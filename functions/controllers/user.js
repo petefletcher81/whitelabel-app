@@ -33,7 +33,8 @@ exports.adminLogin = async (req, res) => {
     const data = await firebase
       .auth()
       .signInWithEmailAndPassword(email, password);
-
+    const userToken = await data.user.getIdToken();
+    token = userToken;
     return res.json(data);
     // explain and add signin test
   } catch (error) {
