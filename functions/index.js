@@ -2,7 +2,7 @@ const functions = require("firebase-functions");
 const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
-const { adminLogin } = require("./controllers/user");
+const { adminLogin } = require("./controllers/auth-endpoints");
 
 const app = express(); // creates express app
 
