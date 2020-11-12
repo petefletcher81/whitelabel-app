@@ -37,3 +37,62 @@ exports.adminLogin = async (req, res) => {
     }
   }
 };
+
+exports.setAdmin = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const userRef = await admin.auth().getUserByEmail(email);
+    if (
+      userRef.customClaims !== undefined &&
+      Object.keys(userRef.customClaims).length > 0
+    ) {
+      // once we set the custom claims on a user they will stay there
+      // we can only then set them
+      return res.json({ message: `${userRef.email} is already an admin` });
+    } else {
+      try {
+        await admin.auth().setCustomUserClaims(userRef.uid, { admin: true });
+        return res.json({ message: `User is now an admin` });
+      } catch (error) {
+        return res.json({ message: "Unable to set user as admin" });
+      }
+    }
+  } catch (error) {
+    // Extract and create error handler
+    switch (error.code) {
+      case "auth/user-not-found":
+        return res.status(404).json({ error: "User not found" });
+        break;
+      default:
+    }
+    res.send({ error });
+  }
+};
+
+exports.removeAdmin = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const userRef = await admin.auth().getUserByEmail(email);
+    console.log(userRef);
+    if (userRef.customClaims === undefined) {
+      res.json({ message: "User is not set as an admin" });
+    } else {
+      userWithoutCustomClaims = userRef;
+      if (userWithoutCustomClaims["customClaims"]) {
+        await admin.auth().setCustomUserClaims(userRef.uid, null);
+
+        res.send({ message: "Admin has been removed from this user" });
+      }
+    }
+  } catch (error) {
+    // Extract and create error handler
+    switch (error.code) {
+      case "auth/user-not-found":
+        return res.status(404).json({ error: "User not found" });
+        break;
+      default:
+    }
+    res.send({ error });
+  }
+};

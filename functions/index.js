@@ -2,7 +2,11 @@ const functions = require("firebase-functions");
 const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
-const { adminLogin } = require("./controllers/auth-endpoints");
+const {
+  adminLogin,
+  setAdmin,
+  removeAdmin,
+} = require("./controllers/auth-endpoints");
 
 const app = express(); // creates express app
 
@@ -11,6 +15,8 @@ app.use(bodyParser.json({ extended: true })); // parse json object bodies --  wh
 app.use(bodyParser.urlencoded({ extended: true })); // parse bodies passed from a url ie form -- Content-Type header matches the type option -- utf-8 encoding
 
 app.post("/admin", adminLogin);
+app.post("/set-admin", setAdmin);
+app.post("/remove-admin", removeAdmin);
 
 app.use((req, res) => {
   res.send({ message: "Path does not exist" });
