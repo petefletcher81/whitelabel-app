@@ -5,11 +5,14 @@ admin.initializeApp(); // initializes the admin sdk in the app
 const { firebaseConfig } = require("../config/firebase-config");
 const firebase = require("firebase");
 
+const { authErrorHandler } = require("../utils/auth-error-handler");
+
 firebase.initializeApp(firebaseConfig);
 
 exports.adminLogin = async (req, res) => {
   // get the GET working first then write post
   // deconstruct body
+  let token;
   const { email, password } = req.body;
   // need to make a async request
   // https://medium.com/javascript-in-plain-english/async-await-javascript-5038668ec6eb
@@ -25,16 +28,10 @@ exports.adminLogin = async (req, res) => {
     return res.json({ token });
     // explain and add signin test
   } catch (error) {
-    switch (error.code) {
-      case "auth/user-not-found":
-        return res.status(404).json({ error: "User not found" });
-        break;
-      case "auth/wrong-password":
-        return res.status(401).json({ error: "Invalid password" });
-        break;
+    const errorMessage = authErrorHandler(error.code);
+    const { status, message } = errorMessage;
 
-      default:
-    }
+    res.status(status).json({ error: message });
   }
 };
 
@@ -59,13 +56,10 @@ exports.setAdmin = async (req, res) => {
     }
   } catch (error) {
     // Extract and create error handler
-    switch (error.code) {
-      case "auth/user-not-found":
-        return res.status(404).json({ error: "User not found" });
-        break;
-      default:
-    }
-    res.send({ error });
+    const errorMessage = authErrorHandler(error.code);
+    const { status, message } = errorMessage;
+
+    res.status(status).json({ error: message });
   }
 };
 
@@ -78,21 +72,47 @@ exports.removeAdmin = async (req, res) => {
     if (userRef.customClaims === undefined) {
       res.json({ message: "User is not set as an admin" });
     } else {
-      userWithoutCustomClaims = userRef;
-      if (userWithoutCustomClaims["customClaims"]) {
+      if (userRef["customClaims"]) {
         await admin.auth().setCustomUserClaims(userRef.uid, null);
 
         res.send({ message: "Admin has been removed from this user" });
       }
     }
   } catch (error) {
-    // Extract and create error handler
-    switch (error.code) {
-      case "auth/user-not-found":
-        return res.status(404).json({ error: "User not found" });
-        break;
-      default:
+    const errorMessage = authErrorHandler(error.code);
+    const { status, message } = errorMessage;
+
+    res.status(status).json({ error: message });
+  }
+};
+
+exports.verifyAdmin = async (req, res) => {
+  // if no auth headers
+  if (
+    !req.headers.authorization &&
+    !req.headers.authorization.startsWith("Bearer ")
+  ) {
+    res.status(403).json({ message: "Not authorized" });
+  }
+
+  // if there are auth headers
+  let idToken = req.headers.authorization.split("Bearer ")[1];
+
+  try {
+    const getClaims = await admin.auth().verifyIdToken(idToken);
+    if (getClaims.admin === true) {
+      res.json({
+        message: `${getClaims.email} is a verified admin`,
+        claim: getClaims.admin,
+      });
+      // once we have a login that is admin, lets add another user who isnt
+    } else {
+      return res.json({ message: `${getClaims.email} is not admin` });
     }
-    res.send({ error });
+  } catch (error) {
+    const errorMessage = authErrorHandler(error.code);
+    const { status, message } = errorMessage;
+
+    res.status(status).json({ error: message });
   }
 };

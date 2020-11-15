@@ -6,7 +6,9 @@ const {
   adminLogin,
   setAdmin,
   removeAdmin,
+  verifyAdmin,
 } = require("./controllers/auth-endpoints");
+const { isAdmin } = require("./middleware/check-auth-middleware");
 
 const app = express(); // creates express app
 
@@ -15,8 +17,9 @@ app.use(bodyParser.json({ extended: true })); // parse json object bodies --  wh
 app.use(bodyParser.urlencoded({ extended: true })); // parse bodies passed from a url ie form -- Content-Type header matches the type option -- utf-8 encoding
 
 app.post("/admin", adminLogin);
-app.post("/set-admin", setAdmin);
-app.post("/remove-admin", removeAdmin);
+app.post("/set-admin", isAdmin, setAdmin);
+app.post("/remove-admin", isAdmin, removeAdmin);
+app.post("/verify-admin", verifyAdmin);
 
 app.use((req, res) => {
   res.send({ message: "Path does not exist" });
