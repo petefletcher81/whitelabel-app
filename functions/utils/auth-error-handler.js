@@ -12,6 +12,12 @@ exports.authErrorHandler = (error) => {
         status: 400,
       };
       break;
+    case "auth/id-token-expired":
+      return {
+        message: "Something went wrong when authenticating",
+        status: 400,
+      };
+      break;
     default:
   }
 };
