@@ -1,9 +1,30 @@
-const functions = require('firebase-functions');
+const functions = require("firebase-functions");
+const bodyParser = require("body-parser");
+const express = require("express");
+const cors = require("cors");
+const {
+  adminLogin,
+  setAdmin,
+  removeAdmin,
+  verifyAdmin,
+} = require("./controllers/auth-endpoints");
+const { isAdmin } = require("./middleware/check-auth-middleware");
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+const app = express(); // creates express app
+
+app.use(cors({ origin: true }));
+app.use(bodyParser.json({ extended: true })); // parse json object bodies --  where the Content-Type header matches the type option -- unicode encoding
+app.use(bodyParser.urlencoded({ extended: true })); // parse bodies passed from a url ie form -- Content-Type header matches the type option -- utf-8 encoding
+
+app.post("/admin", adminLogin);
+app.post("/set-admin", isAdmin, setAdmin);
+app.post("/remove-admin", isAdmin, removeAdmin);
+app.post("/verify-admin", verifyAdmin);
+
+app.use((req, res) => {
+  res.send({ message: "Path does not exist" });
+});
+
+// onRequest takes a https function
+// app will turn into multiple different routes
+exports.app = functions.region("europe-west2").https.onRequest(app);
