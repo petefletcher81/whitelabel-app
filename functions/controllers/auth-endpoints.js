@@ -1,13 +1,12 @@
-const admin = require("firebase-admin");
-admin.initializeApp(); // initializes the admin sdk in the app
+const { admin } = require("../config/adminFirebaseConfig");
 // initialise firebase and give the config
 // set up app in firebase
 const { firebaseConfig } = require("../config/firebase-config");
 const firebase = require("firebase");
 
-const { authErrorHandler } = require("../utils/auth-error-handler");
-
 firebase.initializeApp(firebaseConfig);
+
+const { authErrorHandler } = require("../utils/auth-error-handler");
 
 exports.adminLogin = async (req, res) => {
   // get the GET working first then write post

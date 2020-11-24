@@ -19,5 +19,6 @@ exports.authErrorHandler = (error) => {
       };
       break;
     default:
+      res.send({ error });
   }
 };
