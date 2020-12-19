@@ -6,7 +6,9 @@ const firebase = require("firebase");
 
 firebase.initializeApp(firebaseConfig);
 
-const { authErrorHandler } = require("../utils/auth-error-handler");
+const {
+  authErrorHandler,
+} = require("../utils/errorHandlers/auth-error-handler");
 
 exports.adminLogin = async (req, res) => {
   // get the GET working first then write post

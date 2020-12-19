@@ -1,56 +1,24 @@
-const { db } = require("../config/adminFirebaseConfig");
+const { db, admin } = require("../config/adminFirebaseConfig");
 // initializes the admin sdk in the app
-const { authErrorHandler } = require("../utils/auth-error-handler");
-const { contentErrorHandler } = require("../utils/content-error-handler");
+const {
+  authErrorHandler,
+} = require("../utils/errorHandlers/auth-error-handler");
+const {
+  contentErrorHandler,
+} = require("../utils/errorHandlers/content-error-handler");
+const { contentBuilder } = require("../utils/helpers/content-builder");
+const { contentValidation } = require("../utils/helpers/content-validation");
 
 exports.addContent = async (req, res) => {
   const { page, section } = req.query;
-  const sectionArea = section.split("-")[1];
-
-  // validation section
-  const pages = ["home", "about", "contactus", "footer"];
-  const sections = ["one", "two", "three"];
-
   const { heading, content } = req.body;
 
   // refactor section
-  let headingArea = `heading-${sectionArea}`;
-  let contentArea = `content-${sectionArea}`;
-
-  // first iteration
-  // const newContent = {
-  //   heading,
-  //   section,
-  //   createdAt:new Date().toISOString();
-  // }
-
-  const newContent = {};
-  newContent[headingArea] = heading;
-  newContent[contentArea] = content;
-  newContent["createdAt"] = new Date().toISOString();
+  const newContent = contentBuilder(heading, content, section);
 
   // validation
-  if (!page || !section) {
-    return contentErrorHandler(req, res);
-  } else {
-    if (heading && content) {
-      const validPage = pages.filter((arrayPage) => arrayPage === page);
-      const validSection = sections.filter(
-        (arraySection) => arraySection === sectionArea
-      );
 
-      // validate page and section
-      if (validPage.length === 0 || validSection.length === 0) {
-        // show not adding the return -- it still adds the
-        return contentErrorHandler(req, res);
-      }
-
-      // if it does about page and section doesnt exist
-      if (page === "about" && section === "three") {
-        return contentErrorHandler(req, res);
-      }
-    }
-  }
+  contentValidation(page, section, heading, content, req, res);
 
   try {
     const contentRef = await db.collection(`${page}`).doc(`${section}`);
@@ -71,5 +39,85 @@ exports.addContent = async (req, res) => {
     const { status, message } = errorMessage;
 
     res.status(status).json({ error: message });
+  }
+};
+
+exports.getContent = async (req, res) => {
+  const { page } = req.query;
+  let pageConent = [];
+
+  if (!page) {
+    return contentErrorHandler(req, res);
+  }
+
+  try {
+    const contentRef = await db.collection(`${page}`);
+    const allContent = await contentRef.get();
+
+    if (allContent.size === 0) {
+      res.status(400).json({ message: "This page does not exist" });
+    } else {
+      allContent.forEach((doc) => {
+        pageConent.push({ id: doc.id, ...doc.data() });
+      });
+
+      return res.status(200).json(pageConent);
+    }
+  } catch (error) {
+    res.send({
+      message: `Sorry, something went wrong -- could not find any ${page} page or content`,
+      error,
+    });
+  }
+};
+
+exports.updateContent = async (req, res) => {
+  const { heading, content } = req.body;
+  const { page, section } = req.query;
+
+  // refactored the content out into a builder
+  const newContent = contentBuilder(heading, content, section);
+
+  // refactored validator
+  contentValidation(page, section, heading, content, req, res);
+
+  try {
+    const contentRef = await db.collection(`${page}`).doc(`${section}`);
+    const doc = await contentRef.get();
+
+    if (!doc.exists) {
+      return res.status(400).json({ message: `The ${page} does not exist` });
+    } else {
+      await db.collection(`${page}`).doc(`${section}`).set(newContent);
+      res.status(201).json({
+        message: `Content has been updated to ${section} on ${page} page`,
+      });
+    }
+  } catch (error) {
+    const errorMessage = authErrorHandler(error.code);
+    const { status, message } = errorMessage;
+
+    res.status(status).json({ error: message });
+  }
+};
+
+exports.deleteContent = async (req, res) => {
+  const { page, section } = req.query;
+
+  try {
+    const contentRef = await db.collection(`${page}`).doc(`${section}`);
+    const doc = await contentRef.get();
+
+    if (!doc.exists) {
+      return res.status(400).json({ message: "This content does not exist" });
+    } else {
+      await db.collection(`${page}`).doc(`${section}`).delete();
+
+      return res
+        .status(200)
+        .json({ message: "Content has been deleted", section });
+    }
+  } catch (error) {
+    res.secd({ error });
   }
 };
