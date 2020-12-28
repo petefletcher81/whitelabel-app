@@ -9,6 +9,7 @@ const {
   verifyAdmin,
 } = require("./controllers/auth-endpoints");
 const { isAdmin } = require("./middleware/check-auth-middleware");
+const { addImage } = require("./controllers/images-endpoint");
 
 const app = express(); // creates express app
 
@@ -20,6 +21,15 @@ app.post("/admin", adminLogin);
 app.post("/set-admin", isAdmin, setAdmin);
 app.post("/remove-admin", isAdmin, removeAdmin);
 app.post("/verify-admin", verifyAdmin);
+
+/** Content */
+app.get("/content/body", getContent);
+app.post("/content/body", addContent);
+app.put("/content/body", updateContent);
+app.delete("/content/body", deleteContent);
+
+/** Images */
+app.post("/images/:page/:type", addImage);
 
 app.use((req, res) => {
   res.send({ message: "Path does not exist" });

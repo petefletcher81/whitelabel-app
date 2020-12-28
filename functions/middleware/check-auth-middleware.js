@@ -1,5 +1,5 @@
 /** Check user is admin */
-const admin = require("firebase-admin");
+const { admin } = require("../config/admin-config");
 // initializes the admin sdk in the app
 const { authErrorHandler } = require("../utils/auth-error-handler");
 

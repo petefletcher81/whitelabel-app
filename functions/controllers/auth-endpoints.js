@@ -1,5 +1,4 @@
-const admin = require("firebase-admin");
-admin.initializeApp(); // initializes the admin sdk in the app
+const { admin } = require("../config/admin-config");
 // initialise firebase and give the config
 // set up app in firebase
 const { firebaseConfig } = require("../config/firebase-config");
