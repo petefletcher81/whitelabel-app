@@ -1,7 +1,9 @@
 /** Check user is admin */
-const admin = require("firebase-admin");
+const { admin } = require("../config/adminFirebaseConfig");
 // initializes the admin sdk in the app
-const { authErrorHandler } = require("../utils/auth-error-handler");
+const {
+  authErrorHandler,
+} = require("../utils/errorHandlers/auth-error-handler");
 
 exports.isAdmin = async (req, res, next) => {
   let idToken;
@@ -15,8 +17,9 @@ exports.isAdmin = async (req, res, next) => {
 
   // Verify the ID token first.
   try {
+    console.log("getClaims");
     const getClaims = await admin.auth().verifyIdToken(idToken);
-    console.log(getClaims);
+    console.log("something", getClaims);
     if (getClaims.admin === true) {
       return next();
     } else {
