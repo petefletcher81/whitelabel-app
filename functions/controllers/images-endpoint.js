@@ -1,10 +1,12 @@
 const { v4: uuidv4 } = require("uuid");
+const { getAll, deleteItem } = require("./shared-crud-calls");
 const { db, admin } = require("../config/admin-config");
 const fbConfig = require("../config/firebase-config");
 const Busboy = require("busboy");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
+const { firebase } = require("../config/firebase-config");
 
 exports.addImage = (req, res) => {
   const { page, type } = req.params;
@@ -41,8 +43,13 @@ exports.addImage = (req, res) => {
     uploads["type"] = mimetype;
 
     filesArray.push(uploads[filename]);
+    // creates a writeble atream to the filepath
     const writeStream = fs.createWriteStream(filepath);
+
+    // pipes the data we get from the post into that stream
     file.pipe(writeStream);
+
+    // push to the correct array
     fileWrites.push(filesArray);
   });
 
@@ -114,16 +121,28 @@ exports.addImage = (req, res) => {
           sectionTallies,
           homeLimit,
           contactUsLimit,
-          aboutUsLimit
+          aboutUsLimit,
+          page
         ) => {
-          if (
-            fileAmount + sectionTallies.home <= homeLimit &&
-            fileAmount + sectionTallies.aboutus <= aboutUsLimit &&
-            fileAmount + sectionTallies.contactus <= contactUsLimit
-          ) {
-            return true;
-          } else {
-            return false;
+          switch (page) {
+            case "home":
+              if (fileAmount + sectionTallies.home > homeLimit) {
+                return false;
+              } else return true;
+              break;
+            case "aboutus":
+              if (fileAmount + sectionTallies.aboutus > aboutUsLimit) {
+                return false;
+              } else true;
+              break;
+            case "contactus":
+              if (fileAmount + sectionTallies.contactus > contactUsLimit) {
+                return false;
+              } else true;
+              break;
+
+            default:
+              break;
           }
         };
 
@@ -134,7 +153,8 @@ exports.addImage = (req, res) => {
             sectionTallies,
             homeLimit,
             contactUsLimit,
-            aboutUsLimit
+            aboutUsLimit,
+            page
           );
 
           if (isValid) {
@@ -196,4 +216,25 @@ exports.addImage = (req, res) => {
   });
 
   busboy.end(req.rawBody);
+};
+
+exports.getAllImages = async (req, res) => {
+  getAll(req, res);
+};
+exports.deleteImage = async (req, res) => {
+  const { name } = req.params;
+  await deleteItem(req, res);
+
+  try {
+    const file = await admin.storage().bucket().file(name);
+    file.delete();
+
+    return res
+      .status(200)
+      .json({ message: "This content has now been deleted" });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: "failed to delete image from bucket" });
+  }
 };

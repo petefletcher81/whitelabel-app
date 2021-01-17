@@ -1,12 +1,13 @@
 const { admin } = require("../config/admin-config");
 // initialise firebase and give the config
 // set up app in firebase
-const { firebaseConfig } = require("../config/firebase-config");
-const firebase = require("firebase");
+const { firebase } = require("../config/firebase-config");
 
-const { authErrorHandler } = require("../utils/auth-error-handler");
+// removed firebase
 
-firebase.initializeApp(firebaseConfig);
+const {
+  authErrorHandler,
+} = require("../utils/errorHandlers/auth-error-handler");
 
 exports.adminLogin = async (req, res) => {
   // get the GET working first then write post

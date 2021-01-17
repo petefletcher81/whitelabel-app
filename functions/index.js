@@ -9,7 +9,24 @@ const {
   verifyAdmin,
 } = require("./controllers/auth-endpoints");
 const { isAdmin } = require("./middleware/check-auth-middleware");
-const { addImage } = require("./controllers/images-endpoint");
+const {
+  getContent,
+  deleteContent,
+  addContent,
+  updateContent,
+} = require("./controllers/content-body-endpoints");
+const {
+  addImage,
+  getAllImages,
+  deleteImage,
+} = require("./controllers/images-endpoint");
+
+const {
+  getFooter,
+  addFooter,
+  deleteFooter,
+  updateFooter,
+} = require("./controllers/footer-endpoint");
 
 const app = express(); // creates express app
 
@@ -23,13 +40,21 @@ app.post("/remove-admin", isAdmin, removeAdmin);
 app.post("/verify-admin", verifyAdmin);
 
 /** Content */
-app.get("/content/body", getContent);
-app.post("/content/body", addContent);
-app.put("/content/body", updateContent);
-app.delete("/content/body", deleteContent);
+app.get("/content", getContent);
+app.post("/content/body/:page/:section", addContent);
+app.put("/content/body/:page/:section", updateContent);
+app.delete("/content/:page/:section", deleteContent);
 
 /** Images */
 app.post("/images/:page/:type", addImage);
+app.get("/images", getAllImages);
+app.delete("/images/:name", deleteImage);
+
+// /** Foj*/
+// app.get("/footer", getFooter);
+// app.post("/footer/:area/:content", addFooter);
+// app.put("/footer/:area/:content", updateFooter);
+// app.delete("/footer/:id", deleteFooter);
 
 app.use((req, res) => {
   res.send({ message: "Path does not exist" });
