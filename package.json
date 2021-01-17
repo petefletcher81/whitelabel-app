@@ -16,5 +16,6 @@
   "bugs": {
     "url": "https://github.com/petefletcher81/whitelabel-app/issues"
   },
-  "homepage": "https://github.com/petefletcher81/whitelabel-app#readme"
+  "homepage": "https://github.com/petefletcher81/whitelabel-app#readme",
+  "dependencies": {}
 }

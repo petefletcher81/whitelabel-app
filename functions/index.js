@@ -8,14 +8,25 @@ const {
   removeAdmin,
   verifyAdmin,
 } = require("./controllers/auth-endpoints");
+const { isAdmin } = require("./middleware/check-auth-middleware");
+const {
+  getContent,
+  deleteContent,
+  addContent,
+  updateContent,
+} = require("./controllers/content-body-endpoints");
+const {
+  addImage,
+  getAllImages,
+  deleteImage,
+} = require("./controllers/images-endpoint");
 
 const {
-  addContent,
-  getContent,
-  updateContent,
-  deleteContent,
-} = require("./controllers/content-body-endpoints");
-const { isAdmin } = require("./middleware/check-auth-middleware");
+  getFooter,
+  addFooter,
+  deleteFooter,
+  updateFooter,
+} = require("./controllers/footer-endpoint");
 
 const app = express(); // creates express app
 
@@ -23,17 +34,27 @@ app.use(cors({ origin: true }));
 app.use(bodyParser.json({ extended: true })); // parse json object bodies --  where the Content-Type header matches the type option -- unicode encoding
 app.use(bodyParser.urlencoded({ extended: true })); // parse bodies passed from a url ie form -- Content-Type header matches the type option -- utf-8 encoding
 
-/** Admin endpoints */
 app.post("/admin", adminLogin);
 app.post("/set-admin", isAdmin, setAdmin);
 app.post("/remove-admin", isAdmin, removeAdmin);
 app.post("/verify-admin", verifyAdmin);
 
 /** Content */
-app.get("/content/body", getContent);
-app.post("/content/body", addContent);
-app.put("/content/body", updateContent);
-app.delete("/content/body", deleteContent);
+app.get("/content", getContent);
+app.post("/content/body/:page/:section", addContent);
+app.put("/content/body/:page/:section", updateContent);
+app.delete("/content/:page/:section", deleteContent);
+
+/** Images */
+app.post("/images/:page/:type", addImage);
+app.get("/images", getAllImages);
+app.delete("/images/:name", deleteImage);
+
+// /** Foj*/
+// app.get("/footer", getFooter);
+// app.post("/footer/:area/:content", addFooter);
+// app.put("/footer/:area/:content", updateFooter);
+// app.delete("/footer/:id", deleteFooter);
 
 app.use((req, res) => {
   res.send({ message: "Path does not exist" });

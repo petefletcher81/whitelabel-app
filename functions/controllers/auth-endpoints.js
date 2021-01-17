@@ -1,10 +1,9 @@
-const { admin } = require("../config/adminFirebaseConfig");
+const { admin } = require("../config/admin-config");
 // initialise firebase and give the config
 // set up app in firebase
-const { firebaseConfig } = require("../config/firebase-config");
-const firebase = require("firebase");
+const { firebase } = require("../config/firebase-config");
 
-firebase.initializeApp(firebaseConfig);
+// removed firebase
 
 const {
   authErrorHandler,
