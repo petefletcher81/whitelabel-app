@@ -6,7 +6,7 @@ const Busboy = require("busboy");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
-const { firebase } = require("../config/firebase-config");
+const { firebaseConfig } = require("../config/firebase-config");
 
 exports.addImage = (req, res) => {
   const { page, type } = req.params;
@@ -22,9 +22,6 @@ exports.addImage = (req, res) => {
 
   // This code will process each non-file field in the form.
   busboy.on("field", (fieldname, val) => {
-    /**
-     *  TODO(developer): Process submitted field values here
-     */
     console.log(`Processed field ${fieldname}: ${val}.`);
     fields[fieldname] = val;
   });
@@ -63,7 +60,7 @@ exports.addImage = (req, res) => {
       // we wil need this when we add in the image to storage
       let docAdded = false;
 
-      let url = `https://firebasestorage.googleapis.com/v0/b/${fbConfig.firebaseConfig.storageBucket}/o/${filename}?alt=media`;
+      let url = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${filename}?alt=media`;
 
       let imageType = type;
 
@@ -73,6 +70,12 @@ exports.addImage = (req, res) => {
         createdAt: new Date().toISOString(),
         section: page,
       };
+
+      // TODO - need to check the page is correct (aobut us no banner)
+      // ADDED THIS
+      if (page === "aboutus" && imageType === "banner") {
+        return res.send({ message: "No banners can be added to this page" });
+      }
 
       try {
         // we need the to call the collections to then check the amount within
@@ -88,55 +91,94 @@ exports.addImage = (req, res) => {
         let documentArray = [];
 
         // set out images limit for each of the pages
-        const homeLimit = 3;
-        const aboutUsLimit = 2;
-        const contactUsLimit = 2;
+        // Change Here !!!!
+        const homeImageLimit = 3;
+        const aboutUsImageLimit = 2;
+        const contactUsImageLimit = 2;
+        const homeBannerLimit = 1;
+        const contactusBannerLimit = 1;
 
         // get the amount of files uploaded
         let fileAmount = fileWrites.length;
-
-        if (fileAmount > 3)
+        // REFACTORED THIS
+        if (imageType === "image" && fileAmount > 3)
           return res
             .status(400)
-            .json({ message: "Too many files added, 3 is the maximum" });
+            .json({ message: "Too many files added, 3 is the maximum images" });
+
+        // ADDED THIS ALL THIS
+        if (imageType === "banner" && fileAmount > 1)
+          return res.status(400).json({
+            message: "Too many files added, 1 is the maximum for banners",
+          });
 
         // if it exists - validition process
         collectionSnapshot.forEach((doc) => {
           documentArray.push(doc.data());
         });
 
-        // count all the sections already there, set defaults so we dont get undefined
-        const sectionTallies = documentArray.reduce(
-          (currentTally, currentSection) => {
-            currentTally[currentSection.section] =
-              (currentTally[currentSection.section] || 0) + 1;
-            return currentTally;
-          },
-          { home: 0, aboutus: 0, contactus: 0 }
-        );
+        const collectionTallies = documentArray.reduce((tally, collection) => {
+          // how to get banner key
+          // I think this is already passed
+          let type = Object.keys(collection).find((key) => {
+            return key === "image" || key === "banner";
+          });
 
-        // valid the image amount -- could become a helper function
+          let collectionSection = collection["section"];
+
+          // check if the section exists
+          if (tally[collectionSection]) {
+            // as it nested we need to then check it the type exists
+            // or it will be overridden
+            if (tally[collectionSection][type]) {
+              tally[collectionSection][type] += 1;
+            } else {
+              tally[collectionSection][type] = 1;
+            }
+
+            // if the sectrion doesnt exist it is fine to create it
+            // the we assign the value
+          } else {
+            // need to initialize first as the image type will be undefined
+            tally[collectionSection] = {};
+            tally[collectionSection][type] = 1;
+          }
+          console.log("", tally);
+          return tally;
+        }, {});
+
+        // validat the image amount -- could become a helper function
         const validateImageAmount = (
           fileAmount,
-          sectionTallies,
-          homeLimit,
-          contactUsLimit,
-          aboutUsLimit,
+          collectionTallies,
+          contactUsImageLimit,
+          aboutUsImageLimit,
+          homeImageLimit,
           page
         ) => {
+          // TODO _ - NEED TO ADD THIS
+          if (!collectionTallies) {
+            return true;
+          }
           switch (page) {
             case "home":
-              if (fileAmount + sectionTallies.home > homeLimit) {
+              if (fileAmount + collectionTallies.home.image > homeImageLimit) {
                 return false;
               } else return true;
               break;
             case "aboutus":
-              if (fileAmount + sectionTallies.aboutus > aboutUsLimit) {
+              if (
+                fileAmount + collectionTallies.aboutus.image >
+                aboutUsImageLimit
+              ) {
                 return false;
               } else true;
               break;
             case "contactus":
-              if (fileAmount + sectionTallies.contactus > contactUsLimit) {
+              if (
+                fileAmount + collectionTallies.contactus.image >
+                contactUsImageLimit
+              ) {
                 return false;
               } else true;
               break;
@@ -146,16 +188,74 @@ exports.addImage = (req, res) => {
           }
         };
 
+        const validateBannerAmount = (
+          fileAmount,
+          collectionTallies,
+          homeBannerLimit,
+          contactusBannerLimit,
+          page
+        ) => {
+          if (!collectionTallies) {
+            return true;
+          }
+          switch (page) {
+            case "home":
+              if (
+                fileAmount + collectionTallies.home.banner >
+                homeBannerLimit
+              ) {
+                return false;
+              } else return true;
+              break;
+            case "contactus":
+              if (
+                fileAmount + collectionTallies.contactus.banner >
+                contactusBannerLimit
+              ) {
+                return false;
+              } else {
+                return true;
+              }
+              break;
+
+            default:
+              break;
+          }
+        };
+        const validateGallery = (page, type) => {
+          if (page === "aboutus" && type === "gallery") {
+            return true;
+          } else {
+            return false;
+          }
+        };
         // Check if the image already exists
         if (!doc.exists) {
-          const isValid = validateImageAmount(
-            fileAmount,
-            sectionTallies,
-            homeLimit,
-            contactUsLimit,
-            aboutUsLimit,
-            page
-          );
+          let isValid;
+          if (imageType === "image") {
+            isValid = validateImageAmount(
+              fileAmount,
+              collectionTallies,
+              contactUsImageLimit,
+              aboutUsImageLimit,
+              homeImageLimit,
+              imageType,
+              page
+            );
+          } else if (imageType === "banner") {
+            isValid = validateBannerAmount(
+              fileAmount,
+              collectionTallies,
+              homeBannerLimit,
+              contactusBannerLimit,
+              page
+            );
+          } else {
+            // it gallery and can upload ans many as they want
+            isValid = validateGallery(page, imageType);
+          }
+
+          // CHANGED TO HERE
 
           if (isValid) {
             await admin
@@ -167,8 +267,8 @@ exports.addImage = (req, res) => {
             docAdded = true;
           } else {
             return res.status(400).json({
-              message:
-                "Over the limit for images for this page, please remove or select fewer images",
+              // ADMENDED THIS
+              message: `Over the limit for images for this page or area doesnt exist on the page`,
             });
           }
         } else {
@@ -178,7 +278,7 @@ exports.addImage = (req, res) => {
         }
       } catch (error) {
         return res.status(400).json({
-          message: "Something went wrong when trying to add the product",
+          message: "Something went wrong when trying to add the image",
           error,
         });
       }

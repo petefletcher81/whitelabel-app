@@ -2,6 +2,7 @@ const { admin, db } = require("../config/admin-config");
 
 exports.getAll = async (req, res) => {
   const { page } = req.query;
+
   let items = [];
   let content = !page ? req.url.split("/")[1] : page;
 
@@ -29,9 +30,9 @@ exports.getAll = async (req, res) => {
 };
 
 exports.deleteItem = async (req, res) => {
-  const { section, name, page } = req.params;
+  const { section, name, page, area } = req.params;
   let content = !page ? req.url.split("/")[1] : page;
-  let item = section ? section : name;
+  let item = section ? section : name ? name : area;
 
   try {
     const contentRef = await db.collection(`${content}`).doc(`${item}`);

@@ -1,14 +1,10 @@
-const {
-  contentErrorHandler,
-} = require("../errorHandlers/content-error-handler");
-
 exports.contentValidation = (page, section, heading, content, req, res) => {
   // validation section
-  const pages = ["home", "about", "contactus", "footer"];
+  const pages = ["home", "aboutus", "contactus", "footer"];
   const sections = ["one", "two", "three"];
 
   if (!page || !section) {
-    return contentErrorHandler(req, res);
+    return false;
   } else {
     if (heading && content) {
       const sectionArea = section.split("-")[1];
@@ -20,17 +16,18 @@ exports.contentValidation = (page, section, heading, content, req, res) => {
       // validate page and section
       if (validPage.length === 0 || validSection.length === 0) {
         // show not adding the return -- it still adds the
-        return contentErrorHandler(req, res);
+        return false;
       }
 
       // if it does about page and section doesnt exist
-      if (page === "about" && section === "three") {
-        return contentErrorHandler(req, res);
+      if (page === "aboutus" && sectionArea === "three") {
+        return false;
       }
     }
 
     if (!heading || !content) {
-      return contentErrorHandler(req, res);
+      return false;
     }
   }
+  return true;
 };

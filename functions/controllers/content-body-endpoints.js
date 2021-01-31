@@ -18,28 +18,31 @@ exports.addContent = async (req, res) => {
   const newContent = contentBuilder(heading, content, section);
 
   // validation
+  const isValid = contentValidation(page, section, heading, content, req, res);
 
-  contentValidation(page, section, heading, content, req, res);
+  if (isValid) {
+    try {
+      const contentRef = await db.collection(`${page}`).doc(`${section}`);
+      const doc = await contentRef.get();
 
-  try {
-    const contentRef = await db.collection(`${page}`).doc(`${section}`);
-    const doc = await contentRef.get();
+      if (!doc.exists) {
+        await db.collection(`${page}`).doc(`${section}`).set(newContent);
 
-    if (!doc.exists) {
-      await db.collection(`${page}`).doc(`${section}`).set(newContent);
+        res.status(201).json({ message: `New content added to ${section}` });
+      } else {
+        res
+          .status(400)
+          .send({ message: `This content already exists for ${section}` });
+      }
+    } catch (error) {
+      // add middleware and get the same auth errors
+      const errorMessage = authErrorHandler(error.code);
+      const { status, message } = errorMessage;
 
-      res.status(201).json({ message: `New content added to ${section}` });
-    } else {
-      res
-        .status(400)
-        .send({ message: `This content already exists for ${section}` });
+      res.status(status).json({ error: message });
     }
-  } catch (error) {
-    // add middleware and get the same auth errors
-    const errorMessage = authErrorHandler(error.code);
-    const { status, message } = errorMessage;
-
-    res.status(status).json({ error: message });
+  } else {
+    contentErrorHandler(req, res);
   }
 };
 
