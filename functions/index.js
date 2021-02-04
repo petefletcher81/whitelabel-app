@@ -22,10 +22,10 @@ const {
 } = require("./controllers/images-endpoint");
 
 const {
-  getFooter,
-  addFooter,
-  deleteFooter,
-  updateFooter,
+  getFooterContent,
+  addFooterContent,
+  deleteFooterContent,
+  updateFooterContent,
 } = require("./controllers/footer-endpoint");
 
 const app = express(); // creates express app
@@ -50,11 +50,11 @@ app.post("/images/:page/:type", addImage);
 app.get("/images", getAllImages);
 app.delete("/images/:name", deleteImage);
 
-// /** Foj*/
-// app.get("/footer", getFooter);
-// app.post("/footer/:area/:content", addFooter);
-// app.put("/footer/:area/:content", updateFooter);
-// app.delete("/footer/:id", deleteFooter);
+/** footer */
+app.get("/footer", getFooterContent);
+app.post("/footer/:area", addFooterContent);
+app.put("/footer/:area", updateFooterContent);
+app.delete("/footer/:area", deleteFooterContent);
 
 app.use((req, res) => {
   res.send({ message: "Path does not exist" });
