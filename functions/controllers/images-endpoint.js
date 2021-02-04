@@ -96,17 +96,16 @@ exports.addImage = (req, res) => {
         const aboutUsImageLimit = 2;
         const contactUsImageLimit = 2;
         const homeBannerLimit = 1;
-        const contactusBannerLimit = 1;
+        const contactUsBannerLimit = 1;
 
         // get the amount of files uploaded
         let fileAmount = fileWrites.length;
-        // REFACTORED THIS
+
         if (imageType === "image" && fileAmount > 3)
           return res
             .status(400)
             .json({ message: "Too many files added, 3 is the maximum images" });
 
-        // ADDED THIS ALL THIS
         if (imageType === "banner" && fileAmount > 1)
           return res.status(400).json({
             message: "Too many files added, 1 is the maximum for banners",
@@ -143,9 +142,14 @@ exports.addImage = (req, res) => {
             tally[collectionSection] = {};
             tally[collectionSection][type] = 1;
           }
-          console.log("", tally);
+
           return tally;
         }, {});
+
+        // validate helper
+        const validatePageKeys = (page) => {
+          return Object.keys(collectionTallies).includes(page);
+        };
 
         // validat the image amount -- could become a helper function
         const validateImageAmount = (
@@ -156,79 +160,101 @@ exports.addImage = (req, res) => {
           homeImageLimit,
           page
         ) => {
-          // TODO _ - NEED TO ADD THIS
-          if (!collectionTallies) {
+          if (Object.keys(collectionTallies).length === 0) {
             return true;
           }
+          const homeImageCount = validatePageKeys("home");
+
+          const contactusImageCount = validatePageKeys("contactus");
+
+          const aboutusImageCount = validatePageKeys("aboutus");
           switch (page) {
             case "home":
-              if (fileAmount + collectionTallies.home.image > homeImageLimit) {
-                return false;
-              } else return true;
-              break;
-            case "aboutus":
               if (
-                fileAmount + collectionTallies.aboutus.image >
-                aboutUsImageLimit
+                homeImageCount &&
+                fileAmount + collectionTallies.home.image > homeImageLimit
               ) {
                 return false;
-              } else true;
-              break;
+              } else {
+                return true;
+              }
             case "contactus":
               if (
+                contactusImageCount &&
                 fileAmount + collectionTallies.contactus.image >
-                contactUsImageLimit
+                  contactUsImageLimit
               ) {
                 return false;
-              } else true;
-              break;
-
+              } else {
+                return true;
+              }
+            case "aboutus":
+              // TODO - find nested property ---- !!!!!!!!!!!!!!!!
+              if (
+                aboutusImageCount &&
+                fileAmount + collectionTallies.aboutus.image > aboutUsImageLimit
+              ) {
+                return false;
+              } else {
+                return true;
+              }
             default:
               break;
           }
         };
 
         const validateBannerAmount = (
+          page,
           fileAmount,
-          collectionTallies,
           homeBannerLimit,
-          contactusBannerLimit,
-          page
+          contactUsBannerLimit,
+          collectionTallies
         ) => {
-          if (!collectionTallies) {
+          if (Object.keys(collectionTallies).length === 0) {
             return true;
           }
+
+          const homeImageCount = validatePageKeys("home");
+
+          const contactusImageCount = validatePageKeys("contactus");
+
           switch (page) {
             case "home":
               if (
-                fileAmount + collectionTallies.home.banner >
-                homeBannerLimit
-              ) {
-                return false;
-              } else return true;
-              break;
-            case "contactus":
-              if (
-                fileAmount + collectionTallies.contactus.banner >
-                contactusBannerLimit
+                homeImageCount &&
+                fileAmount + collectionTallies.home.banner > homeBannerLimit
               ) {
                 return false;
               } else {
                 return true;
               }
-              break;
+            case "contactus":
+              if (
+                contactusImageCount &&
+                fileAmount + collectionTallies.contactus.banner >
+                  contactUsBannerLimit
+              ) {
+                return false;
+              } else {
+                return true;
+              }
 
             default:
               break;
           }
         };
+
         const validateGallery = (page, type) => {
+          if (Object.keys(collectionTallies).length === 0) {
+            return true;
+          }
           if (page === "aboutus" && type === "gallery") {
             return true;
           } else {
             return false;
           }
         };
+
         // Check if the image already exists
         if (!doc.exists) {
           let isValid;
@@ -247,15 +273,13 @@ exports.addImage = (req, res) => {
               fileAmount,
               collectionTallies,
               homeBannerLimit,
-              contactusBannerLimit,
+              contactUsBannerLimit,
               page
             );
           } else {
             // it gallery and can upload ans many as they want
             isValid = validateGallery(page, imageType);
           }
-
-          // CHANGED TO HERE
 
           if (isValid) {
             await admin
@@ -267,7 +291,6 @@ exports.addImage = (req, res) => {
             docAdded = true;
           } else {
             return res.status(400).json({
-              // ADMENDED THIS
               message: `Over the limit for images for this page or area doesnt exist on the page`,
             });
           }
