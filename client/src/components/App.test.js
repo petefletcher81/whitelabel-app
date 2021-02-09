@@ -1,13 +1,47 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
+import nock from "nock";
 
 import App from "./App";
 
 describe("<App />", () => {
-  it("should render component", () => {
-    const { container, getByText } = render(<App />);
-    expect(container).toBeInTheDocument();
-    expect(getByText("Website Template")).toBeInTheDocument();
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
+  it("should render component with main sections", async () => {
+    render(<App />);
+    // nav
+    screen.debug();
+    screen.getByText(/Home/i);
+    screen.getByText(/About Us/i);
+    screen.getByText(/Contact Us/i);
+    const homeContent = [
+      {
+        id: "section-one",
+        "heading-one": "Heading 1",
+        "content-1":
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        createdAt: "2021-01-17T06:25:57.066Z",
+      },
+    ];
+    // content and images
+    const content = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/content")
+      .query({
+        page: "home",
+      })
+      .reply(200, homeContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    await waitFor(() => {
+      screen.getByText("Heading 1");
+    });
+    content.done();
+    // footer
   });
 });

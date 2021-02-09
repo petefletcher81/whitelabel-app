@@ -1,7 +1,7 @@
 exports.contentValidation = (page, section, heading, content, req, res) => {
   // validation section
   const pages = ["home", "aboutus", "contactus", "footer"];
-  const sections = ["one", "two", "three"];
+  const sections = ["1", "2", "3"];
 
   if (!page || !section) {
     return false;
@@ -20,7 +20,7 @@ exports.contentValidation = (page, section, heading, content, req, res) => {
       }
 
       // if it does about page and section doesnt exist
-      if (page === "aboutus" && sectionArea === "three") {
+      if (page === "aboutus" && sectionArea === "3") {
         return false;
       }
     }
