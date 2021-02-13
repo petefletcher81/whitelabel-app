@@ -15,3 +15,10 @@ export const getContent = async (page) => {
   );
   return data;
 };
+
+export const getImages = async () => {
+  const { data } = await axios.get(
+    `https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/images`
+  );
+  return data;
+};
