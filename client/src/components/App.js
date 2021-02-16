@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getContent, getFooterContent } from "../utils/apiCalls";
 import "./style/App.scss";
+import Navbar from "./navbar/navbar";
 import ContentError from "./utils/contentError";
 
 const App = () => {
@@ -80,11 +81,7 @@ const App = () => {
   return (
     <>
       <div className="App">
-        <nav aria-labelledby="page-navigation" role="navigation">
-          <ul>Home</ul>
-          <ul>About Us</ul>
-          <ul>Contact Us</ul>
-        </nav>
+        <Navbar />
         {error && !content && <ContentError error={error} />}
         {content &&
           !error &&
