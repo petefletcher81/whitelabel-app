@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { getContent, getImages } from "../utils/apiCalls";
+import { getContent, getImages, getFooterContent } from "../utils/apiCalls";
 import "./style/App.scss";
+
+import Navbar from "./navbar/navbar";
+import ContentError from "../utils/contentError";
 
 const App = () => {
   const [content, setContent] = useState(null);
   const [images, setImages] = useState(null);
+  const [footerContent, setFooterContent] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getHomeContent = async () => {
@@ -12,62 +17,158 @@ const App = () => {
         const response = await getContent("home");
         setContent(response);
       } catch (error) {
-        console.log(error);
+        const data = error.response?.data;
+        setError(data);
       }
     };
     getHomeContent();
   }, []);
 
   useEffect(() => {
-    const getHomeImages = async () => {
+    const getImageContent = async () => {
       try {
-        const response = await getImages("home");
-        // TODO - not getting images back correctly - need to check for image key
-        const homeImages = response.filter(
-          (homeImage) => homeImage.section === "home" && homeImage["image"]
-        );
+        const response = await getImages();
+        const homeImages = response.filter((homeImage) => {
+          return homeImage.section === "home" && homeImage["image"];
+        });
         setImages(homeImages);
       } catch (error) {
-        console.log(error);
+        const data = error.response?.data;
+        setError(data);
       }
     };
-    getHomeImages();
+    getImageContent();
   }, []);
 
+  useEffect(() => {
+    const getAllFooterContent = async () => {
+      try {
+        const response = await getFooterContent("home");
+        setFooterContent(response);
+      } catch (error) {
+        const data = error.response?.data;
+        setError(data);
+      }
+    };
+    getAllFooterContent();
+  }, []);
+
+  const generateFooterCompany = ({
+    companyName,
+    companyAddress,
+    contactNumber,
+    mobileNumber,
+  }) => {
+    return (
+      <>
+        {companyName && (
+          <div>
+            Company Name :<div>{companyName}</div>
+          </div>
+        )}
+        {companyAddress && (
+          <div>
+            Company Address :<div>{companyAddress}</div>
+          </div>
+        )}
+        {contactNumber && (
+          <div>
+            Contact Number :<div>{contactNumber}</div>
+          </div>
+        )}
+        {mobileNumber && (
+          <div>
+            Mobile Number :<div>{mobileNumber}</div>
+          </div>
+        )}
+      </>
+    );
+  };
+
+  const generateFooterSocial = ({
+    socialFacebook,
+    socialTwitter,
+    socialInstagram,
+    socialLinkedin,
+    socialPinterest,
+  }) => {
+    return (
+      <>
+        {socialFacebook && (
+          <div>
+            Facebook :<div>{socialFacebook}</div>
+          </div>
+        )}
+        {socialTwitter && (
+          <div>
+            Twitter :<div>{socialTwitter}</div>
+          </div>
+        )}
+        {socialInstagram && (
+          <div>
+            Instagram :<div>{socialInstagram}</div>
+          </div>
+        )}
+        {socialLinkedin && (
+          <div>
+            LinkedIn :<div>{socialLinkedin}</div>
+          </div>
+        )}
+        {socialPinterest && (
+          <div>
+            Pinterest :<div>{socialPinterest}</div>
+          </div>
+        )}
+      </>
+    );
+  };
+
   return (
-    <>
-      <div className="App">
-        <nav aria-labelledby="page-navigation" role="navigation">
-          <ul>Home</ul>
-          <ul>About Us</ul>
-          <ul>Contact Us</ul>
-        </nav>
-        {content &&
-          content.map((section, index) => {
+    <div className="App">
+      <Navbar />
+      {error && !content && <ContentError error={error} />}
+      {content &&
+        !error &&
+        content.map((section, index) => {
+          return (
+            <div className="content" key={section.id[index]}>
+              <div className="content__section-heading">
+                {section["heading"]}
+              </div>
+              <div className="content__section-content">
+                {section["content"]}
+              </div>
+              {images && (
+                <div className="content__section-image-wrapper">
+                  <img src={images[index].image} />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      <div className="footer-content">
+        {footerContent &&
+          footerContent.map((content) => {
             return (
-              <div className="content" key={section.id[index]}>
+              <div className="footer-content__wrapper" key={content.id}>
                 <div
-                  className="content__section-heading"
-                  data-testid="section-heading"
+                  className="footer-content__company"
+                  data-testid="footer-company"
                 >
-                  {section["heading"]}
+                  {content?.id === "company" && generateFooterCompany(content)}
                 </div>
                 <div
-                  className="content__section-content"
-                  data-testid="section-content"
+                  className="footer-content__social"
+                  data-testid="footer-social"
                 >
-                  {section["content"]}
+                  {content?.id === "social" && generateFooterSocial(content)}
                 </div>
-                {images && (
-                  <div>
-                    <img src={images[index].image} />
-                  </div>
-                )}
               </div>
             );
           })}
       </div>
-    </>
+    </div>
   );
 };
+
 export default App;

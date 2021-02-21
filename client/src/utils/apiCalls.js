@@ -10,15 +10,16 @@ axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 //     : "/v1";
 
 export const getContent = async (page) => {
-  const { data } = await axios.get(
-    `https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content?page=${page}`
-  );
+  const { data } = await axios.get(`/content?page=${page}`);
   return data;
 };
 
 export const getImages = async () => {
-  const { data } = await axios.get(
-    `https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/images`
-  );
+  const { data } = await axios.get(`/images`);
+  return data;
+};
+
+export const getFooterContent = async () => {
+  const { data } = await axios.get(`/footer`);
   return data;
 };
