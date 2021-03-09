@@ -23,3 +23,10 @@ export const getFooterContent = async () => {
   const { data } = await axios.get(`/footer`);
   return data;
 };
+
+export const getFooterContent = async () => {
+  const { data } = await axios.get(
+    `https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/footer`
+  );
+  return data;
+};
