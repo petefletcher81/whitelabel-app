@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getFooterContent } from "../../utils/apiCalls";
 import ContentError from "../../utils/contentError";
+import classnames from "classnames";
+import "./Footer.scss";
 
 const Footer = () => {
   const [footerContent, setFooterContent] = useState(null);
   const [error, setError] = useState(null);
+  const mobile = window.innerWidth < 990;
 
   useEffect(() => {
     const getAllFooterContent = async () => {
@@ -28,23 +31,57 @@ const Footer = () => {
     return (
       <>
         {companyName && (
-          <div>
-            Company Name :<div>{companyName}</div>
+          <div className="company-details border-bottom my-1 flex">
+            <strong>{companyName}</strong>
           </div>
         )}
         {companyAddress && (
-          <div>
-            Company Address :<div>{companyAddress}</div>
+          <div
+            className={classnames(
+              "company-details border-bottom m-1 flex text-center",
+              {
+                "flex-col ": mobile,
+              }
+            )}
+          >
+            <i
+              className={classnames("fas fa-2x fa-home ", {
+                "pb-1": mobile,
+              })}
+            ></i>
+            <div className="px-1">{companyAddress}</div>
           </div>
         )}
         {contactNumber && (
-          <div>
-            Contact Number :<div>{contactNumber}</div>
+          <div
+            className={classnames("company-details border-bottom m-1 flex", {
+              "flex-col": mobile,
+            })}
+          >
+            <div>
+              <i
+                className={classnames("fas fa-2x fa-phone ", {
+                  "pb-1": mobile,
+                })}
+              ></i>
+            </div>
+            <div className="px-1">{contactNumber}</div>
           </div>
         )}
         {mobileNumber && (
-          <div>
-            Mobile Number :<div>{mobileNumber}</div>
+          <div
+            className={classnames("company-details border-bottom m-1 flex", {
+              "flex-col": mobile,
+            })}
+          >
+            <div>
+              <i
+                className={classnames("fas fa-2x fa-mobile ", {
+                  "pb-1": mobile,
+                })}
+              ></i>
+            </div>
+            <div className="px-1">{mobileNumber}</div>
           </div>
         )}
       </>
@@ -59,54 +96,74 @@ const Footer = () => {
     socialPinterest,
   }) => {
     return (
-      <>
+      <section aria-label="Social Icons" className="flex mb-2">
         {socialFacebook && (
           <div>
-            Facebook :<div>{socialFacebook}</div>
+            <a href={socialFacebook}>
+              <i className=" social-icons fab fa-2x fa-facebook px-1"></i>
+            </a>
           </div>
         )}
         {socialTwitter && (
           <div>
-            Twitter :<div>{socialTwitter}</div>
+            <a href={socialTwitter}>
+              <i className="social-icons fab fa-2x fa-twitter px-1"></i>
+            </a>
           </div>
         )}
         {socialInstagram && (
           <div>
-            Instagram :<div>{socialInstagram}</div>
+            <a href={socialInstagram}>
+              <i className="social-icons fab fa-2x fa-instagram px-1"></i>
+            </a>
           </div>
         )}
         {socialLinkedin && (
           <div>
-            LinkedIn :<div>{socialLinkedin}</div>
+            <a href={socialLinkedin}>
+              <i className="social-icons fab fa-2x fa-linkedin px-1"></i>
+            </a>
           </div>
         )}
         {socialPinterest && (
           <div>
-            Pinterest :<div>{socialPinterest}</div>
+            <a href={socialPinterest}>
+              <i className="social-icons fab fa-2x fa-pinterest px-1"></i>
+            </a>
           </div>
         )}
-      </>
+      </section>
     );
   };
 
   return (
-    <div className="footer-content">
-      {error && !footerContent && <ContentError error={error} />}
-      {footerContent &&
-        footerContent.map((content) => {
-          return (
-            <div className="footer-content__wrapper" key={content.id}>
-              <div
-                className={`footer-content__${content.id}`}
-                data-testid={`footer-${content.id}`}
-              >
-                {content?.id === "company"
-                  ? generateFooterCompany(content)
-                  : generateFooterSocial(content)}
-              </div>
-            </div>
-          );
+    <div className="footer">
+      <div
+        className={classnames("justify-between", {
+          "flex flex-col": mobile,
+          flex: !mobile,
         })}
+      >
+        {error && !footerContent && <ContentError error={error} />}
+        {footerContent &&
+          footerContent.map((content) => {
+            return (
+              <div
+                className="footer-content__wrapper mx-1 w-full"
+                key={content.id}
+              >
+                <div
+                  className={`footer-content__${content.id}`}
+                  data-testid={`footer-${content.id}`}
+                >
+                  {content?.id === "company"
+                    ? generateFooterCompany(content)
+                    : generateFooterSocial(content)}
+                </div>
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 };

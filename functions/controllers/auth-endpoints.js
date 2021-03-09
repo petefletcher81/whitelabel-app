@@ -68,7 +68,6 @@ exports.removeAdmin = async (req, res) => {
 
   try {
     const userRef = await admin.auth().getUserByEmail(email);
-    console.log(userRef);
     if (userRef.customClaims === undefined) {
       res.json({ message: "User is not set as an admin" });
     } else {

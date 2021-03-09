@@ -1,0 +1,158 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+
+// css properties
+:root {
+  --primary-color: #565b87;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Robobo", sans-serif;
+  color: #0e0e0e;
+  line-height: 1.6;
+  background-color: #e6e6e6;
+}
+
+ul {
+  // no bullets for uls
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+h1,
+h2 {
+  font-weight: 300;
+  line-height: 1.2;
+  // margin top and bottom
+  margin: 10px 0;
+}
+
+p {
+  margin: 10px 0;
+}
+
+img {
+  // ensures img doesnt break out of div
+  max-width: 100%;
+  // max-height: 100%;
+  display: block;
+}
+
+.container {
+  max-width: 80%;
+  // keep it in the middle
+  margin: 0 auto;
+}
+
+// Utility
+
+// display
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // height whatever the container is
+  height: 100%;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+// size
+.w-full {
+  width: 100%;
+}
+
+// spacing
+.m-1 {
+  margin: 16px;
+}
+
+.my-1 {
+  margin: 16px 0;
+}
+
+.mx-1 {
+  margin: 0 16px;
+}
+
+.mb-1 {
+  margin: 0 0 16px 0;
+}
+
+.mb-2 {
+  margin: 0 0 24px 0;
+}
+.py-1 {
+  padding: 16px 0;
+}
+
+.px-1 {
+  padding: 0 16px;
+}
+
+.pb-1 {
+  margin: 0 0 16px 0;
+}
+
+// Headings
+.heading {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.heading-sm {
+  font-size: 1rem;
+}
+
+// aligning
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.text-center {
+  text-align: center;
+}
+
+// borders
+.border-white {
+  border: 1px solid #fff;
+}
+.border-primary {
+  border: 1px solid var(--primary-color);
+}
+
+.border-bottom {
+  padding-bottom: 12px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+}
+
+.border-bottom-primary {
+  border-color: var(--primary-color);
+  padding-bottom: 12px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+}

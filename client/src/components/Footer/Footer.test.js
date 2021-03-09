@@ -27,7 +27,6 @@ describe("<App />", () => {
       {
         id: "social",
         socialLinkedin: "linkedinurl",
-        socialLinkedin: "linkedinurl",
         socialFacebook: "facebook",
         socialTwitter: "twitter",
         socialInstagram: "insta",
@@ -45,17 +44,16 @@ describe("<App />", () => {
       });
 
     await waitFor(() => {
+      const socialIcons = screen.getAllByRole("link");
+      expect(socialIcons[0]).toHaveAttribute("href", "facebook");
+      expect(socialIcons[1]).toHaveAttribute("href", "twitter");
+      expect(socialIcons[2]).toHaveAttribute("href", "insta");
+      expect(socialIcons[3]).toHaveAttribute("href", "linkedinurl");
+      expect(socialIcons[4]).toHaveAttribute("href", "pinterest");
       screen.getByText("Big Trees");
       screen.getByText("12345");
       screen.getByText("09876");
       screen.getByText("address");
-      screen.getByText("linkedinurl");
-      screen.getByText("pinterest");
-      screen.getByText("facebook");
-      screen.getByText("twitter");
-      screen.getByText("insta");
-      screen.getByTestId("footer-social");
-      screen.getByTestId("footer-company");
     });
     contentFooter.done();
   });

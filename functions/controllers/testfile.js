@@ -63,5 +63,3 @@ const collectionTallies = arr.reduce((tally, collection) => {
 
   return tally;
 }, {});
-
-console.log(collectionTallies);
