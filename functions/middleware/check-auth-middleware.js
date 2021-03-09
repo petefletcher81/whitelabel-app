@@ -17,9 +17,7 @@ exports.isAdmin = async (req, res, next) => {
 
   // Verify the ID token first.
   try {
-    console.log("getClaims");
     const getClaims = await admin.auth().verifyIdToken(idToken);
-    console.log("something", getClaims);
     if (getClaims.admin === true) {
       return next();
     } else {

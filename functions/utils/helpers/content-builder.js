@@ -1,12 +1,11 @@
-exports.contentBuilder = (heading, content, section) => {
-  const sectionArea = section.split("-")[1];
-  let headingArea = `heading-${sectionArea}`;
-  let contentArea = `content-${sectionArea}`;
+const { response } = require("express");
 
-  const contentObj = {};
-  contentObj[headingArea] = heading;
-  contentObj[contentArea] = content;
-  contentObj["createdAt"] = new Date().toISOString();
+exports.contentBuilder = (heading, content) => {
+  const contentObj = {
+    heading,
+    content,
+    createdAt: new Date().toISOString(),
+  };
 
   return contentObj;
 };
