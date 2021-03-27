@@ -1,11 +1,12 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "../../test-utils/custom-utils";
 import "@testing-library/jest-dom/extend-expect";
 import nock from "nock";
 
 import HomePage from "./HomePage";
 
 describe("<HomePage />", () => {
+  // TODO - sort these tests out
   beforeAll(() => {
     nock.disableNetConnect();
   });
@@ -15,8 +16,6 @@ describe("<HomePage />", () => {
   });
 
   it("should render component with main sections", async () => {
-    render(<HomePage />);
-
     const homeContent = [
       {
         id: "section-one",
@@ -26,19 +25,6 @@ describe("<HomePage />", () => {
         createdAt: "2021-01-17T06:25:57.066Z",
       },
     ];
-
-    // content and images
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "home",
-      })
-      .reply(200, homeContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
 
     const imageContent = [
       {
@@ -54,15 +40,12 @@ describe("<HomePage />", () => {
         image: "https://test-for-contactus",
       },
     ];
-
-    const image = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images")
-      .reply(200, imageContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    render(<HomePage />, {
+      initialState: {
+        content: { allContent: homeContent },
+        images: { allImages: imageContent },
+      },
+    });
 
     await waitFor(() => {
       screen.getByText("Heading 1");
@@ -73,56 +56,24 @@ describe("<HomePage />", () => {
 
     const displayedImage = document.querySelectorAll("img");
     expect(displayedImage[0].src).toContain("test-for-home");
-
-    image.done();
-    content.done();
   });
 
   it("should not render content when there is an error", async () => {
-    render(<HomePage />);
-
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "home",
-      })
-      .reply(
-        400,
-        {
-          message:
-            "Something went wrong while trying to add or get the content",
+    render(<HomePage />, {
+      initialState: {
+        content: {
+          error: {
+            message:
+              "Something went wrong while trying to add or get the content",
+          },
         },
-        {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json",
-        }
-      );
-
-    const image = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images")
-      .reply(
-        400,
-        {
-          message:
-            "Something went wrong while trying to add or get the content",
-        },
-        {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json",
-        }
-      );
+      },
+    });
 
     await waitFor(() => {
       screen.getByText(
         /Something went wrong while trying to add or get the content/i
       );
     });
-
-    image.done();
-    content.done();
   });
 });

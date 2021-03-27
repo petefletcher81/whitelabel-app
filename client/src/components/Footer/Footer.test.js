@@ -61,16 +61,6 @@ describe("<App />", () => {
   it("should not render footer content when there is an error", async () => {
     render(<Footer />);
 
-    const footerContent = [
-      {
-        id: "company",
-        companyName: "Big Trees",
-      },
-      {
-        id: "social",
-      },
-    ];
-
     const contentFooter = nock(
       "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
     )
