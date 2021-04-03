@@ -1,47 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { getContent, getImages } from "../../utils/apiCalls";
+import React, { useState } from "react";
 import ContentError from "../../utils/contentError";
+import { useSelector } from "react-redux";
 import "./HomePage.scss";
 
 const HomePage = () => {
-  const [content, setContent] = useState(null);
-  const [images, setImages] = useState(null);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const getHomeContent = async () => {
-      try {
-        const response = await getContent("home");
-        setContent(response);
-      } catch (error) {
-        const data = error.response?.data;
-        setError(data);
-      }
-    };
-    getHomeContent();
-  }, []);
-
-  useEffect(() => {
-    const getImageContent = async () => {
-      try {
-        const response = await getImages();
-        const homeImages = response.filter((homeImage) => {
-          return homeImage.section === "home" && homeImage["image"];
-        });
-        setImages(homeImages);
-      } catch (error) {
-        const data = error.response?.data;
-        setError(data);
-      }
-    };
-    getImageContent();
-  }, []);
-
+  const content = useSelector((state) => state.content.allContent);
+  const images = useSelector((state) => state.images.allImages);
+  const contentError = useSelector((state) => state.content.error);
   return (
-    <>
-      {error && !content && <ContentError error={error} />}
+    <section className="homepage relative" data-testid="homepage-section ">
+      {contentError && !content && <ContentError error={contentError} />}
       {content &&
-        !error &&
+        !contentError &&
         content.map((section, index) => {
           return (
             <div className="content" key={section.id[index]}>
@@ -65,7 +35,7 @@ const HomePage = () => {
             </div>
           );
         })}
-    </>
+    </section>
   );
 };
 

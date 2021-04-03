@@ -76,9 +76,25 @@ img {
   align-items: center;
 }
 
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
 // size
 .w-full {
   width: 100%;
+}
+
+.h-1 {
+  height: 1rem;
+}
+
+.h-4 {
+  height: 4rem;
 }
 
 // spacing
