@@ -8,11 +8,12 @@
   height: 70px;
 }
 
-.navbar a {
+.navbar li a {
+  width: 100px;
   color: #fff;
   padding: 10px;
 }
 
-.navbar a:hover {
+.navbar li a:hover {
   border-bottom: 2px #fff solid;
 }

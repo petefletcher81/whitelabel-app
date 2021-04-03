@@ -1,10 +1,11 @@
 import React from "react";
-import { createStore, combineReducers } from "redux";
+import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { render as rtlRender } from "@testing-library/react";
 import rootReducer from "../redux/root-reducer";
 
 const reducer = rootReducer;
+
 // this is a handy function that I normally make available for all my tests
 // that deal with connected components.
 // you can provide initialState or the entire store that the ui is rendered with

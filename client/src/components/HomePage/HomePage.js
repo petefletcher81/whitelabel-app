@@ -8,7 +8,7 @@ const HomePage = () => {
   const images = useSelector((state) => state.images.allImages);
   const contentError = useSelector((state) => state.content.error);
   return (
-    <>
+    <section className="homepage relative" data-testid="homepage-section ">
       {contentError && !content && <ContentError error={contentError} />}
       {content &&
         !contentError &&
@@ -35,7 +35,7 @@ const HomePage = () => {
             </div>
           );
         })}
-    </>
+    </section>
   );
 };
 

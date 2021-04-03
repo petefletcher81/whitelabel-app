@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Navbar.scss";
 
-const Navbar = () => {
+const Navbar = ({ handleToggle }) => {
   const mobile = window.innerWidth < 990;
 
   return (
@@ -14,19 +14,21 @@ const Navbar = () => {
           className="flex"
         >
           {mobile ? (
-            <div className="menu-icon" role="button">
+            <div className="menu-icon" role="button" onClick={handleToggle}>
               <i className="fas fa-2x fa-bars" />{" "}
             </div>
           ) : (
-            <div className="flex justify-between">
-              <ul>
-                <a>Home</a>
-              </ul>
-              <ul>
-                <a>About Us</a>
-              </ul>
-              <ul>
-                <a>Contact Us</a>
+            <div>
+              <ul className="flex justify-between">
+                <li>
+                  <a>Home</a>
+                </li>
+                <li>
+                  <a>About Us</a>
+                </li>
+                <li>
+                  <a>Contact Us</a>
+                </li>
               </ul>
             </div>
           )}

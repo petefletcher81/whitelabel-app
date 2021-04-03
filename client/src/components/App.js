@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
 import { getContent, getImages } from "../utils/apiCalls";
 import { setContent, setContentError } from "../redux/content/content-actions";
 import { setImages, setImageError } from "../redux/image/image-actions";
 import { useDispatch } from "react-redux";
 
-import Navbar from "./Navbar/Navbar";
-import Footer from "./Footer/Footer";
-import HomePage from "./HomePage/HomePage";
+import Navbar from "./navbar/Navbar";
+import Footer from "./footer/Footer";
+import HomePage from "./homepage/HomePage";
+import SideBar from "./sidebar/Sidebar";
 import "./App.scss";
 
 const App = () => {
@@ -16,6 +17,12 @@ const App = () => {
   // Add switch and route - app.js
   // Add browser router to index.js
   // reverse engineer redux action to "get content"
+
+  const [toggle, setToggle] = useState(false);
+  const handleToggle = () => {
+    const newValue = !toggle;
+    setToggle(newValue);
+  };
 
   useEffect(() => {
     const getAllContent = async () => {
@@ -34,9 +41,7 @@ const App = () => {
     const getImageContent = async () => {
       try {
         const response = await getImages();
-
         dispatch(setImages(response));
-        // TODO - set in redux
       } catch (error) {
         const data = error.response?.data;
         dispatch(setImageError(data));
@@ -47,7 +52,8 @@ const App = () => {
 
   return (
     <div className="App">
-      <Navbar />
+      <Navbar handleToggle={handleToggle} />
+      <SideBar toggle={toggle} />
       <Switch>
         <Route exact path="/" component={HomePage} />
       </Switch>
