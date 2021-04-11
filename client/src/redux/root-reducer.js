@@ -1,10 +1,8 @@
-import contentReducer from "./content/content-reducer";
+import HomepageContentReducer from "./content/homepage-content/homepage-content-reducer";
 import { combineReducers } from "redux";
-import imageReducer from "./image/image-reducer";
 
 const rootReducer = combineReducers({
-  content: contentReducer,
-  images: imageReducer,
+  homepageContent: HomepageContentReducer,
 });
 
 export default rootReducer;

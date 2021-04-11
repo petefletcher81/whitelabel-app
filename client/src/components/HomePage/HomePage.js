@@ -1,16 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ContentError from "../../utils/contentError";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getContent, getImages } from "../../utils/apiCalls";
+import {
+  setHomepageContent,
+  setHomepageContentError,
+  setHomepageImages,
+  setHomepageImageError,
+} from "../../redux/content/homepage-content/homepage-content-actions";
 import "./HomePage.scss";
 
 const HomePage = () => {
-  const content = useSelector((state) => state.content.allContent);
-  const images = useSelector((state) => state.images.allImages);
-  const contentError = useSelector((state) => state.content.error);
+  const dispatch = useDispatch();
+  const content = useSelector((state) => state.homepageContent.content);
+  const images = useSelector((state) => state.homepageContent.images);
+  const contentError = useSelector((state) => state.homepageContent.error);
+
+  useEffect(() => {
+    const getAllContent = async () => {
+      try {
+        const response = await getContent("home");
+        dispatch(setHomepageContent(response));
+      } catch (error) {
+        const data = error.response?.data;
+        dispatch(setHomepageContentError(data));
+      }
+    };
+    getAllContent();
+  }, []);
+
+  useEffect(() => {
+    const getImageContent = async () => {
+      try {
+        const response = await getImages("home");
+        dispatch(setHomepageImages(response));
+      } catch (error) {
+        const data = error.response?.data;
+        dispatch(setHomepageImageError(data));
+      }
+    };
+    getImageContent();
+  }, []);
+
+  console.log("images", images);
   return (
     <section className="homepage relative" data-testid="homepage-section ">
       {contentError && !content && <ContentError error={contentError} />}
       {content &&
+        images &&
         !contentError &&
         content.map((section, index) => {
           return (
