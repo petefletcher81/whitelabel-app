@@ -52,11 +52,16 @@ describe("<HomePage />", () => {
         "Content-type": "application/json",
       });
 
-    render(<HomePage />, {
-      initialState: {
-        images: { allImages: imageContent },
-      },
-    });
+    const image = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images/home/image")
+      .reply(200, imageContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    render(<HomePage />);
 
     await waitFor(() => {
       screen.getByText("Heading 1");
@@ -68,6 +73,7 @@ describe("<HomePage />", () => {
     const displayedImage = document.querySelectorAll("img");
     expect(displayedImage[0].src).toContain("test-for-home");
 
+    image.done();
     content.done();
   });
 
@@ -90,6 +96,23 @@ describe("<HomePage />", () => {
           "Content-type": "application/json",
         }
       );
+
+    const image = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images/home/image")
+      .reply(
+        400,
+        {
+          message:
+            "Something went wrong while trying to add or get the content",
+        },
+        {
+          "Access-Control-Allow-Origin": "*",
+          "Content-type": "application/json",
+        }
+      );
+
     render(<HomePage />);
 
     await waitFor(() => {
@@ -99,5 +122,6 @@ describe("<HomePage />", () => {
     });
 
     content.done();
+    image.done();
   });
 });

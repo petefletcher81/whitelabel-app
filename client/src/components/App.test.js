@@ -74,7 +74,7 @@ describe("App ", () => {
     const image = nock(
       "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
     )
-      .get("/images")
+      .get("/images/home/image")
       .reply(200, imageContent, {
         "Access-Control-Allow-Origin": "*",
         "Content-type": "application/json",
@@ -133,7 +133,7 @@ describe("App ", () => {
     const image = nock(
       "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
     )
-      .get("/images")
+      .get("/images/home/image")
       .reply(
         400,
         {

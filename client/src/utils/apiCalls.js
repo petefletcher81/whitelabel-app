@@ -1,7 +1,7 @@
 import axios from "axios";
 axios.defaults.baseURL =
-  "http://localhost:5000/whitelabel-website-7d72b/europe-west2/app";
-// ("https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app");
+  // "http://localhost:5000/whitelabel-website-7d72b/europe-west2/app";
+  "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app";
 
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 

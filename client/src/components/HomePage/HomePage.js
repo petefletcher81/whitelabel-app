@@ -42,7 +42,6 @@ const HomePage = () => {
     getImageContent();
   }, []);
 
-  console.log("images", images);
   return (
     <section className="homepage relative" data-testid="homepage-section ">
       {contentError && !content && <ContentError error={contentError} />}
