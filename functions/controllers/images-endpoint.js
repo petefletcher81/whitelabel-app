@@ -344,6 +344,40 @@ exports.addImage = (req, res) => {
 exports.getAllImages = async (req, res) => {
   getAll(req, res);
 };
+
+exports.getPageImages = async (req, res) => {
+  const { page, type } = req.params;
+
+  let items = [];
+
+  try {
+    const itemsRef = await admin.firestore().collection("images");
+
+    const groupImages = await itemsRef.get();
+
+    if (groupImages.size === 0) {
+      return res.send({
+        message: `Cant find images for this page does not exist or there are no items available`,
+      });
+    } else {
+      groupImages.forEach((doc) => {
+        console.log(doc.data());
+        const filteredImage = doc.data();
+        if (
+          filteredImage.section === page &&
+          filteredImage.hasOwnProperty(type)
+        ) {
+          items.push({ id: doc.id, ...doc.data() });
+        }
+      });
+      return res.status(200).json(items);
+    }
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: `Something went wront cannot retrieve images` });
+  }
+};
 exports.deleteImage = async (req, res) => {
   const { name } = req.params;
   await deleteItem(req, res);

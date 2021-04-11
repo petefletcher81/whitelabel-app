@@ -19,6 +19,7 @@ const {
   addImage,
   getAllImages,
   deleteImage,
+  getPageImages,
 } = require("./controllers/images-endpoint");
 
 const {
@@ -48,6 +49,7 @@ app.delete("/content/:page/:section", deleteContent);
 /** Images */
 app.post("/images/:page/:type", addImage);
 app.get("/images", getAllImages);
+app.get("/images/:page/:type", getPageImages);
 app.delete("/images/:name", deleteImage);
 
 /** footer */
