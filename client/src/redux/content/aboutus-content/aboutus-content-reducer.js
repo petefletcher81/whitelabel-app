@@ -1,4 +1,4 @@
-import { HomepageActionTypes } from "./homepage-content-types";
+import { AboutusActionTypes } from "./aboutus-content-types";
 
 const initialState = {
   content: null,
@@ -6,24 +6,24 @@ const initialState = {
   error: null,
 };
 
-const HomepageContentReducer = (state = initialState, action) => {
+const AboutusContentReducer = (state = initialState, action) => {
   switch (action.type) {
-    case HomepageActionTypes.SET_HOMEPAGE_CONTENT: {
+    case AboutusActionTypes.SET_ABOUTUS_CONTENT: {
       let newState = { ...state };
       newState.content = action.payload;
       return newState;
     }
-    case HomepageActionTypes.SET_HOMEPAGE_CONTENT_ERROR: {
+    case AboutusActionTypes.SET_ABOUTUS_CONTENT_ERROR: {
       let newState = { ...state };
       newState.error = action.payload;
       return newState;
     }
-    case HomepageActionTypes.SET_HOMEPAGE_IMAGE: {
+    case AboutusActionTypes.SET_ABOUTUS_IMAGE: {
       let newState = { ...state };
       newState.images = action.payload;
       return newState;
     }
-    case HomepageActionTypes.SET_HOMEPAGE_IMAGE_ERROR: {
+    case AboutusActionTypes.SET_ABOUTUS_IMAGE_ERROR: {
       let newState = { ...state };
       newState.error = action.payload;
       return newState;
@@ -34,4 +34,4 @@ const HomepageContentReducer = (state = initialState, action) => {
   }
 };
 
-export default HomepageContentReducer;
+export default AboutusContentReducer;
