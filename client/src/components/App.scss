@@ -47,6 +47,10 @@ img {
   display: block;
 }
 
+.hidden {
+  overflow: hidden;
+}
+
 .container {
   max-width: 80%;
   // keep it in the middle
@@ -89,6 +93,10 @@ img {
   width: 100%;
 }
 
+.h-full {
+  height: 100%;
+}
+
 .h-1 {
   height: 1rem;
 }
@@ -110,6 +118,10 @@ img {
   margin: 0 16px;
 }
 
+.mx-4 {
+  margin: 0 64px;
+}
+
 .mb-1 {
   margin: 0 0 16px 0;
 }
@@ -117,6 +129,7 @@ img {
 .mb-2 {
   margin: 0 0 24px 0;
 }
+
 .py-1 {
   padding: 16px 0;
 }

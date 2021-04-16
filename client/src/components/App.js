@@ -6,11 +6,12 @@ import Navbar from "./navbar/Navbar";
 import Footer from "./footer/Footer";
 import HomePage from "./homepage/HomePage";
 import SideBar from "./sidebar/Sidebar";
-import AboutUs from "../components/aboutus/AboutUs";
+import AboutUs from "./aboutus/AboutUs";
 import "./App.scss";
 
 const App = () => {
   const [toggle, setToggle] = useState(false);
+
   const handleToggle = () => {
     const newValue = !toggle;
     setToggle(newValue);

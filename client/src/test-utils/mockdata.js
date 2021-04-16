@@ -28,4 +28,10 @@ export const mockImage = [
     createdAt: "2021-01-31T06:46:28.742Z",
     image: "https://test-for-contactus",
   },
+  {
+    id: "2bed3fc0-2a17-4519-8460-0dc8ab4e32a2",
+    section: "aboutus",
+    createdAt: "2021-01-31T06:46:28.742Z",
+    banner: "https://test-for-contactus",
+  },
 ];

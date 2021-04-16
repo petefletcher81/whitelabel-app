@@ -8,6 +8,7 @@ import {
   setAboutusImages,
 } from "../../redux/content/aboutus-content/aboutus-content-actions";
 import ContentError from "../../utils/contentError";
+import "./AboutUs.scss";
 
 const AboutUs = () => {
   const dispatch = useDispatch();
@@ -49,8 +50,13 @@ const AboutUs = () => {
     contentSection2 = content[1];
   }
 
+  console.log(images);
+
   return (
-    <section className="aboutus relative" data-testid="aboutus-section ">
+    <section
+      className="aboutus relative flex flex-col"
+      data-testid="aboutus-section "
+    >
       {contentError && !content && <ContentError error={contentError} />}
       {/* TODO - create cards from the content sections */}
       {contentSection1 && !contentError && (
@@ -61,7 +67,7 @@ const AboutUs = () => {
                 <div className="content__section-heading flex m-1 heading border-bottom-primary">
                   {contentSection1["heading"]}
                 </div>
-                <div className="content__section-content mx-1">
+                <div className="content__section-content mx-1 mb-2">
                   {contentSection1["content"]}
                 </div>
               </div>
@@ -69,18 +75,23 @@ const AboutUs = () => {
           </div>
         </div>
       )}
-      {images &&
-        images.map((image, index) => {
-          return (
-            <div
-              className="gallery"
-              data-testid={`gallery-image-${index}`}
-              key={image.id}
-            >
-              <img src={images.image} />
-            </div>
-          );
-        })}
+      <div className="gallery grid">
+        {images &&
+          images.map((image, index) => {
+            if (image.image) {
+              return (
+                <div
+                  className="gallery__image-container w-full h-full relative hidden"
+                  data-testid={`gallery-image-${index}`}
+                  key={image.id}
+                >
+                  <img src={image.image} className="w-full h-full" />
+                </div>
+              );
+            }
+          })}
+      </div>
+
       {contentSection2 && !contentError && (
         <div className="content">
           <div className={`content-2`}>
@@ -89,7 +100,7 @@ const AboutUs = () => {
                 <div className="content__section-heading flex m-1 heading border-bottom-primary">
                   {contentSection2["heading"]}
                 </div>
-                <div className="content__section-content mx-1">
+                <div className="content__section-content mx-1 mb-2">
                   {contentSection2["content"]}
                 </div>
               </div>

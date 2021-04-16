@@ -34,6 +34,9 @@ describe("<AboutUs />", () => {
     screen.getByText("Heading 2");
     screen.getByTestId("gallery-image-0");
 
+    const displayedImage = document.querySelectorAll("img");
+    // TODO - test that image for banner not exist
+
     content.done();
     image.done();
   });
