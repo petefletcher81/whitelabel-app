@@ -10,7 +10,7 @@ import {
 import ContentError from "../../utils/contentError";
 import "./AboutUs.scss";
 
-const AboutUs = () => {
+const AboutUs = ({ setSelectedImage }) => {
   const dispatch = useDispatch();
   const content = useSelector((state) => state.aboutusContent.content);
   const images = useSelector((state) => state.aboutusContent.images);
@@ -50,8 +50,6 @@ const AboutUs = () => {
     contentSection2 = content[1];
   }
 
-  console.log(images);
-
   return (
     <section
       className="aboutus relative flex flex-col"
@@ -84,6 +82,7 @@ const AboutUs = () => {
                   className="gallery__image-container w-full h-full relative hidden"
                   data-testid={`gallery-image-${index}`}
                   key={image.id}
+                  onClick={() => setSelectedImage(image.image)}
                 >
                   <img src={image.image} className="w-full h-full" />
                 </div>

@@ -130,6 +130,9 @@ img {
   margin: 0 0 24px 0;
 }
 
+.p-1 {
+  padding: 16px;
+}
 .py-1 {
   padding: 16px 0;
 }
@@ -184,4 +187,8 @@ img {
   padding-bottom: 12px;
   border-bottom-style: solid;
   border-bottom-width: 2px;
+}
+
+.shadow-1 {
+  box-shadow: 3px 5px 7px rgba(0, 0, 0, 0.5);
 }

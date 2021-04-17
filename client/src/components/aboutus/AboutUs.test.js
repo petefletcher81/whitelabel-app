@@ -1,4 +1,9 @@
-import { render, screen, waitFor } from "../../test-utils/custom-utils";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "../../test-utils/custom-utils";
 import React from "react";
 import AboutUs from "../aboutus/AboutUs";
 import { mockContent, mockImage } from "../../test-utils/mockdata";
@@ -84,6 +89,42 @@ describe("<AboutUs />", () => {
         /Something went wrong while trying to add or get the content/i
       );
     });
+
+    content.done();
+    image.done();
+  });
+
+  it("should open the modal when an image is clicked", async () => {
+    const selectImageMock = jest.fn();
+    const content = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/content")
+      .query({
+        page: "aboutus",
+      })
+      .reply(200, mockContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const image = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images")
+      .reply(200, mockImage, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    render(<AboutUs setSelectedImage={selectImageMock} />);
+
+    await screen.findByText("Heading 1");
+    fireEvent.click(screen.getByTestId("gallery-image-0"));
+    expect(selectImageMock).toHaveBeenCalled();
+
+    const displayedImage = document.querySelectorAll("img");
+    expect(displayedImage[0].src).toContain("test-for-home");
 
     content.done();
     image.done();

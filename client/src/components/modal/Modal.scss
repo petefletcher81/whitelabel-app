@@ -1,0 +1,15 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  & img {
+    display: block;
+    max-width: 60%;
+    max-height: 80%;
+    margin: 100px auto;
+    background-color: #fff;
+    padding: 2px;
+  }
+}
