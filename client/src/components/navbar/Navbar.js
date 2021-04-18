@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./Navbar.scss";
 
 const Navbar = ({ handleToggle }) => {
   const mobile = window.innerWidth < 990;
 
   return (
-    <section className="navbar flex">
+    <section className="navbar flex" role="menu">
       <div className="container flex mx-1 justify-between w-full">
         <div className="logo heading-sm">Whitelabel Website</div>
         <nav
@@ -20,14 +21,14 @@ const Navbar = ({ handleToggle }) => {
           ) : (
             <div>
               <ul className="flex justify-between">
-                <li>
-                  <a>Home</a>
+                <li role="menuitem" aria-label="home navigation">
+                  <Link to="/">Home</Link>
                 </li>
-                <li>
-                  <a>About Us</a>
+                <li role="menuitem" aria-label="about us navigation">
+                  <Link to="aboutus">About Us</Link>
                 </li>
-                <li>
-                  <a>Contact Us</a>
+                <li role="menuitem" aria-label="contact us navigation">
+                  <Link to="/contactus">Contact Us</Link>
                 </li>
               </ul>
             </div>

@@ -35,3 +35,14 @@ export const mockImage = [
     banner: "https://test-for-contactus",
   },
 ];
+
+export const mockFooter = [
+  {
+    id: "company",
+    companyName: "Big Trees",
+  },
+  {
+    id: "social",
+    socialLinkedin: "linkedinurl",
+  },
+];

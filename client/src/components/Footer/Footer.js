@@ -20,6 +20,8 @@ const Footer = () => {
       }
     };
     getAllFooterContent();
+    // need to clean up so no memory leak in tests
+    return () => {};
   }, []);
 
   const generateFooterCompany = ({

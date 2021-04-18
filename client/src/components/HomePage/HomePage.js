@@ -50,7 +50,11 @@ const HomePage = () => {
         !contentError &&
         content.map((section, index) => {
           return (
-            <div className="content" key={section.id[index]}>
+            <div
+              className="content"
+              key={section.id[index]}
+              data-testid="home-content"
+            >
               <div className={`content-${index}`}>
                 <div className="container grid">
                   <div className="content-text-wrapper">

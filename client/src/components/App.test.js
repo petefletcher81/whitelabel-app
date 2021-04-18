@@ -8,6 +8,7 @@ import {
   waitFor,
   fireEvent,
 } from "../test-utils/custom-utils";
+import { mockContent, mockImage, mockFooter } from "../test-utils/mockdata";
 import { createMemoryHistory } from "history";
 import nock from "nock";
 import App from "./App";
@@ -181,6 +182,84 @@ describe("App ", () => {
     image.done();
     contentFooter.done();
     content.done();
+  });
+
+  it("should open the modal when an image is clicked and close the modal when backdrop clicked", async () => {
+    window.innerWidth = 990;
+    const contentAboutus = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/content")
+      .query({
+        page: "aboutus",
+      })
+      .reply(200, mockContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const contentHome = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/content")
+      .query({
+        page: "home",
+      })
+      .reply(200, mockContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const imageHome = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images/home/image")
+      .reply(200, mockImage, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const imageAboutus = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images")
+      .reply(200, mockImage, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const footer = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/footer")
+      .reply(200, mockFooter, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    await screen.findAllByTestId("home-content");
+    fireEvent.click(screen.getByText("About Us"));
+    expect(history.location.pathname).toBe("/aboutus");
+
+    await screen.findByTestId("aboutus-section");
+    await screen.findByTestId("gallery-image-0");
+    fireEvent.click(screen.getByTestId("gallery-image-0"));
+
+    await screen.getByTestId("backdrop");
+    fireEvent.click(screen.getByTestId("backdrop"));
+    expect(screen.queryByTestId("backdrop")).not.toBeInTheDocument();
+
+    contentAboutus.done();
+    contentHome.done();
+    imageHome.done();
+    imageAboutus.done();
+    footer.done();
   });
 
   it("should allow user to toggle the menu button to show hide sidebar", () => {
