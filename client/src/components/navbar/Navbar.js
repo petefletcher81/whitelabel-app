@@ -1,9 +1,26 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useRef, useEffect } from "react";
+import NavItems from "../navitems/NavItems";
 import "./Navbar.scss";
 
-const Navbar = ({ handleToggle }) => {
+const Navbar = ({ toggle, handleToggle }) => {
   const mobile = window.innerWidth < 990;
+  const ref = useRef();
+
+  if (mobile) {
+    useEffect(() => {
+      const onBodyClick = (event) => {
+        if (ref.current.contains(event.target)) {
+          return;
+        }
+        handleToggle();
+      };
+      document.body.addEventListener("click", onBodyClick);
+
+      return () => {
+        document.body.removeEventListener("click", onBodyClick);
+      };
+    }, []);
+  }
 
   return (
     <section className="navbar flex" role="menu">
@@ -15,21 +32,21 @@ const Navbar = ({ handleToggle }) => {
           className="flex"
         >
           {mobile ? (
-            <div className="menu-icon" role="button" onClick={handleToggle}>
-              <i className="fas fa-2x fa-bars" />{" "}
+            <div
+              className="menu-icon"
+              role="button"
+              onClick={() => {
+                const newValue = !toggle;
+                handleToggle(newValue);
+              }}
+              ref={ref}
+            >
+              <i className="fas fa-2x fa-bars" />
             </div>
           ) : (
             <div>
               <ul className="flex justify-between">
-                <li role="menuitem" aria-label="home navigation">
-                  <Link to="/">Home</Link>
-                </li>
-                <li role="menuitem" aria-label="about us navigation">
-                  <Link to="aboutus">About Us</Link>
-                </li>
-                <li role="menuitem" aria-label="contact us navigation">
-                  <Link to="/contactus">Contact Us</Link>
-                </li>
+                <NavItems />
               </ul>
             </div>
           )}
