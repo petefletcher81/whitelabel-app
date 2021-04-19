@@ -6,7 +6,6 @@ import nock from "nock";
 import HomePage from "./HomePage";
 
 describe("<HomePage />", () => {
-  // TODO - sort these tests out
   beforeAll(() => {
     nock.disableNetConnect();
   });
@@ -40,12 +39,29 @@ describe("<HomePage />", () => {
         image: "https://test-for-contactus",
       },
     ];
-    render(<HomePage />, {
-      initialState: {
-        content: { allContent: homeContent },
-        images: { allImages: imageContent },
-      },
-    });
+
+    const content = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/content")
+      .query({
+        page: "home",
+      })
+      .reply(200, homeContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const image = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images/home/image")
+      .reply(200, imageContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    render(<HomePage />);
 
     await waitFor(() => {
       screen.getByText("Heading 1");
@@ -56,24 +72,56 @@ describe("<HomePage />", () => {
 
     const displayedImage = document.querySelectorAll("img");
     expect(displayedImage[0].src).toContain("test-for-home");
+
+    image.done();
+    content.done();
   });
 
   it("should not render content when there is an error", async () => {
-    render(<HomePage />, {
-      initialState: {
-        content: {
-          error: {
-            message:
-              "Something went wrong while trying to add or get the content",
-          },
+    const content = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/content")
+      .query({
+        page: "home",
+      })
+      .reply(
+        400,
+        {
+          message:
+            "Something went wrong while trying to add or get the content",
         },
-      },
-    });
+        {
+          "Access-Control-Allow-Origin": "*",
+          "Content-type": "application/json",
+        }
+      );
+
+    const image = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images/home/image")
+      .reply(
+        400,
+        {
+          message:
+            "Something went wrong while trying to add or get the content",
+        },
+        {
+          "Access-Control-Allow-Origin": "*",
+          "Content-type": "application/json",
+        }
+      );
+
+    render(<HomePage />);
 
     await waitFor(() => {
       screen.getByText(
         /Something went wrong while trying to add or get the content/i
       );
     });
+
+    content.done();
+    image.done();
   });
 });

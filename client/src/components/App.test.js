@@ -7,7 +7,9 @@ import {
   screen,
   waitFor,
   fireEvent,
+  userEvent,
 } from "../test-utils/custom-utils";
+import { mockContent, mockImage, mockFooter } from "../test-utils/mockdata";
 import { createMemoryHistory } from "history";
 import nock from "nock";
 import App from "./App";
@@ -74,7 +76,7 @@ describe("App ", () => {
     const image = nock(
       "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
     )
-      .get("/images")
+      .get("/images/home/image")
       .reply(200, imageContent, {
         "Access-Control-Allow-Origin": "*",
         "Content-type": "application/json",
@@ -100,11 +102,10 @@ describe("App ", () => {
       screen.getByText(
         /Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum./i
       );
+      const displayedImage = document.querySelectorAll("img");
+      expect(displayedImage[0].src).toContain("test-for-home");
+      expect(screen.queryByTestId("homepage-section")).toBeInTheDocument();
     });
-
-    const displayedImage = document.querySelectorAll("img");
-    expect(displayedImage[0].src).toContain("test-for-home");
-    expect(screen.queryByTestId("homepage-section")).toBeInTheDocument();
 
     image.done();
     content.done();
@@ -134,7 +135,7 @@ describe("App ", () => {
     const image = nock(
       "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
     )
-      .get("/images")
+      .get("/images/home/image")
       .reply(
         400,
         {
@@ -184,6 +185,84 @@ describe("App ", () => {
     content.done();
   });
 
+  it("should open the modal when an image is clicked and close the modal when backdrop clicked", async () => {
+    window.innerWidth = 990;
+    const contentAboutus = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/content")
+      .query({
+        page: "aboutus",
+      })
+      .reply(200, mockContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const contentHome = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/content")
+      .query({
+        page: "home",
+      })
+      .reply(200, mockContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const imageHome = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images/home/image")
+      .reply(200, mockImage, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const imageAboutus = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images")
+      .reply(200, mockImage, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const footer = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/footer")
+      .reply(200, mockFooter, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    await screen.findAllByTestId("home-content");
+    fireEvent.click(screen.getByText("About Us"));
+    expect(history.location.pathname).toBe("/aboutus");
+
+    await screen.findByTestId("aboutus-section");
+    await screen.findByTestId("gallery-image-0");
+    fireEvent.click(screen.getByTestId("gallery-image-0"));
+
+    await screen.getByTestId("backdrop");
+    fireEvent.click(screen.getByTestId("backdrop"));
+    expect(screen.queryByTestId("backdrop")).not.toBeInTheDocument();
+
+    contentAboutus.done();
+    contentHome.done();
+    imageHome.done();
+    imageAboutus.done();
+    footer.done();
+  });
+
   it("should allow user to toggle the menu button to show hide sidebar", () => {
     window.innerWidth = 414;
     render(
@@ -202,5 +281,25 @@ describe("App ", () => {
     expect(screen.queryByText("Home")).not.toBeInTheDocument();
     expect(screen.queryByText("About Us")).not.toBeInTheDocument();
     expect(screen.queryByText("Contact Us")).not.toBeInTheDocument();
+
+    fireEvent.click(menu);
+    fireEvent.click(document.body);
+    expect(screen.queryByText("Home")).not.toBeInTheDocument();
+    expect(screen.queryByText("About Us")).not.toBeInTheDocument();
+    expect(screen.queryByText("Contact Us")).not.toBeInTheDocument();
+  });
+
+  it("should allow user to toggle the menu button to show hide sidebar", () => {
+    window.innerWidth = 990;
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    fireEvent.click(document.body);
+    expect(screen.queryByText("Home")).toBeInTheDocument();
+    expect(screen.queryByText("About Us")).toBeInTheDocument();
+    expect(screen.queryByText("Contact Us")).toBeInTheDocument();
   });
 });
