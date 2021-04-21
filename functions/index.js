@@ -21,6 +21,11 @@ const {
   deleteImage,
   getPageImages,
 } = require("./controllers/images-endpoint");
+const {
+  addEnquiry,
+  getEnquiries,
+  deleteEnquiry,
+} = require("./controllers/enquiries-endpoint");
 
 const {
   getFooterContent,
@@ -57,6 +62,11 @@ app.get("/footer", getFooterContent);
 app.post("/footer/:area", addFooterContent);
 app.put("/footer/:area", updateFooterContent);
 app.delete("/footer/:area", deleteFooterContent);
+
+/** enquires */
+app.post("/enquiries", addEnquiry);
+app.get("/enquiries", getEnquiries);
+app.delete("/enquiries/:name", deleteEnquiry);
 
 app.use((req, res) => {
   res.send({ message: "Path does not exist" });

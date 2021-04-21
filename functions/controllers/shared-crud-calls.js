@@ -25,7 +25,7 @@ exports.getAll = async (req, res) => {
   } catch (error) {
     res
       .status(400)
-      .json({ message: `Something went wront cannot retrieve ${content}` });
+      .json({ message: `Something went wrong cannot retrieve ${content}` });
   }
 };
 
