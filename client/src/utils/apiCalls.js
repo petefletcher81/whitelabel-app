@@ -28,3 +28,10 @@ export const getFooterContent = async () => {
   const { data } = await axios.get(`/footer`);
   return data;
 };
+
+export const addEnquiry = async (enquiryData) => {
+  // TODO - need a back off function for bots
+  const { name, email } = enquiryData;
+  const { data } = await axios.post(`/enquiries`, { name, email });
+  return data;
+};
