@@ -3,6 +3,7 @@ import { getFooterContent } from "../../utils/apiCalls";
 import ContentError from "../../utils/contentError";
 import classnames from "classnames";
 import "./Footer.scss";
+import { waitForElementToBeRemoved } from "@testing-library/dom";
 
 const Footer = () => {
   const [footerContent, setFooterContent] = useState(null);
@@ -10,18 +11,25 @@ const Footer = () => {
   const mobile = window.innerWidth < 990;
 
   useEffect(() => {
+    let unmounted = false;
     const getAllFooterContent = async () => {
       try {
-        const response = await getFooterContent("home");
-        setFooterContent(response);
+        const response = await getFooterContent();
+        if (!unmounted) {
+          setFooterContent(response);
+        }
       } catch (error) {
         const data = error.response?.data;
-        setError(data);
+        if (!unmounted) {
+          setError(data);
+        }
       }
     };
     getAllFooterContent();
     // need to clean up so no memory leak in tests
-    return () => {};
+    return () => {
+      unmounted = true;
+    };
   }, []);
 
   const generateFooterCompany = ({
@@ -146,6 +154,7 @@ const Footer = () => {
           flex: !mobile,
         })}
       >
+        {!footerContent && !error && <div className="loading">Loading ...</div>}
         {error && !footerContent && <ContentError error={error} />}
         {footerContent &&
           footerContent.map((content) => {

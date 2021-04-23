@@ -1,5 +1,12 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import {
+  waitForElementToBeRemoved,
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  act,
+} from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import nock from "nock";
 
@@ -12,10 +19,12 @@ describe("<App />", () => {
 
   afterEach(() => {
     nock.cleanAll();
+    cleanup();
   });
 
   it("should render the footer at the bottom of the page", async () => {
     render(<Footer />);
+
     const footerContent = [
       {
         id: "company",

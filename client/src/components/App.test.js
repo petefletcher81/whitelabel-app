@@ -7,7 +7,6 @@ import {
   screen,
   waitFor,
   fireEvent,
-  userEvent,
 } from "../test-utils/custom-utils";
 import { mockContent, mockImage, mockFooter } from "../test-utils/mockdata";
 import { createMemoryHistory } from "history";
