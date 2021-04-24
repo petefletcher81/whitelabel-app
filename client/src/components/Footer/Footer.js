@@ -11,25 +11,19 @@ const Footer = () => {
   const mobile = window.innerWidth < 990;
 
   useEffect(() => {
-    let unmounted = false;
     const getAllFooterContent = async () => {
       try {
         const response = await getFooterContent();
-        if (!unmounted) {
-          setFooterContent(response);
-        }
+        setFooterContent(response);
       } catch (error) {
         const data = error.response?.data;
-        if (!unmounted) {
-          setError(data);
-        }
+        setError(data);
       }
     };
+
     getAllFooterContent();
     // need to clean up so no memory leak in tests
-    return () => {
-      unmounted = true;
-    };
+    return () => {};
   }, []);
 
   const generateFooterCompany = ({
@@ -147,7 +141,7 @@ const Footer = () => {
   };
 
   return (
-    <div className="footer">
+    <div className="footer" data-testid="footer-section">
       <div
         className={classnames("justify-between", {
           "flex flex-col": mobile,

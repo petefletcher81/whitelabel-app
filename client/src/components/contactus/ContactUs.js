@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getContent, addEnquiry } from "../../utils/apiCalls";
+import { getContent, addEnquiry, getBanners } from "../../utils/apiCalls";
 import ContentCard from "../../utils/ContentCard";
 import ContentError from "../../utils/contentError";
 
@@ -9,6 +9,8 @@ const ContactUs = () => {
   const [enquiry, setEnquiry] = useState({ name: "", email: "" });
   const [success, setSuccess] = useState(null);
   const [enquiryError, setEnquiryError] = useState(null);
+  const [banner, setBannerImage] = useState(null);
+  const [bannerError, setBannerImageError] = useState(null);
 
   useEffect(() => {
     const getContactContent = async () => {
@@ -21,6 +23,20 @@ const ContactUs = () => {
       }
     };
     getContactContent();
+  }, []);
+
+  useEffect(() => {
+    const getImageContent = async () => {
+      try {
+        const response = await getBanners("contactus");
+
+        setBannerImage(response);
+      } catch (error) {
+        const data = error.response?.data;
+        setBannerImageError(data);
+      }
+    };
+    getImageContent();
   }, []);
 
   const onChangeFormDetails = (event) => {
@@ -85,6 +101,21 @@ const ContactUs = () => {
       </div>
       {error && !content && <ContentError error={error} />}
       {content && !error && <ContentCard content={content[0]} />}
+      <div className="aboutus__banner">
+        {bannerError && !banner && <ContentError error={bannerError} />}
+        {banner &&
+          banner.map((b) => {
+            return (
+              <div
+                className="aboutus__banner"
+                key={b.id}
+                data-testid="contactus-banner"
+              >
+                <img src={b.banner} alt="contact us banner" />
+              </div>
+            );
+          })}
+      </div>
       {content && !error && <ContentCard content={content[1]} />}
       <div className="aboutus__popup">
         {success && (

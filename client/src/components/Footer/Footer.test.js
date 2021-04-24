@@ -1,29 +1,38 @@
 import React from "react";
-import {
-  waitForElementToBeRemoved,
-  cleanup,
-  render,
-  screen,
-  waitFor,
-  act,
-} from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
+
 import "@testing-library/jest-dom/extend-expect";
 import nock from "nock";
 
 import Footer from "./Footer";
+import { unmountComponentAtNode } from "react-dom";
 
-describe("<App />", () => {
+describe("<Footer />", () => {
+  let container = null;
   beforeAll(() => {
     nock.disableNetConnect();
+  });
+
+  beforeEach(() => {
+    // setup a DOM element as a render target
+    container = document.createElement("div");
+    const testid = document.createAttribute("data-testid");
+    testid.value = "test-body";
+    container.setAttributeNode(testid);
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
     nock.cleanAll();
     cleanup();
+    // cleanup on exiting
+    unmountComponentAtNode(container);
+    container.remove();
+    container = null;
   });
 
   it("should render the footer at the bottom of the page", async () => {
-    render(<Footer />);
+    const { unmount } = render(<Footer />, { container });
 
     const footerContent = [
       {
@@ -64,6 +73,9 @@ describe("<App />", () => {
       screen.getByText("09876");
       screen.getByText("address");
     });
+
+    unmount();
+    expect(screen.queryByTestId("footer-section")).not.toBeInTheDocument();
     contentFooter.done();
   });
 
@@ -81,20 +93,18 @@ describe("<App />", () => {
             "Something went wrong while trying to add or get the content",
         },
         {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json",
+          "access-control-allow-origin": "*",
+          "content-type": "application/json",
         },
         {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json",
+          "access-control-allow-origin": "*",
+          "content-type": "application/json",
         }
       );
 
-    await waitFor(() => {
-      screen.getByText(
-        /Something went wrong while trying to add or get the content/i
-      );
-    });
+    await screen.findByText(
+      /Something went wrong while trying to add or get the content/i
+    );
 
     contentFooter.done();
   });

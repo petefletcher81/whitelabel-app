@@ -24,6 +24,12 @@ export const getImages = async (page) => {
   const { data } = await axios.get(`/images/${page}/image`);
   return data;
 };
+
+export const getBanners = async (page) => {
+  const { data } = await axios.get(`/images/${page}/banner`);
+  return data;
+};
+
 export const getFooterContent = async () => {
   const { data } = await axios.get(`/footer`);
   return data;
