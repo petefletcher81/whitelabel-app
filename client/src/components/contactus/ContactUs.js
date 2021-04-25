@@ -2,24 +2,33 @@ import React, { useState, useEffect } from "react";
 import { getContent, addEnquiry, getBanners } from "../../utils/apiCalls";
 import ContentCard from "../../utils/ContentCard";
 import ContentError from "../../utils/contentError";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setContactusContent,
+  setContactusContentError,
+  setContactusImageError,
+  setContactusImages,
+} from "../../redux/content/contactus-content/contactus-content-actions";
 
 const ContactUs = () => {
-  const [content, setContent] = useState(null);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const content = useSelector((state) => state.contactusContent.content);
+  const banner = useSelector((state) => state.contactusContent.banners);
+  const contentError = useSelector((state) => state.contactusContent.error);
+  const imageError = useSelector((state) => state.contactusContent.imageError);
+
   const [enquiry, setEnquiry] = useState({ name: "", email: "" });
   const [success, setSuccess] = useState(null);
   const [enquiryError, setEnquiryError] = useState(null);
-  const [banner, setBannerImage] = useState(null);
-  const [bannerError, setBannerImageError] = useState(null);
 
   useEffect(() => {
     const getContactContent = async () => {
       try {
         const response = await getContent("contactus");
-        setContent(response);
+        dispatch(setContactusContent(response));
       } catch (error) {
         const data = error.response?.data;
-        setError(data);
+        dispatch(setContactusContentError(data));
       }
     };
     getContactContent();
@@ -29,11 +38,10 @@ const ContactUs = () => {
     const getImageContent = async () => {
       try {
         const response = await getBanners("contactus");
-
-        setBannerImage(response);
+        dispatch(setContactusImages(response));
       } catch (error) {
         const data = error.response?.data;
-        setBannerImageError(data);
+        dispatch(setContactusImageError(data));
       }
     };
     getImageContent();
@@ -41,7 +49,6 @@ const ContactUs = () => {
 
   const onChangeFormDetails = (event) => {
     const { name, value } = event.target;
-
     setEnquiry({ ...enquiry, [name]: value });
   };
 
@@ -99,10 +106,10 @@ const ContactUs = () => {
           />
         </form>
       </div>
-      {error && !content && <ContentError error={error} />}
-      {content && !error && <ContentCard content={content[0]} />}
+      {contentError && !content && <ContentError error={contentError} />}
+      {content && !contentError && <ContentCard content={content[0]} />}
       <div className="aboutus__banner">
-        {bannerError && !banner && <ContentError error={bannerError} />}
+        {imageError && !banner && <ContentError error={imageError} />}
         {banner &&
           banner.map((b) => {
             return (
@@ -116,7 +123,7 @@ const ContactUs = () => {
             );
           })}
       </div>
-      {content && !error && <ContentCard content={content[1]} />}
+      {content && !contentError && <ContentCard content={content[1]} />}
       <div className="aboutus__popup">
         {success && (
           <div
