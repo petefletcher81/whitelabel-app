@@ -9,9 +9,7 @@
   }
 
   & a {
-    width: 100px;
-    color: #fff;
-    padding: 10px;
+    color: var(--primary-color);
   }
 
   & a:hover {
@@ -32,6 +30,12 @@
       height: 4rem;
       align-items: center;
       text-align: center;
+    }
+
+    & a {
+      width: 100px;
+      color: white;
+      padding: 10px;
     }
   }
 }

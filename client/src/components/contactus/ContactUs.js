@@ -76,40 +76,43 @@ const ContactUs = () => {
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
         </div>
-        <div
-          className="aboutus__showcase-form form relative"
-          data-testid="contact-form"
-        >
-          <h2>Contact Us</h2>
-          <form>
-            <div className="aboutus__showcase-form--controls form-control">
-              <label htmlFor="name" className="visuallyhidden" />
+
+        <div className="aboutus-showcase-form-wrapper flex w-full">
+          <div
+            className="aboutus__showcase-form form relative"
+            data-testid="contact-form"
+          >
+            <h2>Contact Us</h2>
+            <form>
+              <div className="aboutus__showcase-form--controls form-control">
+                <label htmlFor="name" className="visuallyhidden" />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  onChange={onChangeFormDetails}
+                  required
+                />
+              </div>
+              <div className="aboutus__showcase-form--controls form-control">
+                <label htmlFor="email" className="visuallyhidden" />
+                <input
+                  type="text"
+                  name="email"
+                  placeholder="Email"
+                  onChange={onChangeFormDetails}
+                  required
+                />
+              </div>
+              <label htmlFor="submit" className="visuallyhidden" />
               <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                onChange={onChangeFormDetails}
-                required
+                type="submit"
+                value="Submit"
+                className="btn btn-primary"
+                onClick={handleSubmit}
               />
-            </div>
-            <div className="aboutus__showcase-form--controls form-control">
-              <label htmlFor="email" className="visuallyhidden" />
-              <input
-                type="text"
-                name="email"
-                placeholder="Email"
-                onChange={onChangeFormDetails}
-                required
-              />
-            </div>
-            <label htmlFor="submit" className="visuallyhidden" />
-            <input
-              type="submit"
-              value="Submit"
-              className="btn btn-primary"
-              onClick={handleSubmit}
-            />
-          </form>
+            </form>
+          </div>
         </div>
       </div>
       {contentError && !content && <ContentError error={contentError} />}

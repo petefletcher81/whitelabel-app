@@ -229,9 +229,8 @@ img {
   color: var(--primary-color);
   flex-direction: column;
   height: 250px;
-  width: 80%;
+  width: 100%;
   justify-content: center;
-  // align-items: center;
   padding: 1rem;
   margin: 0.5rem;
   z-index: 1;
@@ -255,4 +254,10 @@ img {
 
 .form h2 {
   margin-bottom: 0 !important;
+}
+
+@media (min-width: 990px) {
+  .form {
+    width: 80%;
+  }
 }

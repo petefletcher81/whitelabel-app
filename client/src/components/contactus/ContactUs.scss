@@ -6,7 +6,7 @@
 
   &__showcase {
     color: #fff;
-    height: 400px;
+    height: 600px;
     background-color: var(--primary-color);
   }
 
@@ -20,7 +20,8 @@
 
   &__banner-image-wrapper img {
     object-fit: cover;
-    object-position: 50% 50%;
+    // picture dependant
+    object-position: 0% 50%;
     transition: 0.7s ease-in-out;
   }
 
@@ -30,5 +31,23 @@
 }
 
 .aboutus .grid {
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr;
+  gap: 0px;
+}
+
+@media (min-width: 990px) {
+  .aboutus .grid {
+    grid-template-columns: 2fr 1fr;
+    gap: 10px;
+  }
+
+  .aboutus {
+    &__banner-image-wrapper img {
+      object-position: 50% 50%;
+    }
+
+    &__showcase {
+      height: 350px;
+    }
+  }
 }
