@@ -9,6 +9,7 @@ import {
   setContactusImageError,
   setContactusImages,
 } from "../../redux/content/contactus-content/contactus-content-actions";
+import "./ContactUs.scss";
 
 const ContactUs = () => {
   const dispatch = useDispatch();
@@ -64,61 +65,70 @@ const ContactUs = () => {
   };
 
   return (
-    <section className="aboutus relative">
-      <div className="aboutus__showcase">
-        <div className="aboutus__showcase-text">
-          <h1>vestibulum morbi blandit cursus risus at ultrices mi</h1>
+    <section className="aboutus">
+      <div className="aboutus__showcase relative p-2 grid">
+        <div className="aboutus__showcase-text-wrapper">
+          <div className="aboutus__showcase-text">
+            <h1>vestibulum morbi blandit cursus</h1>
+          </div>
+          <p className="py-1">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          </p>
         </div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
-      </div>
-      <div className="aboutus__showcase-form card" data-testid="contact-form">
-        <h2>Contact Us</h2>
-        <form>
-          <div className="aboutus__showcase form-control">
-            <label htmlFor="name" className="visuallyhidden" />
+        <div
+          className="aboutus__showcase-form form relative"
+          data-testid="contact-form"
+        >
+          <h2>Contact Us</h2>
+          <form>
+            <div className="aboutus__showcase-form--controls form-control">
+              <label htmlFor="name" className="visuallyhidden" />
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                onChange={onChangeFormDetails}
+                required
+              />
+            </div>
+            <div className="aboutus__showcase-form--controls form-control">
+              <label htmlFor="email" className="visuallyhidden" />
+              <input
+                type="text"
+                name="email"
+                placeholder="Email"
+                onChange={onChangeFormDetails}
+                required
+              />
+            </div>
+            <label htmlFor="submit" className="visuallyhidden" />
             <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              onChange={onChangeFormDetails}
-              required
+              type="submit"
+              value="Submit"
+              className="btn btn-primary"
+              onClick={handleSubmit}
             />
-          </div>
-          <div className="aboutus__showcase form-control">
-            <label htmlFor="email" className="visuallyhidden" />
-            <input
-              type="text"
-              name="email"
-              placeholder="Email"
-              onChange={onChangeFormDetails}
-              required
-            />
-          </div>
-          <label htmlFor="submit" className="visuallyhidden" />
-          <input
-            type="submit"
-            value="Submit"
-            className="btn btn-primary"
-            onClick={handleSubmit}
-          />
-        </form>
+          </form>
+        </div>
       </div>
       {contentError && !content && <ContentError error={contentError} />}
       {content && !contentError && <ContentCard content={content[0]} />}
-      <div className="aboutus__banner">
+      <div className="aboutus__banner flex">
         {imageError && !banner && <ContentError error={imageError} />}
         {banner &&
           banner.map((b) => {
             return (
               <div
-                className="aboutus__banner"
+                className="aboutus__banner-image-wrapper w-full h-full relative hidden"
                 key={b.id}
                 data-testid="contactus-banner"
               >
-                <img src={b.banner} alt="contact us banner" />
+                <img
+                  src={b.banner}
+                  alt="contact us banner"
+                  className="w-full h-full"
+                />
               </div>
             );
           })}
