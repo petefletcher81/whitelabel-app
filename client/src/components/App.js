@@ -5,6 +5,7 @@ import HomePage from "./homepage/HomePage";
 import AboutUs from "./aboutus/AboutUs";
 import Modal from "./modal/Modal";
 import "./App.scss";
+import ContactUs from "./contactus/ContactUs";
 
 const App = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -19,6 +20,7 @@ const App = () => {
             path="/aboutus"
             component={() => <AboutUs setSelectedImage={setSelectedImage} />}
           />
+          <Route exact path="/contactus" component={ContactUs} />
         </Switch>
         {selectedImage && (
           <Modal imgUrl={selectedImage} setSelectedImage={setSelectedImage} />

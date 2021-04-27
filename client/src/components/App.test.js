@@ -7,7 +7,6 @@ import {
   screen,
   waitFor,
   fireEvent,
-  userEvent,
 } from "../test-utils/custom-utils";
 import { mockContent, mockImage, mockFooter } from "../test-utils/mockdata";
 import { createMemoryHistory } from "history";
@@ -287,19 +286,5 @@ describe("App ", () => {
     expect(screen.queryByText("Home")).not.toBeInTheDocument();
     expect(screen.queryByText("About Us")).not.toBeInTheDocument();
     expect(screen.queryByText("Contact Us")).not.toBeInTheDocument();
-  });
-
-  it("should allow user to toggle the menu button to show hide sidebar", () => {
-    window.innerWidth = 990;
-    render(
-      <Router history={history}>
-        <App />
-      </Router>
-    );
-
-    fireEvent.click(document.body);
-    expect(screen.queryByText("Home")).toBeInTheDocument();
-    expect(screen.queryByText("About Us")).toBeInTheDocument();
-    expect(screen.queryByText("Contact Us")).toBeInTheDocument();
   });
 });

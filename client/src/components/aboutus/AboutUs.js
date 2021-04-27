@@ -9,15 +9,13 @@ import {
 } from "../../redux/content/aboutus-content/aboutus-content-actions";
 import ContentError from "../../utils/contentError";
 import "./AboutUs.scss";
+import ContentCard from "../../utils/ContentCard";
 
 const AboutUs = ({ setSelectedImage }) => {
   const dispatch = useDispatch();
   const content = useSelector((state) => state.aboutusContent.content);
   const images = useSelector((state) => state.aboutusContent.images);
   const contentError = useSelector((state) => state.aboutusContent.error);
-
-  let contentSection1;
-  let contentSection2;
 
   useEffect(() => {
     const getAllContent = async () => {
@@ -45,34 +43,13 @@ const AboutUs = ({ setSelectedImage }) => {
     getImageContent();
   }, []);
 
-  if (content) {
-    contentSection1 = content[0];
-    contentSection2 = content[1];
-  }
-
   return (
     <section
       className="aboutus relative flex flex-col"
       data-testid="aboutus-section "
     >
       {contentError && !content && <ContentError error={contentError} />}
-      {/* TODO - create cards from the content sections */}
-      {contentSection1 && !contentError && (
-        <div className="content">
-          <div className={`content-0`}>
-            <div className="container grid">
-              <div className="content-text-wrapper">
-                <div className="content__section-heading flex m-1 heading border-bottom-primary">
-                  {contentSection1["heading"]}
-                </div>
-                <div className="content__section-content mx-1 mb-2">
-                  {contentSection1["content"]}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {content && !contentError && <ContentCard content={content[0]} />}
       <div className="gallery grid">
         {images &&
           images.map((image, index) => {
@@ -90,23 +67,7 @@ const AboutUs = ({ setSelectedImage }) => {
             }
           })}
       </div>
-
-      {contentSection2 && !contentError && (
-        <div className="content">
-          <div className={`content-2`}>
-            <div className="container grid">
-              <div className="content-text-wrapper">
-                <div className="content__section-heading flex m-1 heading border-bottom-primary">
-                  {contentSection2["heading"]}
-                </div>
-                <div className="content__section-content mx-1 mb-2">
-                  {contentSection2["content"]}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {content && !contentError && <ContentCard content={content[1]} />}
     </section>
   );
 };

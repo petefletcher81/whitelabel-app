@@ -3,6 +3,7 @@ import {
   render,
   screen,
   waitFor,
+  cleanup,
 } from "../../test-utils/custom-utils";
 import React from "react";
 import AboutUs from "../aboutus/AboutUs";
@@ -11,6 +12,15 @@ import { mockContent, mockImage } from "../../test-utils/mockdata";
 import nock from "nock";
 
 describe("<AboutUs />", () => {
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
+
+  afterEach(() => {
+    nock.cleanAll();
+    cleanup();
+  });
+
   it("should render about us content", async () => {
     const content = nock(
       "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"

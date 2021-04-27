@@ -3,6 +3,7 @@ import { getFooterContent } from "../../utils/apiCalls";
 import ContentError from "../../utils/contentError";
 import classnames from "classnames";
 import "./Footer.scss";
+import { waitForElementToBeRemoved } from "@testing-library/dom";
 
 const Footer = () => {
   const [footerContent, setFooterContent] = useState(null);
@@ -12,13 +13,14 @@ const Footer = () => {
   useEffect(() => {
     const getAllFooterContent = async () => {
       try {
-        const response = await getFooterContent("home");
+        const response = await getFooterContent();
         setFooterContent(response);
       } catch (error) {
         const data = error.response?.data;
         setError(data);
       }
     };
+
     getAllFooterContent();
     // need to clean up so no memory leak in tests
     return () => {};
@@ -139,13 +141,14 @@ const Footer = () => {
   };
 
   return (
-    <div className="footer">
+    <div className="footer" data-testid="footer-section">
       <div
         className={classnames("justify-between", {
           "flex flex-col": mobile,
           flex: !mobile,
         })}
       >
+        {!footerContent && !error && <div className="loading">Loading ...</div>}
         {error && !footerContent && <ContentError error={error} />}
         {footerContent &&
           footerContent.map((content) => {

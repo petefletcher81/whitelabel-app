@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import ContentError from "../../utils/contentError";
+import ContentCard from "../../utils/ContentCard";
 import { useSelector, useDispatch } from "react-redux";
 import { getContent, getImages } from "../../utils/apiCalls";
 import {
@@ -50,29 +51,13 @@ const HomePage = () => {
         !contentError &&
         content.map((section, index) => {
           return (
-            <div
-              className="content"
-              key={section.id[index]}
-              data-testid="home-content"
-            >
-              <div className={`content-${index}`}>
-                <div className="container grid">
-                  <div className="content-text-wrapper">
-                    <div className="content__section-heading flex m-1 heading border-bottom-primary">
-                      {section["heading"]}
-                    </div>
-                    <div className="content__section-content mx-1">
-                      {section["content"]}
-                    </div>
-                  </div>
-                  {images && (
-                    <div className="content-image-wrapper">
-                      <img src={images[index].image} />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            <ContentCard
+              content={section}
+              images={images}
+              index={index}
+              key={`${section.id}-${index}`}
+              testid={"home-content"}
+            />
           );
         })}
     </section>

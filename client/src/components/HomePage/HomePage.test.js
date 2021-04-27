@@ -1,5 +1,10 @@
 import React from "react";
-import { render, screen, waitFor } from "../../test-utils/custom-utils";
+import {
+  render,
+  screen,
+  waitFor,
+  cleanup,
+} from "../../test-utils/custom-utils";
 import "@testing-library/jest-dom/extend-expect";
 import nock from "nock";
 
@@ -12,6 +17,7 @@ describe("<HomePage />", () => {
 
   afterEach(() => {
     nock.cleanAll();
+    cleanup();
   });
 
   it("should render component with main sections", async () => {

@@ -2,6 +2,7 @@ const functions = require("firebase-functions");
 const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
+
 const {
   adminLogin,
   setAdmin,
@@ -21,6 +22,11 @@ const {
   deleteImage,
   getPageImages,
 } = require("./controllers/images-endpoint");
+const {
+  addEnquiry,
+  getEnquiries,
+  deleteEnquiry,
+} = require("./controllers/enquiries-endpoint");
 
 const {
   getFooterContent,
@@ -32,8 +38,8 @@ const {
 const app = express(); // creates express app
 
 app.use(cors({ origin: true }));
-app.use(bodyParser.json({ extended: true })); // parse json object bodies --  where the Content-Type header matches the type option -- unicode encoding
-app.use(bodyParser.urlencoded({ extended: true })); // parse bodies passed from a url ie form -- Content-Type header matches the type option -- utf-8 encoding
+app.use(express.json({ extended: true })); // parse json object bodies --  where the Content-Type header matches the type option -- unicode encoding
+app.use(express.urlencoded({ extended: true })); // parse bodies passed from a url ie form -- Content-Type header matches the type option -- utf-8 encoding
 
 app.post("/admin", adminLogin);
 app.post("/set-admin", isAdmin, setAdmin);
@@ -57,6 +63,11 @@ app.get("/footer", getFooterContent);
 app.post("/footer/:area", addFooterContent);
 app.put("/footer/:area", updateFooterContent);
 app.delete("/footer/:area", deleteFooterContent);
+
+/** enquires */
+app.post("/enquiries", addEnquiry);
+app.get("/enquiries", getEnquiries);
+app.delete("/enquiries/:name", deleteEnquiry);
 
 app.use((req, res) => {
   res.send({ message: "Path does not exist" });
