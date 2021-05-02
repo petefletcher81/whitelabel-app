@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Switch, Route } from "react-router-dom";
-import Layout from "./layout/Layout";
-import HomePage from "./homepage/HomePage";
+import React, { useState } from "react";
+import { Route, Switch } from "react-router-dom";
 import AboutUs from "./aboutus/AboutUs";
-import Modal from "./modal/Modal";
 import "./App.scss";
 import ContactUs from "./contactus/ContactUs";
+import HomePage from "./homepage/HomePage";
+import Layout from "./layout/Layout";
+import Modal from "./modal/Modal";
+import SignIn from "./signin/SignIn";
 
 const App = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -15,6 +16,7 @@ const App = () => {
       <Layout>
         <Switch>
           <Route exact path="/" component={HomePage} />
+          <Route exact path="/admin" component={SignIn} />
           <Route
             exact
             path="/aboutus"
