@@ -1,16 +1,14 @@
-import {
-  screen,
-  render,
-  fireEvent,
-  getByLabelText,
-  cleanup,
-} from "../../test-utils/custom-utils";
-import React from "react";
-import ContactUs from "./ContactUs";
-import nock from "nock";
 import "@testing-library/jest-dom/extend-expect";
-
-import { mockContent, mockBannerImage } from "../../test-utils/mockdata";
+import nock from "nock";
+import React from "react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from "../../test-utils/custom-utils";
+import { mockBannerImage, mockContent } from "../../test-utils/mockdata";
+import ContactUs from "./ContactUs";
 
 describe("<ContactUs /> Mobile", () => {
   beforeAll(() => {
@@ -115,7 +113,7 @@ describe("<ContactUs /> Mobile", () => {
 
     await screen.findByText("Heading 1");
 
-    screen.getByText("vestibulum morbi blandit cursus risus at ultrices mi");
+    screen.getByText("vestibulum morbi blandit cursus");
     content.done();
     banner.done();
   });

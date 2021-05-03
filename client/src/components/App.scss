@@ -241,7 +241,8 @@ img {
 }
 
 .form-control input[type="text"],
-.form-control input[type="email"] {
+.form-control input[type="email"],
+.form-control input[type="password"] {
   border: 0;
   border-bottom: 1px solid var(--primary-color);
   width: 100%;

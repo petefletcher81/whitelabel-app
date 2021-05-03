@@ -41,3 +41,10 @@ export const addEnquiry = async (enquiryData) => {
   const { data } = await axios.post(`/enquiries`, { name, email });
   return data;
 };
+
+export const attemptSignIn = async (siginInData) => {
+  // TODO - need a back off function for bots
+  const { password, email } = siginInData;
+  const { data } = await axios.post(`/admin`, { password, email });
+  return data;
+};
