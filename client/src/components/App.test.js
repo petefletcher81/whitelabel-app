@@ -1,27 +1,38 @@
+import "@testing-library/jest-dom/extend-expect";
+import { createMemoryHistory } from "history";
+import jwtDecode from "jwt-decode";
+import nock from "nock";
 import React from "react";
 import { Router } from "react-router-dom";
-import "@testing-library/jest-dom/extend-expect";
 import {
   cleanup,
+  fireEvent,
   render,
   screen,
   waitFor,
-  fireEvent,
 } from "../test-utils/custom-utils";
-import { mockContent, mockImage, mockFooter } from "../test-utils/mockdata";
-import { createMemoryHistory } from "history";
-import nock from "nock";
+import { mockContent, mockFooter, mockImage } from "../test-utils/mockdata";
 import App from "./App";
 
+let mockDate = new Date();
 const history = createMemoryHistory();
+jest.mock("jwt-decode");
+const mockJwt = require("jwt-decode");
 
 describe("App ", () => {
   beforeAll(() => {
     nock.disableNetConnect();
   });
 
+  beforeEach(() => {
+    jest.spyOn(console, "error");
+    // @ts-ignore jest.spyOn adds this functionallity
+    console.error.mockImplementation(() => null);
+  });
+
   afterEach(() => {
     nock.cleanAll();
+    console.error.mockRestore();
     cleanup();
   });
 
@@ -262,13 +273,379 @@ describe("App ", () => {
     footer.done();
   });
 
-  it("should allow user to toggle the menu button to show hide sidebar", () => {
-    window.innerWidth = 414;
+  // it("should NOT render dashboard link and NOT allow user to navigate to page, if there is NO admin token within localstorage", () => {
+  //   render(
+  //     <Router history={history}>
+  //       <App />
+  //     </Router>
+  //   );
+
+  //   expect(screen.queryByText("Dashboard")).not.toBeInTheDocument();
+  // });
+});
+
+describe("App -- Nav items", () => {
+  beforeAll(() => {
+    nock.disableNetConnect();
+  });
+
+  beforeEach(() => {
+    jest.spyOn(console, "error");
+    nock.cleanAll();
+    cleanup();
+    console.error.mockImplementation(() => null);
+  });
+
+  afterEach(() => {
+    localStorage.removeItem("token", "qwerty");
+    nock.cleanAll();
+    console.error.mockRestore();
+    cleanup();
+  });
+
+  afterEach(() => {});
+
+  it("should render dashboard link and allow user to navigate to page, if there is an admin token within localstorage", async () => {
+    const homeContent = [
+      {
+        id: "section-one",
+        heading: "Heading 1",
+        content:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        createdAt: "2021-01-17T06:25:57.066Z",
+      },
+    ];
+    const imageContent = [
+      {
+        id: "ba8c816a-6007-4a9e-aeff-1bca70fc7e97",
+        createdAt: "2021-01-31T06:46:28.741Z",
+        section: "home",
+        image: "https://test-for-home",
+      },
+      {
+        id: "2bed3fc0-2a17-4519-8460-0dc8ab4e32a2",
+        section: "contactus",
+        createdAt: "2021-01-31T06:46:28.742Z",
+        image: "https://test-for-contactus",
+      },
+    ];
+    const footerContent = [
+      {
+        id: "company",
+        companyName: "Big Trees",
+      },
+      {
+        id: "social",
+        socialLinkedin: "linkedinurl",
+      },
+    ];
+
+    const content = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/content")
+      .query({
+        page: "home",
+      })
+      .reply(200, homeContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const image = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images/home/image")
+      .reply(200, imageContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const footer = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/footer")
+      .reply(200, footerContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+    const history = createMemoryHistory();
+    window.innerWidth = 990;
+    localStorage.setItem("token", "qwerty");
+
+    mockJwt.mockImplementation(() => {
+      return { exp: mockDate.getTime(), admin: true };
+    });
+
     render(
       <Router history={history}>
         <App />
       </Router>
     );
+
+    await waitFor(() => {
+      screen.getByText("Heading 1");
+    });
+
+    fireEvent.click(screen.getByText("Dashboard"));
+    screen.getByTestId("dashboard-screen");
+    expect(jwtDecode).toHaveBeenCalled();
+
+    content.done();
+    image.done();
+    footer.done();
+  });
+
+  it("should render not dashboard link and not allow user to navigate to page, if token out of date", async () => {
+    const homeContent = [
+      {
+        id: "section-one",
+        heading: "Heading 1",
+        content:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        createdAt: "2021-01-17T06:25:57.066Z",
+      },
+    ];
+    const imageContent = [
+      {
+        id: "ba8c816a-6007-4a9e-aeff-1bca70fc7e97",
+        createdAt: "2021-01-31T06:46:28.741Z",
+        section: "home",
+        image: "https://test-for-home",
+      },
+      {
+        id: "2bed3fc0-2a17-4519-8460-0dc8ab4e32a2",
+        section: "contactus",
+        createdAt: "2021-01-31T06:46:28.742Z",
+        image: "https://test-for-contactus",
+      },
+    ];
+    const footerContent = [
+      {
+        id: "company",
+        companyName: "Big Trees",
+      },
+      {
+        id: "social",
+        socialLinkedin: "linkedinurl",
+      },
+    ];
+
+    const content = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/content")
+      .query({
+        page: "home",
+      })
+      .reply(200, homeContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const image = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images/home/image")
+      .reply(200, imageContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const footer = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/footer")
+      .reply(200, footerContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const history = createMemoryHistory();
+    window.innerWidth = 990;
+    localStorage.setItem("token", "qwerty");
+
+    mockJwt.mockImplementation(() => {
+      return { exp: 1, admin: false };
+    });
+
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    await waitFor(() => {
+      screen.getByText("Heading 1");
+    });
+
+    expect(screen.queryByText("Dashboard")).not.toBeInTheDocument();
+
+    content.done();
+    image.done();
+    footer.done();
+  });
+
+  it("should render not dashboard if there is admin", async () => {
+    const homeContent = [
+      {
+        id: "section-one",
+        heading: "Heading 1",
+        content:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        createdAt: "2021-01-17T06:25:57.066Z",
+      },
+    ];
+    const imageContent = [
+      {
+        id: "ba8c816a-6007-4a9e-aeff-1bca70fc7e97",
+        createdAt: "2021-01-31T06:46:28.741Z",
+        section: "home",
+        image: "https://test-for-home",
+      },
+      {
+        id: "2bed3fc0-2a17-4519-8460-0dc8ab4e32a2",
+        section: "contactus",
+        createdAt: "2021-01-31T06:46:28.742Z",
+        image: "https://test-for-contactus",
+      },
+    ];
+    const footerContent = [
+      {
+        id: "company",
+        companyName: "Big Trees",
+      },
+      {
+        id: "social",
+        socialLinkedin: "linkedinurl",
+      },
+    ];
+
+    const content = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/content")
+      .query({
+        page: "home",
+      })
+      .reply(200, homeContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const image = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images/home/image")
+      .reply(200, imageContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const footer = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/footer")
+      .reply(200, footerContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const history = createMemoryHistory();
+    window.innerWidth = 990;
+    localStorage.setItem("token", "qwerty");
+
+    mockJwt.mockImplementation(() => {
+      return { exp: mockDate.getTime(), admin: false };
+    });
+
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    await waitFor(() => {
+      screen.getByText("Heading 1");
+    });
+
+    expect(screen.queryByText("Dashboard")).not.toBeInTheDocument();
+
+    content.done();
+    image.done();
+    footer.done();
+  });
+
+  it("should allow user to toggle the menu button to show hide sidebar", async () => {
+    const history = createMemoryHistory();
+    window.innerWidth = 414;
+    const homeContent = [
+      {
+        id: "section-one",
+        heading: "Heading 1",
+        content:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        createdAt: "2021-01-17T06:25:57.066Z",
+      },
+    ];
+    const imageContent = [
+      {
+        id: "ba8c816a-6007-4a9e-aeff-1bca70fc7e97",
+        createdAt: "2021-01-31T06:46:28.741Z",
+        section: "home",
+        image: "https://test-for-home",
+      },
+    ];
+    const footerContent = [
+      {
+        id: "company",
+        companyName: "Big Trees",
+      },
+      {
+        id: "social",
+        socialLinkedin: "linkedinurl",
+      },
+    ];
+
+    const content = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/content")
+      .query({
+        page: "home",
+      })
+      .reply(200, homeContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const image = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/images/home/image")
+      .reply(200, imageContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    const footer = nock(
+      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+    )
+      .get("/footer")
+      .reply(200, footerContent, {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      });
+
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    await waitFor(() => {
+      screen.getByText("Heading 1");
+    });
 
     const menu = screen.getByRole("button");
     fireEvent.click(menu);
@@ -286,5 +663,9 @@ describe("App ", () => {
     expect(screen.queryByText("Home")).not.toBeInTheDocument();
     expect(screen.queryByText("About Us")).not.toBeInTheDocument();
     expect(screen.queryByText("Contact Us")).not.toBeInTheDocument();
+
+    content.done();
+    image.done();
+    footer.done();
   });
 });
