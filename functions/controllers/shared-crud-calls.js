@@ -1,7 +1,7 @@
 const { admin, db } = require("../config/admin-config");
 
 exports.getAll = async (req, res) => {
-  const { page } = req.query;
+  const { page } = req.params;
 
   let items = [];
   let content = !page ? req.url.split("/")[1] : page;

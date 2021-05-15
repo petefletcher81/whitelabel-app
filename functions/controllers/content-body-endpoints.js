@@ -47,7 +47,36 @@ exports.addContent = async (req, res) => {
 };
 
 exports.getContent = async (req, res) => {
-  const { page } = req.query;
+  let contentArray = ["home", "aboutus", "contactus"];
+
+  const result = await Promise.all(
+    contentArray.map(async (content) => {
+      let items = [];
+      try {
+        const itemsRef = await admin.firestore().collection(`${content}`);
+        const allitems = await itemsRef.get();
+        if (allitems.size === 0) {
+          return res.send({
+            message: `Content for ${content} does not exist or there are no items available`,
+          });
+        } else {
+          allitems.forEach((doc) => {
+            items.push({ id: doc.id, ...doc.data() });
+          });
+        }
+      } catch (error) {
+        res
+          .status(400)
+          .json({ message: `Something went wrong cannot retrieve ${content}` });
+      }
+      return items;
+    })
+  );
+  return res.status(200).json(result.flatMap((val) => val));
+};
+
+exports.getPageContent = async (req, res) => {
+  const { page } = req.params;
 
   if (!page) {
     return contentErrorHandler(req, res);

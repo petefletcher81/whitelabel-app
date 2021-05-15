@@ -12,6 +12,7 @@ const {
 const { isAdmin } = require("./middleware/check-auth-middleware");
 const {
   getContent,
+  getPageContent,
   deleteContent,
   addContent,
   updateContent,
@@ -48,8 +49,9 @@ app.post("/verify-admin", verifyAdmin);
 
 /** Content */
 app.get("/content", getContent);
-app.post("/content/body/:page/:section", addContent);
-app.put("/content/body/:page/:section", updateContent);
+app.get("/content/:page", getPageContent);
+app.post("/content/:page/:section", addContent);
+app.put("/content/:page/:section", updateContent);
 app.delete("/content/:page/:section", deleteContent);
 
 /** Images */
