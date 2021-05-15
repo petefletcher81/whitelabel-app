@@ -272,16 +272,6 @@ describe("App ", () => {
     imageAboutus.done();
     footer.done();
   });
-
-  // it("should NOT render dashboard link and NOT allow user to navigate to page, if there is NO admin token within localstorage", () => {
-  //   render(
-  //     <Router history={history}>
-  //       <App />
-  //     </Router>
-  //   );
-
-  //   expect(screen.queryByText("Dashboard")).not.toBeInTheDocument();
-  // });
 });
 
 describe("App -- Nav items", () => {

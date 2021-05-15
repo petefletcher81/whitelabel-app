@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import ContentError from "../../utils/contentError";
-import ContentCard from "../../utils/ContentCard";
-import { useSelector, useDispatch } from "react-redux";
-import { getContent, getImages } from "../../utils/apiCalls";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setHomepageContent,
   setHomepageContentError,
-  setHomepageImages,
   setHomepageImageError,
+  setHomepageImages,
 } from "../../redux/content/homepage-content/homepage-content-actions";
+import { getContent, getImages } from "../../utils/apiCalls";
+import ContentCard from "../../utils/ContentCard";
+import ContentError from "../../utils/contentError";
 import "./HomePage.scss";
 
 const HomePage = () => {

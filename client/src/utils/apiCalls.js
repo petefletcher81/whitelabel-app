@@ -11,7 +11,12 @@ axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 //     : "/v1";
 
 export const getContent = async (page) => {
-  const { data } = await axios.get(`/content?page=${page}`);
+  const { data } = await axios.get(`/content/${page}`);
+  return data;
+};
+
+export const getAllContent = async () => {
+  const { data } = await axios.get(`/content`);
   return data;
 };
 
@@ -32,6 +37,11 @@ export const getBanners = async (page) => {
 
 export const getFooterContent = async () => {
   const { data } = await axios.get(`/footer`);
+  return data;
+};
+
+export const getEnquiries = async () => {
+  const { data } = await axios.get(`/enquiries`);
   return data;
 };
 
