@@ -11,7 +11,11 @@ import {
   screen,
   waitFor,
 } from "../test-utils/custom-utils";
-import { mockContent, mockFooter, mockImage } from "../test-utils/mockdata";
+import {
+  contentBuilder,
+  nockError,
+  nockGetHelper,
+} from "../test-utils/test-helpers";
 import App from "./App";
 
 let mockDate = new Date();
@@ -37,69 +41,11 @@ describe("App ", () => {
   });
 
   it("should render content / images from redux", async () => {
-    const homeContent = [
-      {
-        id: "section-one",
-        heading: "Heading 1",
-        content:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        createdAt: "2021-01-17T06:25:57.066Z",
-      },
-    ];
-    const imageContent = [
-      {
-        id: "ba8c816a-6007-4a9e-aeff-1bca70fc7e97",
-        createdAt: "2021-01-31T06:46:28.741Z",
-        section: "home",
-        image: "https://test-for-home",
-      },
-      {
-        id: "2bed3fc0-2a17-4519-8460-0dc8ab4e32a2",
-        section: "contactus",
-        createdAt: "2021-01-31T06:46:28.742Z",
-        image: "https://test-for-contactus",
-      },
-    ];
-    const footerContent = [
-      {
-        id: "company",
-        companyName: "Big Trees",
-      },
-      {
-        id: "social",
-        socialLinkedin: "linkedinurl",
-      },
-    ];
+    const { allContent, imageContent, footerContent } = contentBuilder();
 
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "home",
-      })
-      .reply(200, homeContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const image = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/home/image")
-      .reply(200, imageContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const footer = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/footer")
-      .reply(200, footerContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/home", allContent);
+    const images = nockGetHelper("images/home/image", imageContent);
+    const footer = nockGetHelper("footer", footerContent);
 
     render(
       <Router history={history}>
@@ -117,66 +63,17 @@ describe("App ", () => {
       expect(screen.queryByTestId("homepage-section")).toBeInTheDocument();
     });
 
-    image.done();
+    images.done();
     content.done();
     footer.done();
   });
 
   it("should render error from content reducer", async () => {
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "home",
-      })
-      .reply(
-        400,
-        {
-          message:
-            "Something went wrong while trying to add or get the content",
-        },
-        {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json",
-        }
-      );
+    const { allContent, imageContent, footerContent } = contentBuilder();
 
-    const image = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/home/image")
-      .reply(
-        400,
-        {
-          message:
-            "Something went wrong while trying to add or get the content",
-        },
-        {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json",
-        }
-      );
-
-    const contentFooter = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/footer")
-      .reply(
-        400,
-        {
-          message:
-            "Something went wrong while trying to add or get the content",
-        },
-        {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json",
-        },
-        {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json",
-        }
-      );
+    const content = nockError("content/home");
+    const images = nockError("images/home/image");
+    const footer = nockError("footer");
 
     render(
       <Router history={history}>
@@ -190,63 +87,20 @@ describe("App ", () => {
       );
     });
 
-    image.done();
-    contentFooter.done();
+    images.done();
+    footer.done();
     content.done();
   });
 
   it("should open the modal when an image is clicked and close the modal when backdrop clicked", async () => {
+    const { allContent, imageContent, footerContent } = contentBuilder();
     window.innerWidth = 990;
-    const contentAboutus = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "aboutus",
-      })
-      .reply(200, mockContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
 
-    const contentHome = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "home",
-      })
-      .reply(200, mockContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const imageHome = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/home/image")
-      .reply(200, mockImage, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const imageAboutus = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images")
-      .reply(200, mockImage, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const footer = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/footer")
-      .reply(200, mockFooter, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const contentHome = nockGetHelper("content/home", allContent);
+    const imageHome = nockGetHelper("images/home/image", imageContent);
+    const contentAboutus = nockGetHelper("content/aboutus", allContent);
+    const imageAboutus = nockGetHelper("images", imageContent);
+    const footer = nockGetHelper("footer", footerContent);
 
     render(
       <Router history={history}>
@@ -296,69 +150,12 @@ describe("App -- Nav items", () => {
   afterEach(() => {});
 
   it("should render dashboard link and allow user to navigate to page, if there is an admin token within localstorage", async () => {
-    const homeContent = [
-      {
-        id: "section-one",
-        heading: "Heading 1",
-        content:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        createdAt: "2021-01-17T06:25:57.066Z",
-      },
-    ];
-    const imageContent = [
-      {
-        id: "ba8c816a-6007-4a9e-aeff-1bca70fc7e97",
-        createdAt: "2021-01-31T06:46:28.741Z",
-        section: "home",
-        image: "https://test-for-home",
-      },
-      {
-        id: "2bed3fc0-2a17-4519-8460-0dc8ab4e32a2",
-        section: "contactus",
-        createdAt: "2021-01-31T06:46:28.742Z",
-        image: "https://test-for-contactus",
-      },
-    ];
-    const footerContent = [
-      {
-        id: "company",
-        companyName: "Big Trees",
-      },
-      {
-        id: "social",
-        socialLinkedin: "linkedinurl",
-      },
-    ];
+    const { allContent, imageContent, footerContent } = contentBuilder();
 
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "home",
-      })
-      .reply(200, homeContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/home", allContent);
+    const images = nockGetHelper("images/home/image", imageContent);
+    const footer = nockGetHelper("footer", footerContent);
 
-    const image = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/home/image")
-      .reply(200, imageContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const footer = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/footer")
-      .reply(200, footerContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
     const history = createMemoryHistory();
     window.innerWidth = 990;
     localStorage.setItem("token", "qwerty");
@@ -382,74 +179,16 @@ describe("App -- Nav items", () => {
     expect(jwtDecode).toHaveBeenCalled();
 
     content.done();
-    image.done();
+    images.done();
     footer.done();
   });
 
   it("should render not dashboard link and not allow user to navigate to page, if token out of date", async () => {
-    const homeContent = [
-      {
-        id: "section-one",
-        heading: "Heading 1",
-        content:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        createdAt: "2021-01-17T06:25:57.066Z",
-      },
-    ];
-    const imageContent = [
-      {
-        id: "ba8c816a-6007-4a9e-aeff-1bca70fc7e97",
-        createdAt: "2021-01-31T06:46:28.741Z",
-        section: "home",
-        image: "https://test-for-home",
-      },
-      {
-        id: "2bed3fc0-2a17-4519-8460-0dc8ab4e32a2",
-        section: "contactus",
-        createdAt: "2021-01-31T06:46:28.742Z",
-        image: "https://test-for-contactus",
-      },
-    ];
-    const footerContent = [
-      {
-        id: "company",
-        companyName: "Big Trees",
-      },
-      {
-        id: "social",
-        socialLinkedin: "linkedinurl",
-      },
-    ];
+    const { allContent, imageContent, footerContent } = contentBuilder();
 
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "home",
-      })
-      .reply(200, homeContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const image = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/home/image")
-      .reply(200, imageContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const footer = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/footer")
-      .reply(200, footerContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/home", allContent);
+    const images = nockGetHelper("images/home/image", imageContent);
+    const footer = nockGetHelper("footer", footerContent);
 
     const history = createMemoryHistory();
     window.innerWidth = 990;
@@ -472,77 +211,21 @@ describe("App -- Nav items", () => {
     expect(screen.queryByText("Dashboard")).not.toBeInTheDocument();
 
     content.done();
-    image.done();
+    images.done();
     footer.done();
   });
 
   it("should render not dashboard if there is admin", async () => {
-    const homeContent = [
-      {
-        id: "section-one",
-        heading: "Heading 1",
-        content:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        createdAt: "2021-01-17T06:25:57.066Z",
-      },
-    ];
-    const imageContent = [
-      {
-        id: "ba8c816a-6007-4a9e-aeff-1bca70fc7e97",
-        createdAt: "2021-01-31T06:46:28.741Z",
-        section: "home",
-        image: "https://test-for-home",
-      },
-      {
-        id: "2bed3fc0-2a17-4519-8460-0dc8ab4e32a2",
-        section: "contactus",
-        createdAt: "2021-01-31T06:46:28.742Z",
-        image: "https://test-for-contactus",
-      },
-    ];
-    const footerContent = [
-      {
-        id: "company",
-        companyName: "Big Trees",
-      },
-      {
-        id: "social",
-        socialLinkedin: "linkedinurl",
-      },
-    ];
+    const { allContent, imageContent, footerContent } = contentBuilder();
 
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "home",
-      })
-      .reply(200, homeContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const image = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/home/image")
-      .reply(200, imageContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const footer = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/footer")
-      .reply(200, footerContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/home", allContent);
+    const images = nockGetHelper("images/home/image", imageContent);
+    const footer = nockGetHelper("footer", footerContent);
 
     const history = createMemoryHistory();
+
     window.innerWidth = 990;
+
     localStorage.setItem("token", "qwerty");
 
     mockJwt.mockImplementation(() => {
@@ -562,70 +245,18 @@ describe("App -- Nav items", () => {
     expect(screen.queryByText("Dashboard")).not.toBeInTheDocument();
 
     content.done();
-    image.done();
+    images.done();
     footer.done();
   });
 
   it("should allow user to toggle the menu button to show hide sidebar", async () => {
     const history = createMemoryHistory();
     window.innerWidth = 414;
-    const homeContent = [
-      {
-        id: "section-one",
-        heading: "Heading 1",
-        content:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        createdAt: "2021-01-17T06:25:57.066Z",
-      },
-    ];
-    const imageContent = [
-      {
-        id: "ba8c816a-6007-4a9e-aeff-1bca70fc7e97",
-        createdAt: "2021-01-31T06:46:28.741Z",
-        section: "home",
-        image: "https://test-for-home",
-      },
-    ];
-    const footerContent = [
-      {
-        id: "company",
-        companyName: "Big Trees",
-      },
-      {
-        id: "social",
-        socialLinkedin: "linkedinurl",
-      },
-    ];
+    const { allContent, imageContent, footerContent } = contentBuilder();
 
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "home",
-      })
-      .reply(200, homeContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const image = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/home/image")
-      .reply(200, imageContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const footer = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/footer")
-      .reply(200, footerContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/home", allContent);
+    const images = nockGetHelper("images/home/image", imageContent);
+    const footer = nockGetHelper("footer", footerContent);
 
     render(
       <Router history={history}>
@@ -655,7 +286,7 @@ describe("App -- Nav items", () => {
     expect(screen.queryByText("Contact Us")).not.toBeInTheDocument();
 
     content.done();
-    image.done();
+    images.done();
     footer.done();
   });
 });

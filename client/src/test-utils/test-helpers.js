@@ -21,7 +21,7 @@ export const contentBuilder = () => {
       id: "section-two",
       heading: "Heading 2",
       content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "Lorem ipsum dolor adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       createdAt: "2021-01-17T06:25:57.066Z",
     },
   ];
@@ -37,11 +37,26 @@ export const contentBuilder = () => {
       id: "2bed3fc0-2a17-4519-8460-0dc8ab4e32a2",
       section: "contactus",
       createdAt: "2021-01-31T06:46:28.742Z",
-      image: "https://test-for-contactus",
+      banner: "https://test-for-contactus",
+    },
+    {
+      id: "2bed3fc0-2a17-4987-8460-0dc8ab4e32a2",
+      section: "aboutus",
+      createdAt: "2021-01-31T06:46:28.742Z",
+      image: "https://test-for-aboutus",
     },
   ];
-
-  return { enquiryContent, allContent, imageContent };
+  const footerContent = [
+    {
+      id: "company",
+      companyName: "Big Trees",
+    },
+    {
+      id: "social",
+      socialLinkedin: "linkedinurl",
+    },
+  ];
+  return { enquiryContent, allContent, imageContent, footerContent };
 };
 
 // nock get request helper
@@ -71,4 +86,20 @@ export const nockError = (endpoint) => {
         "Content-type": "application/json",
       }
     );
+};
+
+export const nockOptions = () => {
+  return nock(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",
+    { encodedQueryParams: true }
+  )
+    .options("/enquiries")
+    .reply(204, "", [
+      "Access-Control-Allow-Headers",
+      "Access-Control-Allow-Origin",
+      "Access-Control-Allow-Methods",
+      "GET,HEAD,PUT,PATCH,POST,DELETE",
+      "Access-Control-Allow-Origin",
+      "http://localhost",
+    ]);
 };

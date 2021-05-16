@@ -1,15 +1,18 @@
+import nock from "nock";
+import React from "react";
 import {
+  cleanup,
   fireEvent,
   render,
   screen,
   waitFor,
-  cleanup,
 } from "../../test-utils/custom-utils";
-import React from "react";
+import {
+  contentBuilder,
+  nockError,
+  nockGetHelper,
+} from "../../test-utils/test-helpers";
 import AboutUs from "../aboutus/AboutUs";
-import { mockContent, mockImage } from "../../test-utils/mockdata";
-
-import nock from "nock";
 
 describe("<AboutUs />", () => {
   beforeAll(() => {
@@ -22,26 +25,10 @@ describe("<AboutUs />", () => {
   });
 
   it("should render about us content", async () => {
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "aboutus",
-      })
-      .reply(200, mockContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const { allContent, imageContent } = contentBuilder();
 
-    const image = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images")
-      .reply(200, mockImage, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/aboutus", allContent);
+    const images = nockGetHelper("images", imageContent);
 
     render(<AboutUs />);
 
@@ -50,47 +37,14 @@ describe("<AboutUs />", () => {
     screen.getByTestId("gallery-image-0");
 
     const displayedImage = document.querySelectorAll("img");
-    // TODO - test that image for banner not exist
 
     content.done();
-    image.done();
+    images.done();
   });
 
   it("should not render content when there is an error", async () => {
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "aboutus",
-      })
-      .reply(
-        400,
-        {
-          message:
-            "Something went wrong while trying to add or get the content",
-        },
-        {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json",
-        }
-      );
-
-    const image = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images")
-      .reply(
-        400,
-        {
-          message:
-            "Something went wrong while trying to add or get the content",
-        },
-        {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json",
-        }
-      );
+    const content = nockError("content/aboutus");
+    const images = nockError("images");
 
     render(<AboutUs />);
 
@@ -101,31 +55,15 @@ describe("<AboutUs />", () => {
     });
 
     content.done();
-    image.done();
+    images.done();
   });
 
   it("should open the modal when an image is clicked", async () => {
     const selectImageMock = jest.fn();
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "aboutus",
-      })
-      .reply(200, mockContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const { allContent, imageContent } = contentBuilder();
 
-    const image = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images")
-      .reply(200, mockImage, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/aboutus", allContent);
+    const images = nockGetHelper("images", imageContent);
 
     render(<AboutUs setSelectedImage={selectImageMock} />);
 
@@ -137,6 +75,6 @@ describe("<AboutUs />", () => {
     expect(displayedImage[0].src).toContain("test-for-home");
 
     content.done();
-    image.done();
+    images.done();
   });
 });
