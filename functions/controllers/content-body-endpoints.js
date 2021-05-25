@@ -50,8 +50,9 @@ exports.getContent = async (req, res) => {
   let contentArray = ["home", "aboutus", "contactus"];
 
   const result = await Promise.all(
-    contentArray.map(async (content) => {
+    contentArray.map(async (content, i) => {
       let items = [];
+      const page = contentArray[i];
       try {
         const itemsRef = await admin.firestore().collection(`${content}`);
         const allitems = await itemsRef.get();
@@ -61,7 +62,7 @@ exports.getContent = async (req, res) => {
           });
         } else {
           allitems.forEach((doc) => {
-            items.push({ id: doc.id, ...doc.data() });
+            items.push({ id: doc.id, ...doc.data(), page: page });
           });
         }
       } catch (error) {

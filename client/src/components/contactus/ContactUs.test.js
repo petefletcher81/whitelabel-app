@@ -12,6 +12,7 @@ import {
   nockError,
   nockGetHelper,
   nockOptions,
+  nockPostMock,
 } from "../../test-utils/test-helpers";
 import ContactUs from "./ContactUs";
 
@@ -79,20 +80,13 @@ describe("<ContactUs /> Mobile", () => {
     const content = nockGetHelper("content/contactus", allContent);
     const banner = nockGetHelper("images/contactus/banner", imageContent);
     const options = nockOptions();
+    const enquiry = nockPostMock(
+      { name: "Fred", email: "Fred@flintstone.com" },
+      "enquiries",
+      postReply
+    );
 
-    const enquiry = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",
-      { encodedQueryParams: true }
-    )
-      .post("/enquiries", { name: "Fred", email: "Fred@flintstone.com" })
-      .reply(201, postReply, [
-        "Access-Control-Allow-Origin",
-        "http://localhost",
-        "Content-Type",
-        "application/json; charset=utf-8",
-      ]);
-
-    // nock.recorder.rec();
+    // // nock.recorder.rec();
 
     render(<ContactUs />);
 

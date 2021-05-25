@@ -7,13 +7,15 @@ import ContactUs from "./contactus/ContactUs";
 import Dashboard from "./dashboard/Dashboard";
 import HomePage from "./homepage/HomePage";
 import Layout from "./layout/Layout";
-import Modal from "./modal/Modal";
+import ContentModal from "./modal/ContentModal";
+import ImageModal from "./modal/ImageModal";
 import SignIn from "./signin/SignIn";
 
 export const UserContext = React.createContext({});
 
 const App = () => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [content, setToggleContentModal] = useState(null);
   let authenticated;
   let admin;
 
@@ -51,12 +53,27 @@ const App = () => {
               component={() => <AboutUs setSelectedImage={setSelectedImage} />}
             />
             <Route exact path="/contactus" component={ContactUs} />
-            {authenticated && admin && (
-              <Route exact path="/dashboard" component={Dashboard} />
-            )}
+            {/* {authenticated && admin && ( */}
+            <Route
+              exact
+              path="/dashboard"
+              component={() => (
+                <Dashboard setToggleContentModal={setToggleContentModal} />
+              )}
+            />
+            {/* )} */}
           </Switch>
           {selectedImage && (
-            <Modal imgUrl={selectedImage} setSelectedImage={setSelectedImage} />
+            <ImageModal
+              imgUrl={selectedImage}
+              setSelectedImage={setSelectedImage}
+            />
+          )}
+          {content && (
+            <ContentModal
+              data={content}
+              setToggleContentModal={setToggleContentModal}
+            />
           )}
         </Layout>
       </UserContext.Provider>

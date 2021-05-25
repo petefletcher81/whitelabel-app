@@ -58,3 +58,17 @@ export const attemptSignIn = async (siginInData) => {
   const { data } = await axios.post(`/admin`, { password, email });
   return data;
 };
+
+export const updateContent = async (page, updatedContent, section) => {
+  const { data } = await axios.put(
+    `/content/${page}/${section}`,
+    updatedContent
+  );
+  return data;
+};
+
+export const deleteContent = async (page, section) => {
+  console.log(page, section, "===kk");
+  const { data } = await axios.delete(`/content/${page}/${section}`);
+  return data;
+};

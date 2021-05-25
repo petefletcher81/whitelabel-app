@@ -1,7 +1,13 @@
 import nock from "nock";
 import React from "react";
 import { unmountComponentAtNode } from "react-dom";
-import { cleanup, render, screen } from "../../test-utils/custom-utils";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from "../../test-utils/custom-utils";
 import { contentBuilder, nockGetHelper } from "../../test-utils/test-helpers";
 import Dashboard from "./Dashboard";
 
@@ -57,5 +63,39 @@ describe("Dashboard", () => {
     content.done();
   });
 
-  it("should render ", () => {});
+  it("should allow user to edit content of selected area by pressing edit", async () => {
+    const mockSetToggleContentModal = jest.fn();
+    const { enquiryContent, imageContent, allContent } = contentBuilder();
+    const enquiry = nockGetHelper("enquiries", enquiryContent);
+    const content = nockGetHelper("content", allContent);
+    const images = nockGetHelper("images", imageContent);
+
+    render(<Dashboard setToggleContentModal={mockSetToggleContentModal} />, {
+      container,
+    });
+
+    await screen.findByText("test");
+
+    const contentWindow = screen.getByTestId("manage-content");
+    const [contentButton] = within(contentWindow).getAllByText("Edit");
+    fireEvent.click(contentButton);
+
+    expect(mockSetToggleContentModal).toHaveBeenCalled();
+
+    const contentWindow2 = screen.getByTestId("manage-enquiries");
+    const [contentButton2] = within(contentWindow2).getAllByText("Edit");
+    fireEvent.click(contentButton2);
+
+    expect(mockSetToggleContentModal).toHaveBeenCalled();
+
+    const contentWindow3 = screen.getByTestId("manage-images");
+    const [contentButton3] = within(contentWindow3).getAllByText("Edit");
+    fireEvent.click(contentButton3);
+
+    expect(mockSetToggleContentModal).toHaveBeenCalled();
+
+    enquiry.done();
+    images.done();
+    content.done();
+  });
 });

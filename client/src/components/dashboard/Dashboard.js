@@ -4,8 +4,9 @@ import {
   getAllImages,
   getEnquiries,
 } from "../../utils/apiCalls";
+import DashboardContentCard from "../../utils/DashboardContentCard";
 
-const Dashboard = () => {
+const Dashboard = ({ setToggleContentModal }) => {
   const [enquiries, setEnquiries] = useState(null);
   const [content, setContent] = useState(null);
   const [images, setImages] = useState(null);
@@ -50,12 +51,18 @@ const Dashboard = () => {
     getImages();
   }, []);
 
+  console.log();
+
   return (
     <div className="dashboard" data-testid="dashboard-screen">
       <div className="dashboard__header">
         <h1>Dashboard</h1>
       </div>
-      <div className="dashboard__enquiries-wrapper">
+      <div
+        className="dashboard__enquiries-wrapper"
+        data-testid="manage-enquiries"
+      >
+        <h2>Manage Enquiries</h2>
         {enquiries &&
           !error &&
           enquiries.map((enquiry) => {
@@ -73,32 +80,40 @@ const Dashboard = () => {
                 <div className="dashboard__enquiries--enquiry-created-at">
                   {enquiry.createdAt}
                 </div>
+                <button
+                  onClick={() =>
+                    setToggleContentModal({
+                      content: enquiry,
+                      type: "enquiries-content",
+                    })
+                  }
+                >
+                  Edit
+                </button>
               </section>
             );
           })}
       </div>
-      <div className="dashboard__content-wrapper">
+      {/* flex column or grid */}
+      <div className="dashboard__content-wrapper" data-testid="manage-content">
+        <h2>Manage Content</h2>
         {content &&
-          content.map((section, index) => {
+          content?.map((section, index) => {
             return (
-              <section
-                className="dashboard__content"
-                key={`${section.createdAt}-${index}-dashboard`}
-              >
-                <div className="dashboard__content-heading">
-                  {section.heading}
-                </div>
-                <div className="dashboard__content-content">
-                  {section.content}
-                </div>
-                <div className="dashboard__content-created-at">
-                  {section.createdAt}
-                </div>
-              </section>
+              <div key={`${section.createdAt}-${index}-dashboard`}>
+                <DashboardContentCard
+                  page={section.page}
+                  section={section}
+                  index={index}
+                  datatestid={"home-content-dashboard"}
+                  setToggleContentModal={setToggleContentModal}
+                />
+              </div>
             );
           })}
       </div>
-      <div className="dashboard__images-wrapper">
+      <div className="dashboard__images-wrapper" data-testid="manage-images">
+        <h2>Manage Images</h2>
         {images &&
           images.map((image) => {
             return (
@@ -114,6 +129,16 @@ const Dashboard = () => {
                 <div className="dashboard__content-created-at">
                   {image.createdAt}
                 </div>
+                <button
+                  onClick={() =>
+                    setToggleContentModal({
+                      content: image,
+                      type: "image-content",
+                    })
+                  }
+                >
+                  Edit
+                </button>
               </section>
             );
           })}

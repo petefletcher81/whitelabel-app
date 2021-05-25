@@ -11,17 +11,21 @@ export const contentBuilder = () => {
 
   const allContent = [
     {
-      id: "section-one",
+      id: "section-1",
       heading: "Heading 1",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      content: "Lorem ipsum dolor sit amet",
       createdAt: "2021-01-17T06:25:57.066Z",
     },
     {
-      id: "section-two",
+      id: "section-2",
       heading: "Heading 2",
-      content:
-        "Lorem ipsum dolor adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      content: "Lorem ipsum dolor adipiscing elit",
+      createdAt: "2021-01-17T06:25:57.066Z",
+    },
+    {
+      id: "section-1",
+      heading: "New Heading",
+      content: "Lorem ipsum dolor sit amet, consectetur",
       createdAt: "2021-01-17T06:25:57.066Z",
     },
   ];
@@ -88,12 +92,12 @@ export const nockError = (endpoint) => {
     );
 };
 
-export const nockOptions = () => {
+export const nockOptions = (endpoint) => {
   return nock(
     "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",
     { encodedQueryParams: true }
   )
-    .options("/enquiries")
+    .options(`/${endpoint}`)
     .reply(204, "", [
       "Access-Control-Allow-Headers",
       "Access-Control-Allow-Origin",
@@ -101,5 +105,58 @@ export const nockOptions = () => {
       "GET,HEAD,PUT,PATCH,POST,DELETE",
       "Access-Control-Allow-Origin",
       "http://localhost",
+      "Function-Execution-Id",
+      "kjhihbselwqn",
+      "Vary",
+      "Origin, Access-Control-Request-Headers",
+      "X-Powered-By",
+      "Express",
+      "X-Cloud-Trace-Context",
+      "5e2b7854479c3fbde7a593afd65d73c4;o=1",
+      "Date",
+      "Mon, 24 May 2021 15:24:24 GMT",
+      "Content-Type",
+      "text/html",
+      "Server",
+      "Google Frontend",
+      "Content-Length",
+      "0",
+      "Alt-Svc",
+      'h3-29=":443"; ma=2592000,h3-T051=":443"; ' +
+        'ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443"; ' +
+        'ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ' +
+        'ma=2592000; v="46,43"',
+    ]);
+};
+
+export const nockPostMock = (postData, endpoint, content) => {
+  return nock(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",
+    { encodedQueryParams: true }
+  )
+    .post(`/${endpoint}`, postData)
+    .reply(201, content, [
+      "Access-Control-Allow-Origin",
+      "http://localhost",
+      "Content-Type",
+      "application/json; charset=utf-8",
+    ]);
+};
+
+export const nockPutMock = (postData, endpoint, content) => {
+  return nock(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net",
+    { encodedQueryParams: true }
+  )
+    .put(`/app/${endpoint}`, postData)
+    .reply(201, content, [
+      "Access-Control-Allow-Origin",
+      "http://localhost",
+      "Content-Type",
+      "application/json; charset=utf-8",
+      "Etag",
+      'W/"40-BOkEAWHce/ES7VATl+foZS1hWJQ"',
+      "Function-Execution-Id",
+      "Vary",
     ]);
 };

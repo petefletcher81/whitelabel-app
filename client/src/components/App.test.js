@@ -92,7 +92,7 @@ describe("App ", () => {
     content.done();
   });
 
-  it("should open the modal when an image is clicked and close the modal when backdrop clicked", async () => {
+  it("should open the image modal when an image is clicked and close the image modal when backdrop clicked", async () => {
     const { allContent, imageContent, footerContent } = contentBuilder();
     window.innerWidth = 990;
 
