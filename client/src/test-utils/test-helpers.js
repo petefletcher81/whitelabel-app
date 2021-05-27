@@ -160,3 +160,20 @@ export const nockPutMock = (postData, endpoint, content) => {
       "Vary",
     ]);
 };
+export const nockDeleteMock = (endpoint, content) => {
+  return nock(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net",
+    { encodedQueryParams: true }
+  )
+    .delete(`/app/${endpoint}`)
+    .reply(200, content, [
+      "Access-Control-Allow-Origin",
+      "http://localhost",
+      "Content-Type",
+      "application/json; charset=utf-8",
+      "Etag",
+      'W/"40-BOkEAWHce/ES7VATl+foZS1hWJQ"',
+      "Function-Execution-Id",
+      "Vary",
+    ]);
+};

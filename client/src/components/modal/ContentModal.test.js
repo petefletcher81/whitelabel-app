@@ -8,6 +8,7 @@ import {
 } from "../../test-utils/custom-utils";
 import {
   contentBuilder,
+  nockDeleteMock,
   nockOptions,
   nockPutMock,
 } from "../../test-utils/test-helpers";
@@ -18,20 +19,24 @@ describe("<ContentModal />", () => {
     const { allContent } = contentBuilder();
     render(
       <ContentModal
-        data={{ content: allContent[0], type: "site-content" }}
+        data={{
+          item: allContent[0],
+          type: "site-content",
+          page: "home",
+        }}
         setToggleContentModal={jest.fn()}
       />
     );
 
     screen.getByDisplayValue("Heading 1");
-    screen.getByDisplayValue("section-one");
+    screen.getByDisplayValue("section-1");
   });
 
   it("should open the modal with the correct content with type image", () => {
     const { imageContent } = contentBuilder();
     render(
       <ContentModal
-        data={{ content: imageContent[0], type: "image-content" }}
+        data={{ item: imageContent[0], type: "image-content" }}
         setToggleContentModal={jest.fn()}
       />
     );
@@ -44,7 +49,7 @@ describe("<ContentModal />", () => {
     const { enquiryContent } = contentBuilder();
     render(
       <ContentModal
-        data={{ content: enquiryContent[0], type: "enquiries-content" }}
+        data={{ item: enquiryContent[0], type: "enquiries-content" }}
         setToggleContentModal={jest.fn()}
       />
     );
@@ -57,7 +62,7 @@ describe("<ContentModal />", () => {
     const { footerContent } = contentBuilder();
     render(
       <ContentModal
-        data={{ content: footerContent[0], type: "footer-content" }}
+        data={{ item: footerContent[0], type: "footer-content" }}
         setToggleContentModal={jest.fn()}
       />
     );
@@ -80,7 +85,7 @@ describe("<ContentModal />", () => {
   });
 });
 
-describe.only("Editing Content", () => {
+describe("Editing Content", () => {
   beforeAll(() => {
     nock.disableNetConnect();
   });
@@ -131,37 +136,34 @@ describe.only("Editing Content", () => {
     options.done();
   });
 
-  // it("should allow user to delete content", async () => {
-  //   const { allContent } = contentBuilder();
+  it("should allow user to delete content", async () => {
+    const { allContent } = contentBuilder();
 
-  //   const options = nockOptions("content/home/section-1");
-  //   // const content = nockPutMock(mockContent, "content/home/section-1", {
-  //   //   message: "This content has been successfully updated",
-  //   // });
+    const options = nockOptions("content/home/section-1");
+    const content = nockDeleteMock("content/home/section-1", {
+      message: "This content has now been deleted",
+      item: "section-1",
+    });
 
-  //   render(
-  //     <ContentModal
-  //       data={{
-  //         item: allContent[0],
-  //         type: "site-content",
-  //         page: "home",
-  //       }}
-  //       setToggleContentModal={jest.fn()}
-  //     />
-  //   );
+    render(
+      <ContentModal
+        data={{
+          item: allContent[0],
+          type: "site-content",
+          page: "home",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
 
-  //   const heading = screen.getByDisplayValue("Heading 1");
-  //   screen.getByTestId("edit-content-modal");
+    const heading = screen.getByDisplayValue("Heading 1");
+    screen.getByTestId("edit-content-modal");
 
-  //   fireEvent.click(screen.getByText("Delete"));
+    fireEvent.click(screen.getByText("Delete"));
 
-  //   nock.recorder.rec();
+    await screen.findByText("This content has now been deleted");
 
-  //   // await screen.findByText("This content has been successfully updated");
-
-  //   // expect(screen.getByDisplayValue("New Heading")).toBeInTheDocument();
-
-  //   // content.done();
-  //   // options.done();
-  // });
+    content.done();
+    options.done();
+  });
 });

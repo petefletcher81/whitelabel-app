@@ -79,7 +79,7 @@ describe("<ContactUs /> Mobile", () => {
 
     const content = nockGetHelper("content/contactus", allContent);
     const banner = nockGetHelper("images/contactus/banner", imageContent);
-    const options = nockOptions();
+    const options = nockOptions("enquiries");
     const enquiry = nockPostMock(
       { name: "Fred", email: "Fred@flintstone.com" },
       "enquiries",
@@ -117,7 +117,7 @@ describe("<ContactUs /> Mobile", () => {
 
     const content = nockGetHelper("content/contactus", allContent);
     const banner = nockGetHelper("images/contactus/banner", imageContent);
-    const options = nockOptions();
+    const options = nockOptions("enquiries");
 
     const enquiry = nock(
       "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",

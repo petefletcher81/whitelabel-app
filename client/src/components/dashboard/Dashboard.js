@@ -51,8 +51,6 @@ const Dashboard = ({ setToggleContentModal }) => {
     getImages();
   }, []);
 
-  console.log();
-
   return (
     <div className="dashboard" data-testid="dashboard-screen">
       <div className="dashboard__header">

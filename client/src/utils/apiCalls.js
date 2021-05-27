@@ -68,7 +68,6 @@ export const updateContent = async (page, updatedContent, section) => {
 };
 
 export const deleteContent = async (page, section) => {
-  console.log(page, section, "===kk");
   const { data } = await axios.delete(`/content/${page}/${section}`);
   return data;
 };

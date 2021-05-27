@@ -101,7 +101,7 @@ const ContentModal = ({ data, setToggleContentModal }) => {
             </div>
           </div>
         )}
-        {/* {newContent && type === "enquiries-content" && (
+        {newContent && type === "enquiries-content" && (
           <div className="modal__site-content">
             <div className="modal__site-content-email">{newContent.email}</div>
             <div className="modal__site-content-name">{newContent.name}</div>
@@ -117,7 +117,7 @@ const ContentModal = ({ data, setToggleContentModal }) => {
               {newContent.companyName}
             </div>
           </div>
-        )} */}
+        )}
         <button onClick={handleSave}>Save</button>
         <button
           onClick={(e) => {
