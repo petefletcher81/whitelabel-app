@@ -25,6 +25,7 @@ const {
 } = require("./controllers/images-endpoint");
 const {
   addEnquiry,
+  updateEnquiry,
   getEnquiries,
   deleteEnquiry,
 } = require("./controllers/enquiries-endpoint");
@@ -69,6 +70,7 @@ app.delete("/footer/:area", deleteFooterContent);
 /** enquires */
 app.post("/enquiries", addEnquiry);
 app.get("/enquiries", getEnquiries);
+app.put("/enquiries/:email", updateEnquiry);
 app.delete("/enquiries/:name", deleteEnquiry);
 
 app.use((req, res) => {

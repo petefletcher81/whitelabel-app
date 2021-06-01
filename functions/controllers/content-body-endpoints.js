@@ -15,7 +15,7 @@ exports.addContent = async (req, res) => {
   const { heading, content } = req.body;
 
   // refactor section
-  const newContent = contentBuilder(heading, content, section);
+  const newContent = contentBuilder(heading, content, section, page);
 
   // validation
   const isValid = contentValidation(page, section, heading, content, req, res);
@@ -91,7 +91,7 @@ exports.updateContent = async (req, res) => {
   const { page, section } = req.params;
 
   // refactored the content out into a builder
-  const newContent = contentBuilder(heading, content, section);
+  const newContent = contentBuilder(heading, content, section, page);
 
   // refactored validator
   contentValidation(page, section, heading, content, req, res);

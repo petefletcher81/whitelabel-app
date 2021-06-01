@@ -69,6 +69,7 @@ exports.addImage = (req, res) => {
         [imageType]: url,
         createdAt: new Date().toISOString(),
         section: page,
+        key: filename,
       };
 
       // TODO - need to check the page is correct (aobut us no banner)
@@ -378,6 +379,7 @@ exports.getPageImages = async (req, res) => {
       .json({ message: `Something went wront cannot retrieve images` });
   }
 };
+
 exports.deleteImage = async (req, res) => {
   const { name } = req.params;
   await deleteItem(req, res);

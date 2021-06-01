@@ -13,6 +13,8 @@ exports.addEnquiry = async (req, res) => {
     name,
     email,
     createdAt: new Date().toISOString(),
+    contacted: false,
+    key: email,
   };
 
   try {
@@ -39,6 +41,40 @@ exports.addEnquiry = async (req, res) => {
   }
 };
 
+exports.updateEnquiry = async (req, res) => {
+  const { name, email, contacted } = req.body;
+
+  const enquiry = {
+    name,
+    email,
+    createdAt: new Date().toISOString(),
+    contacted,
+    key: email,
+  };
+
+  try {
+    const contentRef = await db.collection(`enquiries`).doc(`${email}`);
+    const doc = await contentRef.get();
+
+    if (!doc.exists) {
+      res.status(400).send({
+        message: `Hey, this email doesnt exist`,
+      });
+    } else {
+      await db.collection(`enquiries`).doc(`${email}`).set(enquiry);
+
+      res
+        .status(201)
+        .json({ message: `The enquiry for ${email}, has been updated` });
+    }
+  } catch (error) {
+    // add middleware and get the same auth errors
+    const errorMessage = authErrorHandler(error.code);
+    const { status, message } = errorMessage;
+
+    res.status(status).json({ error: message });
+  }
+};
 exports.getEnquiries = async (req, res) => {
   getAll(req, res);
 };
