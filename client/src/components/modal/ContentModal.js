@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { deleteContent, updateContent } from "../../utils/apiCalls";
+import {
+  deleteContent,
+  deleteItem,
+  updateContent,
+  updateData,
+} from "../../utils/apiCalls";
 import "./Modal.scss";
 
 const ContentModal = ({ data, setToggleContentModal }) => {
@@ -10,21 +15,74 @@ const ContentModal = ({ data, setToggleContentModal }) => {
 
   const onChangeContentDetails = (event) => {
     const { name, value } = event.target;
-    setNewContent({ ...newContent, [name]: value });
+    let newValue;
+
+    if (type === "enquiries-content") {
+      newValue = !newContent.contacted;
+    }
+
+    setNewContent({ ...newContent, [name]: newValue ? newValue : value });
   };
 
   const handleSave = async () => {
+    switch (type) {
+      case "enquiries-content":
+        newContent.page = "enquiries";
+        break;
+      case "image-content":
+        newContent.page = "images";
+        break;
+      case "footer-content":
+        newContent.page = "footer";
+        break;
+      default:
+        break;
+    }
+
     try {
-      const response = await updateContent(page, newContent, newContent.id);
-      setSuccess(response.message);
+      if (type === "site-content") {
+        const response = await updateContent(page, newContent, newContent.id);
+        setSuccess(response.message);
+      }
+      if (type !== "site-content") {
+        console.log({ newContent });
+        const response = await updateData(
+          newContent.page,
+          newContent,
+          newContent.key
+        );
+        setSuccess(response.message);
+      }
     } catch (error) {
       const err = error.response?.data;
       setError(err.error);
     }
   };
 
-  const handleDelete = () => {
-    console.log("delete image enq or footer content");
+  const handleDelete = async () => {
+    switch (type) {
+      case "enquiries-content":
+        newContent.id = newContent.email;
+        newContent.page = "enquiries";
+        break;
+      case "image-content":
+        newContent.id = newContent.email;
+        newContent.page = "images";
+        break;
+      case "footer-content":
+        newContent.id = newContent.email;
+        newContent.page = "footer";
+        break;
+    }
+
+    try {
+      const response = await deleteItem(newContent.page, newContent.id);
+      setSuccess(response.message);
+    } catch (error) {
+      console.log(error);
+      const err = error.response?.data;
+      setError(err.error);
+    }
   };
 
   const handleDeleteContent = async () => {
@@ -67,15 +125,31 @@ const ContentModal = ({ data, setToggleContentModal }) => {
               />
             </div>
             <div className="modal__site-content-content">
-              {newContent.content}
+              <input
+                id="newContent"
+                aria-label="content"
+                type="text"
+                name="content"
+                value={newContent.content}
+                placeholder={newContent.content}
+                onChange={onChangeContentDetails}
+              />
             </div>
             <div className="modal__site-content-created-at">
-              {newContent.createdAt}
+              <input
+                id="newContent"
+                aria-label="content createdAt"
+                type="text"
+                name="createdAt"
+                value={newContent.createdAt}
+                placeholder={newContent.createdAt}
+                disabled
+              />
             </div>
           </div>
         )}
         {newContent && type === "image-content" && (
-          <div className="modal__site-content">
+          <div className="modal__site-content" data-testid="image-content">
             <div className="modal__site-content-id">{newContent.id}</div>
             <div className="modal__site-content-section">
               {newContent.section}
@@ -102,22 +176,151 @@ const ContentModal = ({ data, setToggleContentModal }) => {
           </div>
         )}
         {newContent && type === "enquiries-content" && (
-          <div className="modal__site-content">
+          <div className="modal__site-content" data-testid="enquiry-content">
             <div className="modal__site-content-email">{newContent.email}</div>
             <div className="modal__site-content-name">{newContent.name}</div>
             <div className="modal__site-content-created-at">
-              {newContent.createdAt}
+              <input
+                id="newContent"
+                aria-label="content createdAt"
+                type="text"
+                name="createdAt"
+                value={newContent.createdAt}
+                placeholder={newContent.createdAt}
+                disabled
+              />
+            </div>
+            <div className="modal__site-content">
+              <label htmlFor="enquiry checkbox" className="visuallyhidden" />
+              <input
+                className="checkbox"
+                name="contacted"
+                type="checkbox"
+                value={newContent.contacted ? true : false}
+                role="checkbox"
+                onChange={onChangeContentDetails}
+                checked={newContent.contacted ? true : false}
+              />
             </div>
           </div>
         )}
-        {newContent && type === "footer-content" && (
-          <div className="modal__site-content">
-            <div className="modal__site-content-id">{newContent.id}</div>
-            <div className="modal__site-content-company-name">
-              {newContent.companyName}
+        {newContent &&
+          type === "footer-content" &&
+          newContent.key === "company" && (
+            <div
+              className="modal__site-content"
+              data-testid="footer-content-company"
+            >
+              <div className="modal__site-content-company-name">
+                <input
+                  id="newContent-name"
+                  aria-label="content company name"
+                  type="text"
+                  name="companyName"
+                  value={newContent.companyName}
+                  onChange={onChangeContentDetails}
+                  placeholder={newContent.companyName}
+                />
+              </div>
+              <div className="modal__site-content-company-address">
+                <input
+                  id="newContent-address"
+                  aria-label="content company address"
+                  type="text"
+                  name="companyAddress"
+                  value={newContent.companyAddress}
+                  onChange={onChangeContentDetails}
+                  placeholder={newContent.companyAddress}
+                />
+              </div>
+              <div className="modal__site-content-company-number">
+                <input
+                  id="newContent-number"
+                  aria-label="content company number"
+                  type="text"
+                  name="companyName"
+                  value={newContent.companyNumber}
+                  onChange={onChangeContentDetails}
+                  placeholder={newContent.companyNumber}
+                />
+              </div>
+              <div className="modal__site-content-company-mobile">
+                <input
+                  id="newContent-mobile"
+                  aria-label="content company mobile"
+                  type="text"
+                  name="mobileNumber"
+                  value={newContent.mobileNumber}
+                  onChange={onChangeContentDetails}
+                  placeholder={newContent.mobilrNumber}
+                />
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        {newContent &&
+          type === "footer-content" &&
+          newContent.key === "social" && (
+            <div
+              className="modal__site-content"
+              data-testid="footer-content-social"
+            >
+              <div className="modal__site-content-facebook">
+                <input
+                  id="newContent"
+                  aria-label="social data facebook"
+                  type="text"
+                  name="socialFacebook"
+                  value={newContent.socialFacebook}
+                  placeholder={newContent.socialFacebook}
+                  onChange={onChangeContentDetails}
+                />
+              </div>
+              <div className="modal__site-content-instagram">
+                <input
+                  id="newContent-insta"
+                  aria-label="social data instagram"
+                  type="text"
+                  name="socialInstagram"
+                  value={newContent.socialInstagram}
+                  placeholder={newContent.socialInstagram}
+                  onChange={onChangeContentDetails}
+                />
+              </div>
+              <div className="modal__site-content-pinterest">
+                <input
+                  id="newContent-pinterest"
+                  aria-label="social data pinterest"
+                  type="text"
+                  name="socialPinterest"
+                  value={newContent.socialPinterest}
+                  placeholder={newContent.socialPinterest}
+                  onChange={onChangeContentDetails}
+                />
+              </div>
+              <div className="modal__site-content-linkedin">
+                <input
+                  id="newContent-linkedin"
+                  aria-label="social data linkedin"
+                  type="text"
+                  name="socialLinkedin"
+                  value={newContent.socialLinkedin}
+                  placeholder={newContent.socialLinkedin}
+                  onChange={onChangeContentDetails}
+                />
+              </div>
+              <div className="modal__site-content-twitter">
+                <input
+                  id="newContent-twitter"
+                  aria-label="social data twitter"
+                  type="text"
+                  name="socialTwitter"
+                  value={newContent.socialTwitter}
+                  placeholder={newContent.socialTwitter}
+                  onChange={onChangeContentDetails}
+                />
+              </div>
+            </div>
+          )}
         <button onClick={handleSave}>Save</button>
         <button
           onClick={(e) => {

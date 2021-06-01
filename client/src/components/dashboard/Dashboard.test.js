@@ -98,4 +98,6 @@ describe("Dashboard", () => {
     images.done();
     content.done();
   });
+
+  it("should allow user to upload new images", () => {});
 });

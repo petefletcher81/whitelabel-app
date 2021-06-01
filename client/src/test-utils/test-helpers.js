@@ -6,6 +6,8 @@ export const contentBuilder = () => {
       email: "test1@test.com",
       name: "test",
       createdAt: "2021-01-17T06:25:57.066Z",
+      contacted: false,
+      key: "test1@test.com",
     },
   ];
 
@@ -15,18 +17,21 @@ export const contentBuilder = () => {
       heading: "Heading 1",
       content: "Lorem ipsum dolor sit amet",
       createdAt: "2021-01-17T06:25:57.066Z",
+      page: "home",
     },
     {
       id: "section-2",
       heading: "Heading 2",
       content: "Lorem ipsum dolor adipiscing elit",
       createdAt: "2021-01-17T06:25:57.066Z",
+      page: "aboutus",
     },
     {
       id: "section-1",
       heading: "New Heading",
       content: "Lorem ipsum dolor sit amet, consectetur",
       createdAt: "2021-01-17T06:25:57.066Z",
+      page: "contactus",
     },
   ];
 
@@ -36,28 +41,42 @@ export const contentBuilder = () => {
       createdAt: "2021-01-31T06:46:28.741Z",
       section: "home",
       image: "https://test-for-home",
+      key: "test-filename",
     },
     {
       id: "2bed3fc0-2a17-4519-8460-0dc8ab4e32a2",
       section: "contactus",
       createdAt: "2021-01-31T06:46:28.742Z",
       banner: "https://test-for-contactus",
+      key: "test-filename-2",
     },
     {
       id: "2bed3fc0-2a17-4987-8460-0dc8ab4e32a2",
       section: "aboutus",
       createdAt: "2021-01-31T06:46:28.742Z",
       image: "https://test-for-aboutus",
+      key: "test-filename-3",
     },
   ];
+
   const footerContent = [
     {
       id: "company",
       companyName: "Big Trees",
+      key: "company",
+      page: "footer",
+      companyAddress: "23 Made Up Street, Somewhere Nice, Awesome Town",
+      companyNumber: "12345 678909",
+      mobileNumber: "09872234837",
     },
     {
-      id: "social",
       socialLinkedin: "linkedinurl",
+      socialFacebook: "fburl",
+      socialInstagram: "instaurl",
+      socialPinterest: "pinurl",
+      socialTwitter: "twiturl",
+      key: "social",
+      page: "footer",
     },
   ];
   return { enquiryContent, allContent, imageContent, footerContent };
@@ -93,6 +112,7 @@ export const nockError = (endpoint) => {
 };
 
 export const nockOptions = (endpoint) => {
+  console.log("options", endpoint);
   return nock(
     "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",
     { encodedQueryParams: true }

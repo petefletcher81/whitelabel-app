@@ -1,3 +1,4 @@
+import { within } from "@testing-library/react";
 import nock from "nock";
 import React from "react";
 import {
@@ -67,7 +68,7 @@ describe("<ContentModal />", () => {
       />
     );
 
-    screen.getByText("Big Trees");
+    screen.getByDisplayValue("Big Trees");
   });
 
   it("should allow user to close the modal", () => {
@@ -103,6 +104,7 @@ describe("Editing Content", () => {
       heading: "New Heading",
       content: "Lorem ipsum dolor sit amet",
       createdAt: "2021-01-17T06:25:57.066Z",
+      page: "home",
     };
 
     const options = nockOptions("content/home/section-1");
@@ -162,6 +164,173 @@ describe("Editing Content", () => {
     fireEvent.click(screen.getByText("Delete"));
 
     await screen.findByText("This content has now been deleted");
+
+    content.done();
+    options.done();
+  });
+
+  it("should allow user to check the contacted box on the enquiry modal", async () => {
+    const { enquiryContent } = contentBuilder();
+    /* need to match the body coming back or would not allow pass */
+    const mockContent = {
+      email: "test1@test.com",
+      name: "test",
+      createdAt: "2021-01-17T06:25:57.066Z",
+      contacted: true,
+      key: "test1@test.com",
+      page: "enquiries",
+    };
+
+    const options = nockOptions("enquiries/test1@test.com");
+    const content = nockPutMock(mockContent, "enquiries/test1@test.com", {
+      message: "This content has been successfully updated",
+    });
+
+    render(
+      <ContentModal
+        data={{
+          item: enquiryContent[0],
+          type: "enquiries-content",
+          page: "contactus",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    const enquiryContainer = screen.getByTestId("enquiry-content");
+    const checkbox = within(enquiryContainer).getByRole("checkbox");
+    within(enquiryContainer).getByRole("checkbox", { checked: false });
+
+    fireEvent.click(checkbox);
+
+    within(enquiryContainer).getByRole("checkbox", { checked: true });
+    fireEvent.click(screen.getByText("Save"));
+
+    await screen.findByText("This content has been successfully updated");
+
+    content.done();
+    options.done();
+  });
+
+  it("should allow user to delete content that is not of type site-content", async () => {
+    const { enquiryContent } = contentBuilder();
+
+    const options = nockOptions("enquiries/test1@test.com");
+    const content = nockDeleteMock("enquiries/test1@test.com", {
+      message: "This content has now been deleted",
+    });
+
+    render(
+      <ContentModal
+        data={{
+          item: enquiryContent[0],
+          type: "enquiries-content",
+          page: "contactus",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    screen.getByText("test");
+    screen.getByTestId("enquiry-content");
+
+    fireEvent.click(screen.getByText("Delete"));
+
+    await screen.findByText("This content has now been deleted");
+
+    content.done();
+    options.done();
+  });
+
+  it("should allow user to edit the footer company content and update the new data", async () => {
+    const { footerContent } = contentBuilder();
+    /* need to match the body coming back or would not allow pass */
+    const mockContent = {
+      id: "company",
+      companyName: "New Heading",
+      key: "company",
+      page: "footer",
+      companyAddress: "23 Made Up Street, Somewhere Nice, Awesome Town",
+      companyNumber: "12345 678909",
+      mobileNumber: "09872234837",
+    };
+
+    const options = nockOptions("footer/company");
+    const content = nockPutMock(mockContent, "footer/company", {
+      message: "This content has been successfully updated",
+    });
+
+    render(
+      <ContentModal
+        data={{
+          item: footerContent[0],
+          type: "footer-content",
+          page: "footer",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    const heading = screen.getByDisplayValue("Big Trees");
+    expect(heading).toBeInTheDocument();
+
+    fireEvent.change(heading, { target: { value: "New Heading" } });
+
+    screen.getByDisplayValue("New Heading");
+    fireEvent.click(screen.getByText("Save"));
+
+    await screen.findByText("This content has been successfully updated");
+
+    expect(screen.getByDisplayValue("New Heading")).toBeInTheDocument();
+
+    await screen.findByText("This content has been successfully updated");
+
+    content.done();
+    options.done();
+  });
+
+  it("should allow user to edit the footer social content and update the new data", async () => {
+    const { footerContent } = contentBuilder();
+    /* need to match the body coming back or would not allow pass */
+    const mockContent = {
+      socialLinkedin: "New Heading",
+      socialFacebook: "fburl",
+      socialInstagram: "instaurl",
+      socialPinterest: "pinurl",
+      socialTwitter: "twiturl",
+      key: "social",
+      page: "footer",
+    };
+
+    const options = nockOptions("footer/social");
+    const content = nockPutMock(mockContent, "footer/social", {
+      message: "This content has been successfully updated",
+    });
+
+    render(
+      <ContentModal
+        data={{
+          item: footerContent[1],
+          type: "footer-content",
+          page: "footer",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    const heading = screen.getByDisplayValue("linkedinurl");
+    expect(heading).toBeInTheDocument();
+
+    fireEvent.change(heading, { target: { value: "New Heading" } });
+
+    screen.getByDisplayValue("New Heading");
+    fireEvent.click(screen.getByText("Save"));
+
+    await screen.findByText("This content has been successfully updated");
+
+    expect(screen.getByDisplayValue("New Heading")).toBeInTheDocument();
+
+    await screen.findByText("This content has been successfully updated");
 
     content.done();
     options.done();
