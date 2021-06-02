@@ -29,9 +29,6 @@ const ContentModal = ({ data, setToggleContentModal }) => {
       case "enquiries-content":
         newContent.page = "enquiries";
         break;
-      case "image-content":
-        newContent.page = "images";
-        break;
       case "footer-content":
         newContent.page = "footer";
         break;
@@ -55,7 +52,7 @@ const ContentModal = ({ data, setToggleContentModal }) => {
       }
     } catch (error) {
       const err = error.response?.data;
-      setError(err.error);
+      setError(err.message);
     }
   };
 
@@ -66,11 +63,11 @@ const ContentModal = ({ data, setToggleContentModal }) => {
         newContent.page = "enquiries";
         break;
       case "image-content":
-        newContent.id = newContent.email;
+        newContent.id = newContent.key;
         newContent.page = "images";
         break;
       case "footer-content":
-        newContent.id = newContent.email;
+        newContent.id = newContent.key;
         newContent.page = "footer";
         break;
     }
@@ -79,9 +76,8 @@ const ContentModal = ({ data, setToggleContentModal }) => {
       const response = await deleteItem(newContent.page, newContent.id);
       setSuccess(response.message);
     } catch (error) {
-      console.log(error);
       const err = error.response?.data;
-      setError(err.error);
+      setError(err.message);
     }
   };
 
@@ -91,7 +87,7 @@ const ContentModal = ({ data, setToggleContentModal }) => {
       setSuccess(response.message);
     } catch (error) {
       const err = error.response?.data;
-      setError(err.error);
+      setError(err.message);
     }
   };
 
@@ -148,8 +144,12 @@ const ContentModal = ({ data, setToggleContentModal }) => {
             </div>
           </div>
         )}
+
         {newContent && type === "image-content" && (
-          <div className="modal__site-content" data-testid="image-content">
+          <div
+            className="modal__site-content"
+            data-testid="image-content-wrapper"
+          >
             <div className="modal__site-content-id">{newContent.id}</div>
             <div className="modal__site-content-section">
               {newContent.section}
@@ -175,6 +175,7 @@ const ContentModal = ({ data, setToggleContentModal }) => {
             </div>
           </div>
         )}
+
         {newContent && type === "enquiries-content" && (
           <div className="modal__site-content" data-testid="enquiry-content">
             <div className="modal__site-content-email">{newContent.email}</div>
@@ -204,6 +205,7 @@ const ContentModal = ({ data, setToggleContentModal }) => {
             </div>
           </div>
         )}
+
         {newContent &&
           type === "footer-content" &&
           newContent.key === "company" && (
@@ -257,6 +259,7 @@ const ContentModal = ({ data, setToggleContentModal }) => {
               </div>
             </div>
           )}
+
         {newContent &&
           type === "footer-content" &&
           newContent.key === "social" && (
@@ -321,6 +324,7 @@ const ContentModal = ({ data, setToggleContentModal }) => {
               </div>
             </div>
           )}
+        {/* TODO do i need a disabled conditional here for images*/}
         <button onClick={handleSave}>Save</button>
         <button
           onClick={(e) => {

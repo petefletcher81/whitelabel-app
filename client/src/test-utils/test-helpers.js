@@ -111,6 +111,40 @@ export const nockError = (endpoint) => {
     );
 };
 
+export const nockErrorDelete = (endpoint) => {
+  return nock(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+  )
+    .delete(`/${endpoint}`)
+    .reply(
+      400,
+      {
+        message: "Something went wrong while trying to add or get the content",
+      },
+      {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      }
+    );
+};
+
+export const nockErrorPut = (endpoint) => {
+  return nock(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
+  )
+    .put(`/${endpoint}`)
+    .reply(
+      400,
+      {
+        message: "Something went wrong while trying to add or get the content",
+      },
+      {
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/json",
+      }
+    );
+};
+
 export const nockOptions = (endpoint) => {
   console.log("options", endpoint);
   return nock(
@@ -180,6 +214,7 @@ export const nockPutMock = (postData, endpoint, content) => {
       "Vary",
     ]);
 };
+
 export const nockDeleteMock = (endpoint, content) => {
   return nock(
     "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net",

@@ -124,6 +124,10 @@ describe("App ", () => {
     imageAboutus.done();
     footer.done();
   });
+
+  it("should open the content modal when an user is in dashboard and content is clicked and close the image modal when backdrop clicked", async () => {
+    // TODO - write this test!!!!!
+  });
 });
 
 describe("App -- Nav items", () => {

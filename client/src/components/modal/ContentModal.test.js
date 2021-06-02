@@ -10,6 +10,8 @@ import {
 import {
   contentBuilder,
   nockDeleteMock,
+  nockErrorDelete,
+  nockErrorPut,
   nockOptions,
   nockPutMock,
 } from "../../test-utils/test-helpers";
@@ -44,6 +46,19 @@ describe("<ContentModal />", () => {
 
     screen.getByText("home");
     screen.getByText("https://test-for-home");
+  });
+
+  it("should open the modal with the correct content with type image", () => {
+    const { imageContent } = contentBuilder();
+    render(
+      <ContentModal
+        data={{ item: imageContent[1], type: "image-content" }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    screen.getByText("contactus");
+    screen.getByText("https://test-for-contactus");
   });
 
   it("should open the modal with the correct content with type enquiries", () => {
@@ -164,6 +179,76 @@ describe("Editing Content", () => {
     fireEvent.click(screen.getByText("Delete"));
 
     await screen.findByText("This content has now been deleted");
+
+    content.done();
+    options.done();
+  });
+
+  it("should surface an error if there is a problem response with content on delete", async () => {
+    const { allContent } = contentBuilder();
+
+    const options = nockOptions("content/home/section-1");
+    const content = nockErrorDelete("content/home/section-1");
+
+    render(
+      <ContentModal
+        data={{
+          item: allContent[0],
+          type: "site-content",
+          page: "home",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    const heading = screen.getByDisplayValue("Heading 1");
+    screen.getByTestId("edit-content-modal");
+
+    fireEvent.click(screen.getByText("Delete"));
+
+    await screen.findByText(
+      "Something went wrong while trying to add or get the content"
+    );
+
+    content.done();
+    options.done();
+  });
+
+  it("should surface an error if there is a problem rsponse with contetn on post", async () => {
+    const { allContent } = contentBuilder();
+    /* need to match the body coming back or would not allow pass */
+    const mockContent = {
+      id: "section-1",
+      heading: "New Heading",
+      content: "Lorem ipsum dolor sit amet",
+      createdAt: "2021-01-17T06:25:57.066Z",
+      page: "home",
+    };
+
+    const options = nockOptions("content/home/section-1");
+    const content = nockErrorPut("content/home/section-1");
+
+    render(
+      <ContentModal
+        data={{
+          item: allContent[0],
+          type: "site-content",
+          page: "home",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    const heading = screen.getByDisplayValue("Heading 1");
+    screen.getByTestId("edit-content-modal");
+    fireEvent.change(heading, { target: { value: "New Heading" } });
+
+    screen.getByDisplayValue("New Heading");
+    fireEvent.click(screen.getByText("Save"));
+
+    await screen.findByText(
+      "Something went wrong while trying to add or get the content"
+    );
 
     content.done();
     options.done();
@@ -331,6 +416,126 @@ describe("Editing Content", () => {
     expect(screen.getByDisplayValue("New Heading")).toBeInTheDocument();
 
     await screen.findByText("This content has been successfully updated");
+
+    content.done();
+    options.done();
+  });
+
+  it("should allow user to delete footer company content", async () => {
+    const { footerContent } = contentBuilder();
+
+    const options = nockOptions("footer/company");
+    const content = nockDeleteMock("footer/company", {
+      message: "This content has now been deleted",
+    });
+
+    render(
+      <ContentModal
+        data={{
+          item: footerContent[0],
+          type: "footer-content",
+          page: "footer",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    screen.getByDisplayValue("Big Trees");
+    screen.getByTestId("footer-content-company");
+
+    fireEvent.click(screen.getByText("Delete"));
+
+    await screen.findByText("This content has now been deleted");
+
+    content.done();
+    options.done();
+  });
+
+  it("should allow user to delete footer social content", async () => {
+    const { footerContent } = contentBuilder();
+
+    const options = nockOptions("footer/social");
+    const content = nockDeleteMock("footer/social", {
+      message: "This content has now been deleted",
+    });
+
+    render(
+      <ContentModal
+        data={{
+          item: footerContent[1],
+          type: "footer-content",
+          page: "footer",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    screen.getByDisplayValue("linkedinurl");
+    screen.getByTestId("footer-content-social");
+
+    fireEvent.click(screen.getByText("Delete"));
+
+    await screen.findByText("This content has now been deleted");
+
+    content.done();
+    options.done();
+  });
+
+  it("should allow usr to delete image content", async () => {
+    const { imageContent } = contentBuilder();
+
+    const options = nockOptions("images/test-filename");
+    const content = nockDeleteMock("images/test-filename", {
+      message: "This content has now been deleted",
+    });
+
+    render(
+      <ContentModal
+        data={{
+          item: imageContent[0],
+          type: "image-content",
+          page: "home",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    screen.getByText("home");
+    screen.getByTestId("image-content-wrapper");
+
+    fireEvent.click(screen.getByText("Delete"));
+
+    await screen.findByText("This content has now been deleted");
+
+    content.done();
+    options.done();
+  });
+
+  it("should surface an error if there is a problem response with !content on deleteItem", async () => {
+    const { footerContent } = contentBuilder();
+
+    const options = nockOptions("footer/social");
+    const content = nockErrorDelete("footer/social");
+
+    render(
+      <ContentModal
+        data={{
+          item: footerContent[1],
+          type: "footer-content",
+          page: "footer",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    screen.getByDisplayValue("linkedinurl");
+    screen.getByTestId("footer-content-social");
+
+    fireEvent.click(screen.getByText("Delete"));
+
+    await screen.findByText(
+      "Something went wrong while trying to add or get the content"
+    );
 
     content.done();
     options.done();
