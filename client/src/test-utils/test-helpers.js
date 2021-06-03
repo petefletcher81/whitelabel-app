@@ -146,7 +146,6 @@ export const nockErrorPut = (endpoint) => {
 };
 
 export const nockOptions = (endpoint) => {
-  console.log("options", endpoint);
   return nock(
     "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",
     { encodedQueryParams: true }

@@ -42,7 +42,6 @@ const ContentModal = ({ data, setToggleContentModal }) => {
         setSuccess(response.message);
       }
       if (type !== "site-content") {
-        console.log({ newContent });
         const response = await updateData(
           newContent.page,
           newContent,
@@ -94,9 +93,9 @@ const ContentModal = ({ data, setToggleContentModal }) => {
   return (
     <div className="backdrop w-full h-full" data-testid="backdrop">
       <div className="modal">
+        <h1>Site Content</h1>
         {newContent && type === "site-content" && (
           <div className="modal__site-content" data-testid="edit-content-modal">
-            <h1>Site Content</h1>
             <div className="modal__site-content-id">
               <label htmlFor="content-id" className="visuallyhidden" />
               <input

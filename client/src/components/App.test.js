@@ -38,6 +38,8 @@ describe("App ", () => {
     nock.cleanAll();
     console.error.mockRestore();
     cleanup();
+    // the below will reset the history
+    history.push("/");
   });
 
   it("should render content / images from redux", async () => {
@@ -126,7 +128,46 @@ describe("App ", () => {
   });
 
   it("should open the content modal when an user is in dashboard and content is clicked and close the image modal when backdrop clicked", async () => {
-    // TODO - write this test!!!!!
+    const { allContent, imageContent, footerContent, enquiryContent } =
+      contentBuilder();
+    window.innerWidth = 990;
+
+    const contentHome = nockGetHelper("content/home", allContent);
+    const imageHome = nockGetHelper("images/home/image", imageContent);
+    const enquiry = nockGetHelper("enquiries", enquiryContent);
+    const content = nockGetHelper("content", allContent);
+    const images = nockGetHelper("images", imageContent);
+    const footer = nockGetHelper("footer", footerContent);
+
+    localStorage.setItem("token", "qwerty");
+
+    mockJwt.mockImplementation(() => {
+      return { exp: mockDate.getTime(), admin: true };
+    });
+
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    await screen.findByText("Heading 1");
+    fireEvent.click(screen.getByText("Dashboard"));
+
+    await screen.findByText("test1@test.com");
+
+    screen.getByText("Manage Content");
+    const [contentButton] = screen.getAllByText("Edit");
+    fireEvent.click(contentButton);
+
+    await screen.findByText("Site Content");
+
+    contentHome.done();
+    imageHome.done();
+    enquiry.done();
+    content.done();
+    images.done();
+    footer.done();
   });
 });
 
