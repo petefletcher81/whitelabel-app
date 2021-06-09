@@ -6,6 +6,7 @@ const Busboy = require("busboy");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
+const { dateFormatter } = require("../utils/helpers/date-formatter");
 const { firebaseConfig } = require("../config/firebase-config");
 
 exports.addImage = (req, res) => {
@@ -67,7 +68,7 @@ exports.addImage = (req, res) => {
       const newImage = {
         id: uuidv4(),
         [imageType]: url,
-        createdAt: new Date().toISOString(),
+        createdAt: dateFormatter(),
         section: page,
         key: filename,
       };

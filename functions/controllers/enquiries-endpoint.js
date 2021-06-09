@@ -4,6 +4,8 @@ const {
   authErrorHandler,
 } = require("../utils/errorHandlers/auth-error-handler");
 
+const { dateFormatter } = require("../utils/helpers/date-formatter");
+
 const { getAll, deleteItem } = require("./shared-crud-calls");
 
 exports.addEnquiry = async (req, res) => {
@@ -12,7 +14,7 @@ exports.addEnquiry = async (req, res) => {
   const enquiry = {
     name,
     email,
-    createdAt: new Date().toISOString(),
+    createdAt: dateFormatter(),
     contacted: false,
     key: email,
   };
@@ -47,7 +49,7 @@ exports.updateEnquiry = async (req, res) => {
   const enquiry = {
     name,
     email,
-    createdAt: new Date().toISOString(),
+    createdAt: dateFormatter(),
     contacted,
     key: email,
   };
