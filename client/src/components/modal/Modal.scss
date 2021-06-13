@@ -16,13 +16,22 @@
 }
 
 .modal {
-  &__site-content {
-    display: block;
-    max-width: 60%;
-    height: 80%;
-    max-height: 80%;
-    margin: 100px auto;
-    background-color: #fff;
-    padding: 2px;
+  &__enquiries-content.grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+
+  &__buttons-wrapper.flex {
+    justify-content: space-around;
+  }
+
+  &__enquiries-content.grid {
+    //   display: block;
+    //   max-width: 60%;
+    //   height: 80%;
+    //   max-height: 80%;
+    //   margin: 100px auto;
+    //   background-color: #fff;
+    //   padding: 2px;
   }
 }

@@ -53,8 +53,6 @@ const Dashboard = ({ setToggleContentModal }) => {
     getImages();
   }, []);
 
-  console.log(enquiries);
-
   return (
     <div
       className="dashboard border-primary flex flex-col grid p-2"
@@ -120,12 +118,14 @@ const Dashboard = ({ setToggleContentModal }) => {
                       <div className="flex">
                         <button
                           className="btn p-1"
-                          onClick={() =>
+                          onClick={() => {
+                            console.log(enquiry);
                             setToggleContentModal({
-                              content: enquiry,
+                              item: enquiry,
+                              page: "enquiries",
                               type: "enquiries-content",
-                            })
-                          }
+                            });
+                          }}
                         >
                           Edit
                         </button>
