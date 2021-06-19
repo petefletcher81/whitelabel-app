@@ -107,6 +107,10 @@ img {
   color: white;
 }
 
+.text-error {
+  color: red;
+}
+
 .bg-primary {
   background-color: var(--primary-color);
 }
@@ -140,6 +144,15 @@ img {
   align-items: center;
 }
 
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 .absolute {
   position: absolute;
 }
@@ -149,11 +162,15 @@ img {
 }
 
 // size
+.w-500 {
+  width: 500px;
+}
+
 .w-full {
   width: 100%;
 }
 
-.w-scroll {
+.w-min {
   min-width: 0;
 }
 

@@ -1,5 +1,32 @@
 .dashboard {
   font-size: 0.85rem;
+  &__footer-company-details.flex {
+    align-items: baseline;
+  }
+
+  &__footer-headings.grid {
+    grid-template-columns: repeat(6, minmax(100px, 200px));
+    text-align: center;
+  }
+
+  &__images-content-wrapper {
+    height: 40vh;
+  }
+
+  &__footer-content.grid {
+    grid-template-columns: repeat(6, minmax(100px, 200px));
+    text-align: center;
+  }
+
+  &__footer-content-social.grid {
+    grid-template-columns: repeat(7, minmax(100px, 200px));
+    text-align: center;
+  }
+
+  &__footer-headings-social.grid {
+    grid-template-columns: repeat(7, minmax(100px, 200px));
+    text-align: center;
+  }
 
   &__heading {
     font-size: 1rem;
