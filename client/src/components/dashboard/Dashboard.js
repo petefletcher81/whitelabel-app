@@ -5,6 +5,7 @@ import {
   getEnquiries,
   getFooterContent,
 } from "../../utils/apiCalls";
+import ContentError from "../../utils/contentError";
 import DashboardContentCard from "../../utils/DashboardContentCard";
 import Row from "../../utils/Row";
 import "./Dashboard.scss";
@@ -14,7 +15,11 @@ const Dashboard = ({ setToggleContentModal }) => {
   const [content, setContent] = useState(null);
   const [footer, setFooter] = useState(null);
   const [images, setImages] = useState(null);
+  const [contentError, setContentError] = useState(null);
   const [error, setError] = useState(null);
+  const [enquiriesError, setEnquiriesError] = useState(null);
+  const [imageError, setImageError] = useState(null);
+  const [footerError, setFooterError] = useState(null);
   const [company, setCompany] = useState(null);
   const [social, setSocial] = useState(null);
   const mobile = window.innerWidth < 990;
@@ -26,7 +31,7 @@ const Dashboard = ({ setToggleContentModal }) => {
         setEnquiries(response);
       } catch (error) {
         const data = error.response?.data;
-        setError(data);
+        setEnquiriesError(data);
       }
     };
     getAllEquiries();
@@ -39,7 +44,7 @@ const Dashboard = ({ setToggleContentModal }) => {
         setContent(response);
       } catch (error) {
         const data = error.response?.data;
-        setError(data);
+        setContentError(data);
       }
     };
     getContent();
@@ -52,7 +57,7 @@ const Dashboard = ({ setToggleContentModal }) => {
         setImages(response);
       } catch (error) {
         const data = error.response?.data;
-        setError(data);
+        setImageError(data);
       }
     };
     getImages();
@@ -66,31 +71,20 @@ const Dashboard = ({ setToggleContentModal }) => {
         const company = response.find((company) => {
           return company.id === "company";
         });
+
         setCompany(company);
 
         const social = response.find((socials) => socials.id === "social");
-        console.log("======", social);
         setSocial(social);
 
         setFooter(response);
       } catch (error) {
         const data = error.response?.data;
-        setError(data);
+        setFooterError(data);
       }
     };
     getFooterData();
   }, []);
-
-  const splitFooterContent = () => {
-    const company = footer.find((company) => {
-      return company.id === "company";
-    });
-    setCompany(company);
-    const social = footer.find((socials) => socials.id === "social");
-    console.log("======", social);
-    setCompany(social);
-    return { company, social };
-  };
 
   return (
     <div
@@ -130,7 +124,7 @@ const Dashboard = ({ setToggleContentModal }) => {
           </div>
           <div className="dashboard__enquiry-wrapper hidden scroll-y">
             {enquiries &&
-              !error &&
+              !enquiriesError &&
               enquiries.map((enquiry, i) => {
                 return (
                   <section
@@ -174,6 +168,11 @@ const Dashboard = ({ setToggleContentModal }) => {
                   </section>
                 );
               })}
+            {enquiriesError && (
+              <div className="dashboard__enquires-error h-full text-error flex bg-white">
+                <ContentError error={enquiriesError} />
+              </div>
+            )}
           </div>
         </div>
 
@@ -205,6 +204,7 @@ const Dashboard = ({ setToggleContentModal }) => {
 
           <div className="dashboard__content-wrapper hidden scroll-y">
             {content &&
+              !contentError &&
               content?.map((section, index) => {
                 return (
                   <div
@@ -224,6 +224,11 @@ const Dashboard = ({ setToggleContentModal }) => {
                   </div>
                 );
               })}
+            {contentError && (
+              <div className="dashboard__enquires-error h-full text-error flex bg-white">
+                <ContentError error={contentError} />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -259,6 +264,7 @@ const Dashboard = ({ setToggleContentModal }) => {
           {/* images content */}
           <div className="dashboard__images-content-wrapper hidden scroll-y">
             {images &&
+              !imageError &&
               images.map((image, index) => {
                 return (
                   <section
@@ -312,6 +318,11 @@ const Dashboard = ({ setToggleContentModal }) => {
                   </section>
                 );
               })}
+            {imageError && (
+              <div className="dashboard__enquires-error h-full text-error flex bg-white">
+                <ContentError error={imageError} />
+              </div>
+            )}
           </div>
         </div>
 
@@ -321,41 +332,59 @@ const Dashboard = ({ setToggleContentModal }) => {
         >
           {footer && (
             <div className="dashboard__footer-wrapper grid">
-              <div className="dashboard__footer-company-details flex flex-col hidden scroll-x">
+              <div
+                className="dashboard__footer-company-details flex flex-col hidden scroll-x"
+                data-testid="manage-footer-company"
+              >
                 <div className="dashboard__footer-headings grid bg-primary px-1">
-                  <Row classname="dashboard__footer--content" textWhite={true}>
+                  <Row
+                    classname="dashboard__footer--content"
+                    textColour={"white"}
+                  >
                     Company Name
                   </Row>
-                  <Row classname="dashboard__footer--content" textWhite={true}>
+                  <Row
+                    classname="dashboard__footer--content"
+                    textColour={"white"}
+                  >
                     Address
                   </Row>
-                  <Row classname="dashboard__footer--content" textWhite={true}>
+                  <Row
+                    classname="dashboard__footer--content"
+                    textColour={"white"}
+                  >
                     Phone
                   </Row>
-                  <Row classname="dashboard__footer--content" textWhite={true}>
+                  <Row
+                    classname="dashboard__footer--content"
+                    textColour={"white"}
+                  >
                     Mobile
                   </Row>
-                  <Row classname="dashboard__footer--content" textWhite={true}>
+                  <Row
+                    classname="dashboard__footer--content"
+                    textColour={"white"}
+                  >
                     id
                   </Row>
                 </div>
 
                 <div className="dashboard__footer-content grid shaded p-1">
-                  <div className="dashboard__footer--content">
+                  <Row className="dashboard__footer--content">
                     {company?.companyName}
-                  </div>
-                  <div className="dashboard__footer--content">
+                  </Row>
+                  <Row className="dashboard__footer--content">
                     {company?.companyAddress}
-                  </div>
-                  <div className="dashboard__footer--content ">
+                  </Row>
+                  <Row className="dashboard__footer--content ">
                     {company?.contactNumber}
-                  </div>
-                  <div className="dashboard__footer--content">
+                  </Row>
+                  <Row className="dashboard__footer--content">
                     {company?.mobileNumber}
-                  </div>
-                  <div className="dashboard__footer--content">
+                  </Row>
+                  <Row className="dashboard__footer--content">
                     {company?.id}
-                  </div>
+                  </Row>
                   <button
                     className="btn p-1"
                     onClick={() =>
@@ -371,52 +400,71 @@ const Dashboard = ({ setToggleContentModal }) => {
                 </div>
               </div>
 
-              <div className="dashboard__footer-company-details flex flex-col hidden scroll-x">
+              <div
+                className="dashboard__footer-company-details flex flex-col hidden scroll-x"
+                data-testid="manage-footer-social"
+              >
                 <div className="dashboard__footer-headings-social grid bg-primary px-1">
-                  <Row classname="dashboard__footer--content" textWhite={true}>
+                  <Row
+                    classname="dashboard__footer--content"
+                    textColour={"white"}
+                  >
                     Twitter
                   </Row>
-                  <Row classname="dashboard__footer--content" textWhite={true}>
+                  <Row
+                    classname="dashboard__footer--content"
+                    textColour={"white"}
+                  >
                     Facebook
                   </Row>
-                  <Row classname="dashboard__footer--content" textWhite={true}>
+                  <Row
+                    classname="dashboard__footer--content"
+                    textColour={"white"}
+                  >
                     LinkedIn
                   </Row>
-                  <Row classname="dashboard__footer--content" textWhite={true}>
+                  <Row
+                    classname="dashboard__footer--content"
+                    textColour={"white"}
+                  >
                     Instagram
                   </Row>
-                  <Row classname="dashboard__footer--content" textWhite={true}>
+                  <Row
+                    classname="dashboard__footer--content"
+                    textColour={"white"}
+                  >
                     Pinterest
                   </Row>
-                  <Row classname="dashboard__footer--content" textWhite={true}>
+                  <Row
+                    classname="dashboard__footer--content"
+                    textColour={"white"}
+                  >
                     Id
                   </Row>
                 </div>
 
                 <div className="dashboard__footer-content-social grid shaded p-1">
-                  <div className="dashboard__footer--content">
+                  <Row classname="dashboard__footer--content">
                     {social?.socialTwitter}
-                  </div>
-                  <div className="dashboard__footer--content shaded">
+                  </Row>
+                  <Row className="dashboard__footer--content">
                     {social?.socialFacebook}
-                  </div>
-                  <div className="dashboard__footer--content">
+                  </Row>
+                  <Row className="dashboard__footer--content">
                     {social?.socialLinkedin}
-                  </div>
-                  <div className="dashboard__footer--content shaded">
+                  </Row>
+                  <Row className="dashboard__footer--content">
                     {social?.socialInstagram}
-                  </div>
-                  <div className="dashboard__footer--content">
+                  </Row>
+                  <Row className="dashboard__footer--content">
                     {social?.socialPinterest}
-                  </div>
-                  <div className="dashboard__footer--content shaded">
-                    {social?.id}
-                  </div>
+                  </Row>
+                  <Row className="dashboard__footer--content">{social?.id}</Row>
                   <button
                     className="btn p-1"
                     onClick={() =>
                       setToggleContentModal({
-                        item: company,
+                        item: social,
                         page: "footer",
                         type: "footer-content",
                       })
@@ -426,6 +474,11 @@ const Dashboard = ({ setToggleContentModal }) => {
                   </button>
                 </div>
               </div>
+            </div>
+          )}
+          {footerError && (
+            <div className="dashboard__enquires-error h-full text-error flex bg-white">
+              <ContentError error={footerError} />
             </div>
           )}
         </div>

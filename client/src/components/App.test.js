@@ -160,7 +160,7 @@ describe("App ", () => {
     const [contentButton] = screen.getAllByText("Edit");
     fireEvent.click(contentButton);
 
-    await screen.findByText("Site Content");
+    await screen.findAllByText("Dashboard");
 
     contentHome.done();
     imageHome.done();

@@ -9,6 +9,13 @@ export const contentBuilder = () => {
       contacted: false,
       key: "test1@test.com",
     },
+    {
+      email: "test2@test.com",
+      name: "test2",
+      createdAt: "2020-01-17T06:25:57.064Z",
+      contacted: true,
+      key: "test2@test.com",
+    },
   ];
 
   const allContent = [
@@ -38,6 +45,7 @@ export const contentBuilder = () => {
   const imageContent = [
     {
       id: "ba8c816a-6007-4a9e-aeff-1bca70fc7e97",
+      name: "brook-anderson-1M5W_Gni_N4-unsplash.jpg",
       createdAt: "2021-01-31T06:46:28.741Z",
       section: "home",
       image: "https://test-for-home",
@@ -45,17 +53,27 @@ export const contentBuilder = () => {
     },
     {
       id: "2bed3fc0-2a17-4519-8460-0dc8ab4e32a2",
+      name: "brook-anderson-gTQbZXL417Q-unsplash.jpg",
       section: "contactus",
-      createdAt: "2021-01-31T06:46:28.742Z",
+      createdAt: "2021-01-31T06:46:28.442Z",
       banner: "https://test-for-contactus",
       key: "test-filename-2",
     },
     {
       id: "2bed3fc0-2a17-4987-8460-0dc8ab4e32a2",
+      name: "cindy-chen--7nnXc4jBWU-unsplash.jpg",
       section: "aboutus",
-      createdAt: "2021-01-31T06:46:28.742Z",
+      createdAt: "2021-01-31T06:46:28.342Z",
       image: "https://test-for-aboutus",
       key: "test-filename-3",
+    },
+    {
+      id: "2bed3fc0-2a17-4987-460-0dc8ab4e32a2",
+      name: "gallery-test",
+      section: "aboutus",
+      createdAt: "2021-01-31T06:46:28.42Z",
+      gallery: "https://test-for-aboutus-gallery",
+      key: "test-filename-4",
     },
   ];
 
@@ -77,6 +95,7 @@ export const contentBuilder = () => {
       socialTwitter: "twiturl",
       key: "social",
       page: "footer",
+      id: "social",
     },
   ];
   return { enquiryContent, allContent, imageContent, footerContent };

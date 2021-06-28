@@ -1,11 +1,11 @@
 import React from "react";
 
-const Row = ({ classname, shaded, children, textWhite }) => {
+const Row = ({ classname, shaded, children, textColour }) => {
   return (
     <div
-      className={`${classname}  py-1 ${shaded ? "shaded" : null} ${
-        textWhite ? "text-white" : "text-primary"
-      }`}
+      className={`${classname}  py-1 ${
+        shaded ? "shaded" : null
+      } text-${textColour}`}
     >
       {children}
     </div>

@@ -5,7 +5,7 @@
   }
 
   &__footer-headings.grid {
-    grid-template-columns: repeat(6, minmax(100px, 200px));
+    grid-template-columns: repeat(6, minmax(100px, 300px));
     text-align: center;
   }
 
@@ -14,17 +14,17 @@
   }
 
   &__footer-content.grid {
-    grid-template-columns: repeat(6, minmax(100px, 200px));
+    grid-template-columns: repeat(6, minmax(100px, 300px));
     text-align: center;
   }
 
   &__footer-content-social.grid {
-    grid-template-columns: repeat(7, minmax(100px, 200px));
+    grid-template-columns: repeat(7, minmax(100px, 250px));
     text-align: center;
   }
 
   &__footer-headings-social.grid {
-    grid-template-columns: repeat(7, minmax(100px, 200px));
+    grid-template-columns: repeat(7, minmax(100px, 250px));
     text-align: center;
   }
 

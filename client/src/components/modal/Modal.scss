@@ -16,8 +16,7 @@
 }
 
 .modal {
-  &__enquiries-content.grid {
-    grid-template-columns: repeat(2, 1fr);
+  &__content-grid.grid-2 {
     gap: 0;
   }
 
@@ -25,13 +24,25 @@
     justify-content: space-around;
   }
 
-  &__enquiries-content.grid {
-    //   display: block;
-    //   max-width: 60%;
-    //   height: 80%;
-    //   max-height: 80%;
-    //   margin: 100px auto;
-    //   background-color: #fff;
-    //   padding: 2px;
+  &__site-content-image {
+    & img {
+      margin: 12px;
+      max-width: 75%;
+      max-height: 500px;
+    }
+  }
+
+  &__site-content.grid-2 {
+    gap: 0;
+  }
+}
+
+.modal-input {
+  & input {
+    border: 0;
+    border-bottom: 1px solid var(--primary-color);
+    font-size: inherit;
+    width: 80%;
+    background-color: inherit;
   }
 }

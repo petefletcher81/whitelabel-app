@@ -44,8 +44,11 @@ describe("<ContentModal />", () => {
       />
     );
 
-    screen.getByText("home");
-    screen.getByText("https://test-for-home");
+    screen.getByText(
+      "Are you sure you want to delete this image from the home page"
+    );
+    const displayedImage = document.querySelectorAll("img");
+    expect(displayedImage[0].src).toContain("test-for-home");
   });
 
   it("should open the modal with the correct content with type image", () => {
@@ -57,8 +60,11 @@ describe("<ContentModal />", () => {
       />
     );
 
-    screen.getByText("contactus");
-    screen.getByText("https://test-for-contactus");
+    screen.getByText(
+      "Are you sure you want to delete this image from the contactus page"
+    );
+    const displayedImage = document.querySelectorAll("img");
+    expect(displayedImage[0].src).toContain("test-for-contactus");
   });
 
   it("should open the modal with the correct content with type enquiries", () => {
@@ -98,6 +104,50 @@ describe("<ContentModal />", () => {
 
     fireEvent.click(screen.getByText("Close"));
     expect(mockClose).toHaveBeenCalled();
+  });
+
+  it("render correct class dependant on size", () => {
+    const { allContent } = contentBuilder();
+    const mockClose = jest.fn();
+    render(
+      <ContentModal
+        data={{
+          item: allContent[0],
+          type: "site-content",
+          page: "home",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    const contentWindow = screen.getByText("Content");
+    screen.debug(contentWindow);
+    expect(contentWindow).toHaveClass("shaded");
+  });
+
+  it("should render gallery component", () => {
+    const { imageContent } = contentBuilder();
+
+    console.log(imageContent[3]);
+
+    render(
+      <ContentModal
+        data={{
+          item: imageContent[3],
+          type: "image-content",
+          page: "aboutus",
+        }}
+        setToggleContentModal={jest.fn()}
+      />
+    );
+
+    screen.getByText(
+      "Are you sure you want to delete this image from the aboutus page"
+    );
+
+    const displayedImage = document.querySelectorAll("img");
+    screen.debug();
+    expect(displayedImage[0].src).toContain("test-for-aboutus-gallery");
   });
 });
 
@@ -385,6 +435,7 @@ describe("Editing Content", () => {
       socialTwitter: "twiturl",
       key: "social",
       page: "footer",
+      id: "social",
     };
 
     const options = nockOptions("footer/social");
@@ -500,7 +551,6 @@ describe("Editing Content", () => {
       />
     );
 
-    screen.getByText("home");
     screen.getByTestId("image-content-wrapper");
 
     fireEvent.click(screen.getByText("Delete"));
