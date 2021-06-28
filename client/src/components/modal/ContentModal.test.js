@@ -128,8 +128,6 @@ describe("<ContentModal />", () => {
   it("should render gallery component", () => {
     const { imageContent } = contentBuilder();
 
-    console.log(imageContent[3]);
-
     render(
       <ContentModal
         data={{

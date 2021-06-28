@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack serve --open --mode development",
     "build": "webpack --mode production",
-    "test": "jest --watchAll --coverage",
+    "test": "jest --watchAll --coverage --maxWorkers=50%",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand"
   },
   "author": "",

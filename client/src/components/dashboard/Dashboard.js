@@ -153,7 +153,6 @@ const Dashboard = ({ setToggleContentModal }) => {
                         <button
                           className="btn p-1"
                           onClick={() => {
-                            console.log(enquiry);
                             setToggleContentModal({
                               item: enquiry,
                               page: "enquiries",
