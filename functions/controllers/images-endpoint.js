@@ -6,6 +6,7 @@ const Busboy = require("busboy");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
+const { dateFormatter } = require("../utils/helpers/date-formatter");
 const { firebaseConfig } = require("../config/firebase-config");
 
 exports.addImage = (req, res) => {
@@ -67,8 +68,9 @@ exports.addImage = (req, res) => {
       const newImage = {
         id: uuidv4(),
         [imageType]: url,
-        createdAt: new Date().toISOString(),
+        createdAt: dateFormatter(),
         section: page,
+        key: filename,
       };
 
       // TODO - need to check the page is correct (aobut us no banner)
@@ -378,6 +380,7 @@ exports.getPageImages = async (req, res) => {
       .json({ message: `Something went wront cannot retrieve images` });
   }
 };
+
 exports.deleteImage = async (req, res) => {
   const { name } = req.params;
   await deleteItem(req, res);

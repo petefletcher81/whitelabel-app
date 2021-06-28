@@ -1,10 +1,11 @@
-const { response } = require("express");
+const { dateFormatter } = require("./date-formatter");
 
-exports.contentBuilder = (heading, content) => {
+exports.contentBuilder = (heading, content, section, page) => {
   const contentObj = {
     heading,
     content,
-    createdAt: new Date().toISOString(),
+    createdAt: dateFormatter(),
+    page,
   };
 
   return contentObj;

@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { getContent, addEnquiry, getBanners } from "../../utils/apiCalls";
-import ContentCard from "../../utils/ContentCard";
-import ContentError from "../../utils/contentError";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setContactusContent,
   setContactusContentError,
   setContactusImageError,
   setContactusImages,
 } from "../../redux/content/contactus-content/contactus-content-actions";
+import { addEnquiry, getBanners, getContent } from "../../utils/apiCalls";
+import ContentCard from "../../utils/ContentCard";
+import ContentError from "../../utils/contentError";
 import "./ContactUs.scss";
 
 const ContactUs = () => {
@@ -117,21 +117,25 @@ const ContactUs = () => {
       </div>
       {contentError && !content && <ContentError error={contentError} />}
       {content && !contentError && <ContentCard content={content[0]} />}
-      <div className="aboutus__banner flex">
+      <div className="contactus flex">
         {imageError && !banner && <ContentError error={imageError} />}
         {banner &&
           banner.map((b) => {
+            const { banner } = b;
             return (
-              <div
-                className="aboutus__banner-image-wrapper w-full h-full relative hidden"
-                key={b.id}
-                data-testid="contactus-banner"
-              >
-                <img
-                  src={b.banner}
-                  alt="contact us banner"
-                  className="w-full h-full"
-                />
+              <div key={b.id}>
+                {banner && (
+                  <div
+                    className="contactus-image-wrapper w-full h-full relative hidden"
+                    data-testid="contactus-banner"
+                  >
+                    <img
+                      src={b.banner}
+                      alt="contact us banner"
+                      className="w-full h-full"
+                    />
+                  </div>
+                )}
               </div>
             );
           })}

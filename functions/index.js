@@ -12,6 +12,7 @@ const {
 const { isAdmin } = require("./middleware/check-auth-middleware");
 const {
   getContent,
+  getPageContent,
   deleteContent,
   addContent,
   updateContent,
@@ -24,6 +25,7 @@ const {
 } = require("./controllers/images-endpoint");
 const {
   addEnquiry,
+  updateEnquiry,
   getEnquiries,
   deleteEnquiry,
 } = require("./controllers/enquiries-endpoint");
@@ -48,8 +50,9 @@ app.post("/verify-admin", verifyAdmin);
 
 /** Content */
 app.get("/content", getContent);
-app.post("/content/body/:page/:section", addContent);
-app.put("/content/body/:page/:section", updateContent);
+app.get("/content/:page", getPageContent);
+app.post("/content/:page/:section", addContent);
+app.put("/content/:page/:section", updateContent);
 app.delete("/content/:page/:section", deleteContent);
 
 /** Images */
@@ -67,6 +70,7 @@ app.delete("/footer/:area", deleteFooterContent);
 /** enquires */
 app.post("/enquiries", addEnquiry);
 app.get("/enquiries", getEnquiries);
+app.put("/enquiries/:email", updateEnquiry);
 app.delete("/enquiries/:name", deleteEnquiry);
 
 app.use((req, res) => {

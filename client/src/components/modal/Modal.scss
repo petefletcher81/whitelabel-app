@@ -3,6 +3,7 @@
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
 
   & img {
     display: block;
@@ -11,5 +12,37 @@
     margin: 100px auto;
     background-color: #fff;
     padding: 2px;
+  }
+}
+
+.modal {
+  &__content-grid.grid-2 {
+    gap: 0;
+  }
+
+  &__buttons-wrapper.flex {
+    justify-content: space-around;
+  }
+
+  &__site-content-image {
+    & img {
+      margin: 12px;
+      max-width: 75%;
+      max-height: 500px;
+    }
+  }
+
+  &__site-content.grid-2 {
+    gap: 0;
+  }
+}
+
+.modal-input {
+  & input {
+    border: 0;
+    border-bottom: 1px solid var(--primary-color);
+    font-size: inherit;
+    width: 80%;
+    background-color: inherit;
   }
 }

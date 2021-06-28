@@ -11,7 +11,12 @@ axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 //     : "/v1";
 
 export const getContent = async (page) => {
-  const { data } = await axios.get(`/content?page=${page}`);
+  const { data } = await axios.get(`/content/${page}`);
+  return data;
+};
+
+export const getAllContent = async () => {
+  const { data } = await axios.get(`/content`);
   return data;
 };
 
@@ -35,6 +40,11 @@ export const getFooterContent = async () => {
   return data;
 };
 
+export const getEnquiries = async () => {
+  const { data } = await axios.get(`/enquiries`);
+  return data;
+};
+
 export const addEnquiry = async (enquiryData) => {
   // TODO - need a back off function for bots
   const { name, email } = enquiryData;
@@ -43,8 +53,31 @@ export const addEnquiry = async (enquiryData) => {
 };
 
 export const attemptSignIn = async (siginInData) => {
-  // TODO - need a back off function for bots
+  // TODO - need a back off function for bots1
   const { password, email } = siginInData;
   const { data } = await axios.post(`/admin`, { password, email });
+  return data;
+};
+
+export const updateContent = async (page, updatedContent, section) => {
+  const { data } = await axios.put(
+    `/content/${page}/${section}`,
+    updatedContent
+  );
+  return data;
+};
+
+export const updateData = async (page, updatedContent, section) => {
+  const { data } = await axios.put(`/${page}/${section}`, updatedContent);
+  return data;
+};
+
+export const deleteContent = async (page, section) => {
+  const { data } = await axios.delete(`/content/${page}/${section}`);
+  return data;
+};
+
+export const deleteItem = async (page, section) => {
+  const { data } = await axios.delete(`/${page}/${section}`);
   return data;
 };

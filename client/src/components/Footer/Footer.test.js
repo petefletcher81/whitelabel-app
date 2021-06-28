@@ -1,11 +1,9 @@
-import React from "react";
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
-
 import "@testing-library/jest-dom/extend-expect";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import nock from "nock";
-
-import Footer from "./Footer";
+import React from "react";
 import { unmountComponentAtNode } from "react-dom";
+import Footer from "./Footer";
 
 describe("<Footer />", () => {
   let container = null;

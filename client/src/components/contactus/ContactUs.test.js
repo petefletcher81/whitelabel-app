@@ -7,7 +7,13 @@ import {
   render,
   screen,
 } from "../../test-utils/custom-utils";
-import { mockBannerImage, mockContent } from "../../test-utils/mockdata";
+import {
+  contentBuilder,
+  nockError,
+  nockGetHelper,
+  nockOptions,
+  nockPostMock,
+} from "../../test-utils/test-helpers";
 import ContactUs from "./ContactUs";
 
 describe("<ContactUs /> Mobile", () => {
@@ -21,62 +27,21 @@ describe("<ContactUs /> Mobile", () => {
   });
 
   it("should render content from Api", async () => {
-    render(<ContactUs />);
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "contactus",
-      })
-      .reply(200, mockContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const { allContent, imageContent } = contentBuilder();
 
-    const banner = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/contactus/banner")
-      .reply(200, mockBannerImage, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/contactus", allContent);
+    const banner = nockGetHelper("images/contactus/banner", imageContent);
+
+    render(<ContactUs />);
 
     await screen.findByText("Heading 1");
-    screen.getByText("Heading 2");
     content.done();
     banner.done();
   });
 
-  it("should render error if content not retreived from Api", async () => {
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "contactus",
-      })
-      .reply(
-        400,
-        {
-          message:
-            "Something went wrong while trying to add or get the content",
-        },
-        {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json",
-        }
-      );
-
-    const banner = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/contactus/banner")
-      .reply(200, mockBannerImage, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+  it("should render error if content not retrieved from Api", async () => {
+    const content = nockError("content/contactus");
+    const banner = nockError("images/contactus/banner");
 
     render(<ContactUs />);
 
@@ -88,91 +53,40 @@ describe("<ContactUs /> Mobile", () => {
   });
 
   it("should have banner text with a heading", async () => {
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "contactus",
-      })
-      .reply(200, mockContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const { allContent, imageContent } = contentBuilder();
 
-    const banner = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/contactus/banner")
-      .reply(200, mockBannerImage, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/contactus", allContent);
+    const banner = nockGetHelper("images/contactus/banner", imageContent);
 
     render(<ContactUs />);
 
     await screen.findByText("Heading 1");
 
     screen.getByText("vestibulum morbi blandit cursus");
+
     content.done();
     banner.done();
   });
 
   it("should allow user to submit contact details", async () => {
+    const { allContent, imageContent } = contentBuilder();
+
     const inputValueName = "Fred";
     const inputValueEmail = "Fred@flintstone.com";
     const postReply = {
       message: "Thank you Fred, someone will contact you soon",
     };
 
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "contactus",
-      })
-      .reply(200, mockContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/contactus", allContent);
+    const banner = nockGetHelper("images/contactus/banner", imageContent);
+    const options = nockOptions("enquiries");
+    const enquiry = nockPostMock(
+      { name: "Fred", email: "Fred@flintstone.com" },
+      "enquiries",
+      postReply
+    );
 
-    const enquiry = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",
-      { encodedQueryParams: true }
-    )
-      .post("/enquiries", { name: "Fred", email: "Fred@flintstone.com" })
-      .reply(201, postReply, [
-        "Access-Control-Allow-Origin",
-        "http://localhost",
-        "Content-Type",
-        "application/json; charset=utf-8",
-      ]);
-
-    const options = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",
-      { encodedQueryParams: true }
-    )
-      .options("/enquiries")
-      .reply(204, "", [
-        "Access-Control-Allow-Headers",
-        "Access-Control-Allow-Origin",
-        "Access-Control-Allow-Methods",
-        "GET,HEAD,PUT,PATCH,POST,DELETE",
-        "Access-Control-Allow-Origin",
-        "http://localhost",
-      ]);
-
-    const banner = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/contactus/banner")
-      .reply(200, mockBannerImage, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    // nock.recorder.rec();
+    // // nock.recorder.rec();
 
     render(<ContactUs />);
 
@@ -197,20 +111,13 @@ describe("<ContactUs /> Mobile", () => {
   });
 
   it("should allow user to submit contact details and surface error if email already exists", async () => {
+    const { allContent, imageContent } = contentBuilder();
     const inputValueName = "Fred";
     const inputValueEmail = "Fred@flintstone.com";
 
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "contactus",
-      })
-      .reply(200, mockContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/contactus", allContent);
+    const banner = nockGetHelper("images/contactus/banner", imageContent);
+    const options = nockOptions("enquiries");
 
     const enquiry = nock(
       "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",
@@ -228,29 +135,6 @@ describe("<ContactUs /> Mobile", () => {
           "Content-type": "application/json",
         }
       );
-
-    const banner = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/contactus/banner")
-      .reply(200, mockBannerImage, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
-
-    const options = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",
-      { encodedQueryParams: true }
-    )
-      .options("/enquiries")
-      .reply(204, "", [
-        "Access-Control-Allow-Headers",
-        "Access-Control-Allow-Origin",
-        "Access-Control-Allow-Methods",
-        "GET,HEAD,PUT,PATCH,POST,DELETE",
-        "Access-Control-Allow-Origin",
-        "http://localhost",
-      ]);
 
     render(<ContactUs />);
 
@@ -277,26 +161,11 @@ describe("<ContactUs /> Mobile", () => {
   });
 
   it("should display banner image for page", async () => {
-    const banner = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/contactus/banner")
-      .reply(200, mockBannerImage, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const { allContent, imageContent } = contentBuilder();
 
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "contactus",
-      })
-      .reply(200, mockContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/contactus", allContent);
+    const banner = nockGetHelper("images/contactus/banner", imageContent);
+
     render(<ContactUs />);
 
     await screen.findByText("Heading 1");
@@ -311,39 +180,17 @@ describe("<ContactUs /> Mobile", () => {
   });
 
   it("should display banner image error content if bad response from api", async () => {
-    const banner = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/images/contactus/banner")
-      .reply(
-        400,
-        {
-          message:
-            "Something went wrong while trying to add or get the content",
-        },
-        {
-          "Access-Control-Allow-Origin": "*",
-          "Content-type": "application/json",
-        }
-      );
+    const { allContent } = contentBuilder();
 
-    const content = nock(
-      "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app"
-    )
-      .get("/content")
-      .query({
-        page: "contactus",
-      })
-      .reply(200, mockContent, {
-        "Access-Control-Allow-Origin": "*",
-        "Content-type": "application/json",
-      });
+    const content = nockGetHelper("content/contactus", allContent);
+    const banner = nockError("images/contactus/banner");
+
     render(<ContactUs />);
 
     await screen.findByText("Heading 1");
     screen.getByText("Heading 2");
 
-    await screen.findByText(
+    await screen.findAllByText(
       "Something went wrong while trying to add or get the content"
     );
 

@@ -1,7 +1,7 @@
 import React from "react";
 import "./Modal.scss";
 
-const Modal = ({ imgUrl, setSelectedImage }) => {
+const ImageModal = ({ imgUrl, setSelectedImage }) => {
   return (
     <div
       className="backdrop w-full h-full"
@@ -19,4 +19,4 @@ const Modal = ({ imgUrl, setSelectedImage }) => {
   );
 };
 
-export default Modal;
+export default ImageModal;

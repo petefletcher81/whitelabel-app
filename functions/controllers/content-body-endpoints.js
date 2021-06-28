@@ -15,7 +15,7 @@ exports.addContent = async (req, res) => {
   const { heading, content } = req.body;
 
   // refactor section
-  const newContent = contentBuilder(heading, content, section);
+  const newContent = contentBuilder(heading, content, section, page);
 
   // validation
   const isValid = contentValidation(page, section, heading, content, req, res);
@@ -47,7 +47,37 @@ exports.addContent = async (req, res) => {
 };
 
 exports.getContent = async (req, res) => {
-  const { page } = req.query;
+  let contentArray = ["home", "aboutus", "contactus"];
+
+  const result = await Promise.all(
+    contentArray.map(async (content, i) => {
+      let items = [];
+      const page = contentArray[i];
+      try {
+        const itemsRef = await admin.firestore().collection(`${content}`);
+        const allitems = await itemsRef.get();
+        if (allitems.size === 0) {
+          return res.send({
+            message: `Content for ${content} does not exist or there are no items available`,
+          });
+        } else {
+          allitems.forEach((doc) => {
+            items.push({ id: doc.id, ...doc.data(), page: page });
+          });
+        }
+      } catch (error) {
+        res
+          .status(400)
+          .json({ message: `Something went wrong cannot retrieve ${content}` });
+      }
+      return items;
+    })
+  );
+  return res.status(200).json(result.flatMap((val) => val));
+};
+
+exports.getPageContent = async (req, res) => {
+  const { page } = req.params;
 
   if (!page) {
     return contentErrorHandler(req, res);
@@ -61,7 +91,7 @@ exports.updateContent = async (req, res) => {
   const { page, section } = req.params;
 
   // refactored the content out into a builder
-  const newContent = contentBuilder(heading, content, section);
+  const newContent = contentBuilder(heading, content, section, page);
 
   // refactored validator
   contentValidation(page, section, heading, content, req, res);

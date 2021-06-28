@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
-import { getContent, getAllImages } from "../../utils/apiCalls";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setAboutusContent,
   setAboutusContentError,
   setAboutusImageError,
   setAboutusImages,
 } from "../../redux/content/aboutus-content/aboutus-content-actions";
+import { getAllImages, getContent } from "../../utils/apiCalls";
+import ContentCard from "../../utils/ContentCard";
 import ContentError from "../../utils/contentError";
 import "./AboutUs.scss";
-import ContentCard from "../../utils/ContentCard";
 
 const AboutUs = ({ setSelectedImage }) => {
   const dispatch = useDispatch();
@@ -58,7 +58,7 @@ const AboutUs = ({ setSelectedImage }) => {
                 <div
                   className="gallery__image-container w-full h-full relative hidden"
                   data-testid={`gallery-image-${index}`}
-                  key={image.id}
+                  key={`${image.id}-${index}`}
                   onClick={() => setSelectedImage(image.image)}
                 >
                   <img src={image.image} className="w-full h-full" />

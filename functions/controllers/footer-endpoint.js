@@ -27,6 +27,8 @@ exports.addFooterContent = async (req, res) => {
 
     const newFooterContent = {
       ...content,
+      key: area,
+      page: "footer",
     };
 
     if (validArea.length > 0) {
@@ -83,6 +85,8 @@ exports.updateFooterContent = async (req, res) => {
 
     const newFooterContent = {
       ...content,
+      key: area,
+      page: "footer",
     };
 
     if (validArea.length > 0) {
