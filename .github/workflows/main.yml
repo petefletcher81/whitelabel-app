@@ -19,7 +19,7 @@ jobs:
       - name: Install node modules
         working-directory: ./client
         run: npm install
-        
+
       - name: Run tests
         working-directory: ./client
-        run: npm test
+        run: npm test:ci
