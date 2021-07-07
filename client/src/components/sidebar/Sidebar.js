@@ -1,6 +1,6 @@
 import React from "react";
 import NavItems from "../navitems/NavItems";
-import "./SideBar.scss";
+import "./Sidebar.scss";
 
 const SideBar = () => {
   return (
