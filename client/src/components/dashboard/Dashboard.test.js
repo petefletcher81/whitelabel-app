@@ -65,8 +65,6 @@ describe("Dashboard", () => {
 
     await screen.findByText("test");
     screen.getAllByText("Heading 1");
-    screen.getByText("2021-01-31T06:46:28.342Z");
-    screen.getByText("2021-01-31T06:46:28.42Z");
 
     enquiry.done();
     footer.done();
