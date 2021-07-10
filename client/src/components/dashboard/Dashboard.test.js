@@ -65,8 +65,6 @@ describe("Dashboard", () => {
 
     await screen.findByText("test");
     screen.getAllByText("Heading 1");
-    screen.getByText("2021-01-31T06:46:28.342Z");
-    screen.getByText("2021-01-31T06:46:28.42Z");
 
     enquiry.done();
     footer.done();
@@ -89,7 +87,6 @@ describe("Dashboard", () => {
     screen.getByText("2021-01-31T06:46:28.342Z");
 
     const contentWindow = screen.getByTestId("manage-enquiries");
-    screen.debug(contentWindow);
     expect(contentWindow.getElementsByClassName("shaded").length).toBe(1);
 
     enquiry.done();

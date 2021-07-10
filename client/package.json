@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack serve --open --mode development",
     "build": "webpack --mode production",
-    "test": "jest --watchAll --coverage",
+    "test": "jest --watchAll --coverage --maxWorkers=50%",
+    "test:ci": "jest --coverage --maxWorkers=50%",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand"
   },
   "author": "",
@@ -29,6 +30,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "babel-core": "^6.26.3",
+    "babel-jest": "^27.0.6",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.0.1",
     "html-loader": "^2.1.2",

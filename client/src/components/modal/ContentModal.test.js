@@ -121,14 +121,11 @@ describe("<ContentModal />", () => {
     );
 
     const contentWindow = screen.getByText("Content");
-    screen.debug(contentWindow);
     expect(contentWindow).toHaveClass("shaded");
   });
 
   it("should render gallery component", () => {
     const { imageContent } = contentBuilder();
-
-    console.log(imageContent[3]);
 
     render(
       <ContentModal
@@ -146,7 +143,6 @@ describe("<ContentModal />", () => {
     );
 
     const displayedImage = document.querySelectorAll("img");
-    screen.debug();
     expect(displayedImage[0].src).toContain("test-for-aboutus-gallery");
   });
 });

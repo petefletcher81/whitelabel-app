@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import SideBar from "../sidebar/SideBar";
-import Navbar from "../navbar/Navbar";
+import React, { useState } from "react";
 import Footer from "../footer/Footer";
+import Navbar from "../navbar/Navbar";
+import SideBar from "../sidebar/Sidebar";
 const Layout = ({ children }) => {
   const [toggle, setToggle] = useState(false);
 
