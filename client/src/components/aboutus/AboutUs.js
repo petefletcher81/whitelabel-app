@@ -16,7 +16,6 @@ const AboutUs = ({ setSelectedImage }) => {
   const content = useSelector((state) => state.aboutusContent.content);
   const images = useSelector((state) => state.aboutusContent.images);
   const contentError = useSelector((state) => state.aboutusContent.error);
-
   useEffect(() => {
     const getAllContent = async () => {
       try {

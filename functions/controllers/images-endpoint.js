@@ -34,6 +34,7 @@ exports.addImage = (req, res) => {
     let filesArray = [];
     // Note: os.tmpdir() points to an in-memory file system on GCF
     // Thus, any files in it must fit in the instance's memory.
+
     console.log(`Processed file ${filename}`);
     // randomnumber.png
     const filepath = path.join(tmpdir, filename);
@@ -58,6 +59,13 @@ exports.addImage = (req, res) => {
 
     fileWrites.forEach(async ([file], index) => {
       let filename = file.split("\\").pop();
+      console.log("======", filename);
+      // console.log("trimfile", filename);
+      if (filename.includes("tmp")) {
+        trimmedFilename = filename.split("/")[2];
+        console.log("========", trimmedFilename);
+        filename = trimmedFilename;
+      }
       // we wil need this when we add in the image to storage
       let docAdded = false;
 
@@ -302,6 +310,7 @@ exports.addImage = (req, res) => {
           });
         }
       } catch (error) {
+        console.log(error);
         return res.status(400).json({
           message: "Something went wrong when trying to add the image",
           error,

@@ -81,3 +81,34 @@ export const deleteItem = async (page, section) => {
   const { data } = await axios.delete(`/${page}/${section}`);
   return data;
 };
+
+export const postImages = (formData) => {
+  var myHeaders = new Headers();
+  // myHeaders.append("Authorization", `Bearer ${token}`);
+
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: formData,
+    redirect: "follow",
+    mode: "cors",
+  };
+
+  const response = fetch(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/images/aboutus/gallery",
+    requestOptions
+  )
+    .then(async (res) => {
+      const data = await res.json();
+      if (res.ok) {
+        console.log("DATA OK", data);
+        return data;
+      } else {
+        throw new Error(data.message);
+      }
+    })
+    .catch((error) => {
+      return Promise.reject(error);
+    });
+  return response;
+};

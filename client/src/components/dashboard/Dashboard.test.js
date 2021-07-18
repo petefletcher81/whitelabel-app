@@ -89,7 +89,6 @@ describe("Dashboard", () => {
     screen.getByText("2021-01-31T06:46:28.342Z");
 
     const contentWindow = screen.getByTestId("manage-enquiries");
-    screen.debug(contentWindow);
     expect(contentWindow.getElementsByClassName("shaded").length).toBe(1);
 
     enquiry.done();
