@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { postImages } from "../../utils/apiCalls";
 import ContentError from "../../utils/contentError";
+import Dropdown from "../dropdown/Dropdown";
+import { imageOptions, pageOptions } from "./options";
 
 const DashboardImages = ({
   images,
@@ -9,6 +11,8 @@ const DashboardImages = ({
   setToggleContentModal,
 }) => {
   const [imagesUpload, setImagesUpload] = useState(null);
+  const [imageSelected, setImageSelected] = useState(imageOptions[0]);
+  const [pageSelected, setPageSelected] = useState(pageOptions[0]);
 
   const handleImageOnChange = (event) => {
     const { files } = event.target;
@@ -27,9 +31,10 @@ const DashboardImages = ({
     formData.append("image", imagesUpload, imagesUpload.name);
 
     console.log(formData);
+    console.log(pageSelected, imageSelected);
 
     try {
-      let response = await postImages(formData);
+      let response = await postImages(formData, pageSelected, imageSelected);
       console.log(response);
     } catch (error) {
       alert(error.message);
@@ -89,6 +94,20 @@ const DashboardImages = ({
                 >
                   Upload Image
                 </button>
+
+                <Dropdown
+                  options={pageOptions}
+                  onSelectedChange={setPageSelected}
+                  selected={pageSelected}
+                  label={"page"}
+                />
+
+                <Dropdown
+                  options={imageOptions}
+                  onSelectedChange={setImageSelected}
+                  selected={imageSelected}
+                  label={"image type"}
+                />
                 <button
                   className="btn btn-tertiary mx-2"
                   onClick={handleSubmit}

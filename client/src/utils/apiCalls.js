@@ -82,7 +82,7 @@ export const deleteItem = async (page, section) => {
   return data;
 };
 
-export const postImages = (formData) => {
+export const postImages = (formData, page, imageType) => {
   var myHeaders = new Headers();
   // myHeaders.append("Authorization", `Bearer ${token}`);
 
@@ -95,7 +95,7 @@ export const postImages = (formData) => {
   };
 
   const response = fetch(
-    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/images/aboutus/gallery",
+    `https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/images/${page}/${imageType}`,
     requestOptions
   )
     .then(async (res) => {
