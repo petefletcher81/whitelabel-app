@@ -84,7 +84,8 @@ export const deleteItem = async (page, section) => {
 
 export const postImages = (formData, page, imageType) => {
   var myHeaders = new Headers();
-  // myHeaders.append("Authorization", `Bearer ${token}`);
+
+  console.log(formData, page, imageType);
 
   var requestOptions = {
     method: "POST",
@@ -101,7 +102,6 @@ export const postImages = (formData, page, imageType) => {
     .then(async (res) => {
       const data = await res.json();
       if (res.ok) {
-        console.log("DATA OK", data);
         return data;
       } else {
         throw new Error(data.message);

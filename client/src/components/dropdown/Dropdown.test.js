@@ -21,6 +21,10 @@ describe("<Dropdown />", () => {
     },
   ];
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("should render the dropdown", () => {
     render(
       <Dropdown

@@ -16,7 +16,7 @@ const DashboardImages = ({
 
   const handleImageOnChange = (event) => {
     const { files } = event.target;
-    console.log("been clicked", files);
+    console.log(files);
     setImagesUpload(files[0]);
   };
 
@@ -28,15 +28,21 @@ const DashboardImages = ({
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
+
+    if (!imagesUpload) {
+      return alert("Please upload an image");
+    }
     formData.append("image", imagesUpload, imagesUpload.name);
 
-    console.log(formData);
-    console.log(pageSelected, imageSelected);
-
     try {
-      let response = await postImages(formData, pageSelected, imageSelected);
-      console.log(response);
+      let response = await postImages(
+        formData,
+        pageSelected.value,
+        imageSelected.value
+      );
+      alert(response.message);
     } catch (error) {
+      console.log(error);
       alert(error.message);
     }
   };
@@ -52,42 +58,28 @@ const DashboardImages = ({
         <div className="dashboard__heading py-1 flex text-white bg-primary">
           Manage Images
         </div>
-        <div
-          className="dashboard__images--headings 
-      grid border-bottom-sm p-1 text-center hidden "
-        >
-          {!mobile && (
-            <>
-              <div className="dashboard__images--heading text-primary">
-                Name
-              </div>
-              <div className="dashboard__images--heading text-primary">
-                Created At
-              </div>
-            </>
-          )}
-          <div className="dashboard__images--heading text-primary">Image</div>
-          <div className="dashboard__images--heading-page text-primary">
-            section
-          </div>
-          <div className="dashboard__images--heading text-primary"></div>
-        </div>
-        {/* images content */}
         <div className="dashboard__images-content-wrapper hidden scroll-y">
-          <div className="form-wrapper w-full p-2 flex h-0 justify-between">
-            <h4 className="text-primary">Want to add an image?</h4>
+          <div className="flex h-auto border-bottom-sm">
+            {mobile ? (
+              <h4 className="text-primary">Add Image</h4>
+            ) : (
+              <h4 className="text-primary">Want to add an image?</h4>
+            )}
+          </div>
+          <div className="dashboard__form-wrapper w-full ">
             <form onSubmit={handleSubmit} encType="multipart/form-data">
-              <label htmlFor="Upload Images" className="visuallyhidden" />
+              <label htmlFor="image-input" className="visuallyhidden" />
               <input
                 type="file"
                 id="image-input"
                 aria-label="image upload"
+                data-testid="handle-image-change"
                 onChange={handleImageOnChange}
                 hidden
               />
-              <div className="flex justify-around">
+              <div className="dashboard__form-button-wrapper my-1 flex justify-around">
                 <button
-                  className="btn btn-primary mx-2"
+                  className="btn btn-primary m-2"
                   onClick={handleImageUpload}
                   aria-label="handle upload image"
                   id="handle-image-upload"
@@ -100,6 +92,7 @@ const DashboardImages = ({
                   onSelectedChange={setPageSelected}
                   selected={pageSelected}
                   label={"page"}
+                  mobile={mobile}
                 />
 
                 <Dropdown
@@ -107,7 +100,9 @@ const DashboardImages = ({
                   onSelectedChange={setImageSelected}
                   selected={imageSelected}
                   label={"image type"}
+                  mobile={mobile}
                 />
+
                 <button
                   className="btn btn-tertiary mx-2"
                   onClick={handleSubmit}
@@ -118,6 +113,35 @@ const DashboardImages = ({
               </div>
             </form>
           </div>
+          <div className="flex h-auto border-tb-2">
+            {mobile ? (
+              <h4 className="text-primary">Edit Image</h4>
+            ) : (
+              <h4 className="text-primary">Want to edit an image?</h4>
+            )}
+          </div>
+          <div
+            className="dashboard__images--headings 
+      grid border-bottom-sm p-1 text-center hidden"
+          >
+            {!mobile && (
+              <>
+                <div className="dashboard__images--heading text-primary">
+                  Name
+                </div>
+                <div className="dashboard__images--heading text-primary">
+                  Created At
+                </div>
+              </>
+            )}
+            <div className="dashboard__images--heading text-primary">Image</div>
+            <div className="dashboard__images--heading-page text-primary">
+              section
+            </div>
+            <div className="dashboard__images--heading text-primary"></div>
+          </div>
+          {/* images content */}
+
           {images &&
             !imageError &&
             images.map((image, index) => {
@@ -177,7 +201,6 @@ const DashboardImages = ({
             </div>
           )}
         </div>
-        )
       </div>
     </>
   );

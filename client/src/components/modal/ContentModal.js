@@ -458,6 +458,7 @@ const ContentModal = ({ data, setToggleContentModal }) => {
             onClick={
               type === "site-content" ? handleDeleteContent : handleDelete
             }
+            disabled={success}
           >
             Delete
           </button>

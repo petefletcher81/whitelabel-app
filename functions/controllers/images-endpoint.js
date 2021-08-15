@@ -60,10 +60,8 @@ exports.addImage = (req, res) => {
     fileWrites.forEach(async ([file], index) => {
       let filename = file.split("\\").pop();
       console.log("======", filename);
-      // console.log("trimfile", filename);
       if (filename.includes("tmp")) {
         trimmedFilename = filename.split("/")[2];
-        console.log("========", trimmedFilename);
         filename = trimmedFilename;
       }
       // we wil need this when we add in the image to storage
@@ -81,8 +79,6 @@ exports.addImage = (req, res) => {
         key: filename,
       };
 
-      // TODO - need to check the page is correct (aobut us no banner)
-      // ADDED THIS
       if (page === "aboutus" && imageType === "banner") {
         return res.send({ message: "No banners can be added to this page" });
       }
@@ -199,7 +195,6 @@ exports.addImage = (req, res) => {
                 return true;
               }
             case "aboutus":
-              // TODO - find nested property ---- !!!!!!!!!!!!!!!!
               if (
                 aboutusImageCount &&
                 fileAmount + collectionTallies.aboutus.image > aboutUsImageLimit
