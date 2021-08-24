@@ -25,6 +25,8 @@ const Dashboard = ({ setToggleContentModal }) => {
   const [fetchNewImages, setFetchNewImages] = useState(false);
   const mobile = window.innerWidth < 990;
 
+  console.log(mobile);
+
   useEffect(() => {
     const getAllEquiries = async () => {
       try {
