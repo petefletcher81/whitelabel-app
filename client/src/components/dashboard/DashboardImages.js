@@ -9,6 +9,7 @@ const DashboardImages = ({
   mobile,
   imageError,
   setToggleContentModal,
+  setFetchNewImages,
 }) => {
   const [imagesUpload, setImagesUpload] = useState(null);
   const [imageSelected, setImageSelected] = useState(imageOptions[0]);
@@ -16,7 +17,6 @@ const DashboardImages = ({
 
   const handleImageOnChange = (event) => {
     const { files } = event.target;
-    console.log(files);
     setImagesUpload(files[0]);
   };
 
@@ -41,6 +41,7 @@ const DashboardImages = ({
         imageSelected.value
       );
       alert(response.message);
+      setFetchNewImages(true);
     } catch (error) {
       console.log(error);
       alert(error.message);

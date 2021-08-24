@@ -22,6 +22,7 @@ const Dashboard = ({ setToggleContentModal }) => {
   const [footerError, setFooterError] = useState(null);
   const [company, setCompany] = useState(null);
   const [social, setSocial] = useState(null);
+  const [fetchNewImages, setFetchNewImages] = useState(false);
   const mobile = window.innerWidth < 990;
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const Dashboard = ({ setToggleContentModal }) => {
       }
     };
     getImages();
-  }, []);
+  }, [fetchNewImages]);
 
   useEffect(() => {
     const getFooterData = async () => {
@@ -241,6 +242,7 @@ const Dashboard = ({ setToggleContentModal }) => {
           images={images}
           mobile={mobile}
           imageError={imageError}
+          setFetchNewImages={setFetchNewImages}
         />
         <div
           className="dashboard__footer-company-wrapper border-wrapper 
