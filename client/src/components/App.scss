@@ -51,6 +51,10 @@ img {
   overflow: hidden;
 }
 
+visible {
+  overflow: visible;
+}
+
 .scroll-x {
   overflow-x: scroll;
 }
@@ -100,6 +104,15 @@ img {
 .btn-alert:hover,
 .btn-tertiary:hover {
   transform: scale(0.98);
+}
+e .btn-alert:disabled {
+  display: inline-block;
+  padding: 10px 30px;
+  cursor: none;
+  color: white;
+  border-radius: 0.25rem;
+  background-color: #ccc;
+  border: none;
 }
 
 // colours
@@ -181,6 +194,10 @@ img {
   width: 50%;
 }
 
+.h-0 {
+  height: 0%;
+}
+
 .h-full {
   height: 100%;
 }
@@ -199,6 +216,10 @@ img {
 
 .h-4 {
   height: 4rem;
+}
+
+.h-auto {
+  height: auto;
 }
 
 // spacing
@@ -314,6 +335,11 @@ img {
 
 .border-primary {
   border: 1px solid var(--primary-color);
+}
+
+.border-tb-2 {
+  border-top: 2px solid var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
 }
 
 .border-bottom {

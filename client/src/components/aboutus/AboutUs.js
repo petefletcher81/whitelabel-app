@@ -16,7 +16,6 @@ const AboutUs = ({ setSelectedImage }) => {
   const content = useSelector((state) => state.aboutusContent.content);
   const images = useSelector((state) => state.aboutusContent.images);
   const contentError = useSelector((state) => state.aboutusContent.error);
-
   useEffect(() => {
     const getAllContent = async () => {
       try {
@@ -53,15 +52,20 @@ const AboutUs = ({ setSelectedImage }) => {
       <div className="gallery grid">
         {images &&
           images.map((image, index) => {
-            if (image.image) {
+            if (image.image || image.gallery) {
               return (
                 <div
                   className="gallery__image-container w-full h-full relative hidden"
                   data-testid={`gallery-image-${index}`}
                   key={`${image.id}-${index}`}
-                  onClick={() => setSelectedImage(image.image)}
+                  onClick={() =>
+                    setSelectedImage(image.image ? image.image : image.gallery)
+                  }
                 >
-                  <img src={image.image} className="w-full h-full" />
+                  <img
+                    src={image.image ? image.image : image.gallery}
+                    className="w-full h-full"
+                  />
                 </div>
               );
             }

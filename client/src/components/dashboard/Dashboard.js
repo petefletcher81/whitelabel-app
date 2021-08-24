@@ -9,6 +9,7 @@ import ContentError from "../../utils/contentError";
 import DashboardContentCard from "../../utils/DashboardContentCard";
 import Row from "../../utils/Row";
 import "./Dashboard.scss";
+import DashboardImages from "./DashboardImages";
 
 const Dashboard = ({ setToggleContentModal }) => {
   const [enquiries, setEnquiries] = useState(null);
@@ -16,12 +17,12 @@ const Dashboard = ({ setToggleContentModal }) => {
   const [footer, setFooter] = useState(null);
   const [images, setImages] = useState(null);
   const [contentError, setContentError] = useState(null);
-  const [error, setError] = useState(null);
   const [enquiriesError, setEnquiriesError] = useState(null);
   const [imageError, setImageError] = useState(null);
   const [footerError, setFooterError] = useState(null);
   const [company, setCompany] = useState(null);
   const [social, setSocial] = useState(null);
+  const [fetchNewImages, setFetchNewImages] = useState(false);
   const mobile = window.innerWidth < 990;
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const Dashboard = ({ setToggleContentModal }) => {
       }
     };
     getImages();
-  }, []);
+  }, [fetchNewImages]);
 
   useEffect(() => {
     const getFooterData = async () => {
@@ -224,7 +225,10 @@ const Dashboard = ({ setToggleContentModal }) => {
                 );
               })}
             {contentError && (
-              <div className="dashboard__enquires-error h-full text-error flex bg-white">
+              <div
+                className="dashboard__enquires-error h-full text-error 
+                flex bg-white"
+              >
                 <ContentError error={contentError} />
               </div>
             )}
@@ -233,100 +237,16 @@ const Dashboard = ({ setToggleContentModal }) => {
       </div>
 
       <div className="dashboard__image-footer-wrapper grid">
+        <DashboardImages
+          setToggleContentModal={setToggleContentModal}
+          images={images}
+          mobile={mobile}
+          imageError={imageError}
+          setFetchNewImages={setFetchNewImages}
+        />
         <div
-          className="dashboard__images-wrapper border-wrapper border-bottom-sm mb-2 w-full hidden"
-          data-testid="manage-images"
-        >
-          {/* headings images */}
-          <div className="dashboard__heading py-1 flex text-white bg-primary">
-            Manage Images
-          </div>
-
-          <div className="dashboard__images--headings grid border-bottom-sm p-1 text-center hidden ">
-            {!mobile && (
-              <>
-                <div className="dashboard__images--heading text-primary">
-                  Name
-                </div>
-                <div className="dashboard__images--heading text-primary">
-                  Created At
-                </div>
-              </>
-            )}
-            <div className="dashboard__images--heading text-primary">Image</div>
-            <div className="dashboard__images--heading-page text-primary">
-              section
-            </div>
-            <div className="dashboard__images--heading text-primary"></div>
-          </div>
-
-          {/* images content */}
-          <div className="dashboard__images-content-wrapper hidden scroll-y">
-            {images &&
-              !imageError &&
-              images.map((image, index) => {
-                return (
-                  <section
-                    className={`dashboard__images--content ${
-                      index % 2 === 0 ? "shaded" : null
-                    }`}
-                    key={image.id}
-                  >
-                    <div className="dashboard__images--contents grid p-1">
-                      {!mobile && (
-                        <>
-                          <div className="dashboard__image-name">
-                            {image.key}
-                          </div>
-                          <div className="dashboard__images-created-at">
-                            {image.createdAt}
-                          </div>
-                        </>
-                      )}
-                      {image.image && (
-                        <div className="dashboard__image-image">
-                          <img src={image.image} className="w-full h-full" />
-                        </div>
-                      )}
-                      {image.banner && (
-                        <div className="dashboard__image-banner">
-                          <img src={image.banner} className="w-full h-full" />
-                        </div>
-                      )}
-                      {image.gallery && (
-                        <div className="dashboard__image-gallery">
-                          <img src={image.gallery} className="w-full h-full" />
-                        </div>
-                      )}
-                      <div className="dashboard__image-section text-center">
-                        {image.section}
-                      </div>
-                      <button
-                        className="btn p-1"
-                        onClick={() =>
-                          setToggleContentModal({
-                            item: image,
-                            page: "images",
-                            type: "image-content",
-                          })
-                        }
-                      >
-                        Edit
-                      </button>
-                    </div>
-                  </section>
-                );
-              })}
-            {imageError && (
-              <div className="dashboard__enquires-error h-full text-error flex bg-white">
-                <ContentError error={imageError} />
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div
-          className="dashboard__footer-company-wrapper border-wrapper border-bottom-sm mb-2 w-full hidden"
+          className="dashboard__footer-company-wrapper border-wrapper 
+            border-bottom-sm mb-2 w-full hidden"
           data-testid="manage-footer"
         >
           {footer && (
