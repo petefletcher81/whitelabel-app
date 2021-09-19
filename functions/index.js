@@ -22,6 +22,7 @@ const {
   getAllImages,
   deleteImage,
   getPageImages,
+  updateImageContent,
 } = require("./controllers/images-endpoint");
 const {
   addEnquiry,
@@ -52,7 +53,7 @@ app.post("/verify-admin", verifyAdmin);
 app.get("/content", getContent);
 app.get("/content/:page", getPageContent);
 app.post("/content/:page/:section", addContent);
-app.put("/content/:page/:section", updateContent);
+app.put("/content/:page/:updatedPage", updateImageContent);
 app.delete("/content/:page/:section", deleteContent);
 
 /** Images */

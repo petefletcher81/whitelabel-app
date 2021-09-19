@@ -13,12 +13,12 @@ const { getAll, deleteItem } = require("./shared-crud-calls");
 exports.addContent = async (req, res) => {
   const { page, section } = req.params;
   const { heading, content } = req.body;
+  const { position } = req.query;
 
-  // refactor section
-  const newContent = contentBuilder(heading, content, section, page);
+  const newContent = contentBuilder(heading, content, section, page, position);
 
   // validation
-  const isValid = contentValidation(page, section, heading, content, req, res);
+  const isValid = contentValidation(page, section, heading, content, position);
 
   if (isValid) {
     try {
@@ -89,9 +89,10 @@ exports.getPageContent = async (req, res) => {
 exports.updateContent = async (req, res) => {
   const { heading, content } = req.body;
   const { page, section } = req.params;
+  const { position } = req.query;
 
   // refactored the content out into a builder
-  const newContent = contentBuilder(heading, content, section, page);
+  const newContent = contentBuilder(heading, content, page, position);
 
   // refactored validator
   contentValidation(page, section, heading, content, req, res);
