@@ -1,31 +1,3 @@
-.gallery.grid {
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: 200px;
-  gap: 5px;
-  justify-content: center;
-  align-items: center;
-  width: 80%;
-  grid-auto-flow: dense;
-}
-
-.gallery__image-container img {
-  object-fit: cover;
-  object-position: 50% 50%;
-  cursor: pointer;
-  transition: 0.7s ease-in-out;
-}
-
-.gallery__image-container img:hover {
-  transform: scale(1.2);
-}
-
 .aboutus .content .grid {
   grid-template-columns: 1fr;
-}
-
-@media (min-width: 990px) {
-  .gallery.grid {
-    grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 300px;
-  }
 }

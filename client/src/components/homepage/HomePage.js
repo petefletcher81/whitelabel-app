@@ -50,9 +50,14 @@ const HomePage = () => {
         images &&
         !contentError &&
         content.map((section, index) => {
+          const positionIndex = index + 1;
+          const findContent = content.find(
+            (content) => content.position === positionIndex.toString()
+          );
+
           return (
             <ContentCard
-              content={section}
+              content={findContent}
               images={images}
               index={index}
               key={`${section.id}-${index}`}

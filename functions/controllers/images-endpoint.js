@@ -443,6 +443,7 @@ exports.updateImageContent = async (req, res) => {
     });
 
   if (isValid) {
+    console.log("Content Valid");
     try {
       const contentRef = await db.collection(`images`).doc(`${newContent.key}`);
       const doc = await contentRef.get();

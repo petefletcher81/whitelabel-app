@@ -58,14 +58,17 @@ const App = () => {
               exact
               path="/dashboard"
               component={() => (
-                <Dashboard setToggleContentModal={setToggleContentModal} />
+                <Dashboard
+                  setToggleContentModal={setToggleContentModal}
+                  setSelectedImage={setSelectedImage}
+                />
               )}
             />
             {/* )} */}
           </Switch>
           {selectedImage && (
             <ImageModal
-              imgUrl={selectedImage}
+              data={selectedImage}
               setSelectedImage={setSelectedImage}
             />
           )}

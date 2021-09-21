@@ -1,6 +1,14 @@
 import React from "react";
 
 const ContentCard = ({ content, images, index, testid }) => {
+  const positionIndex = index + 1;
+  let findImage;
+  if (images) {
+    findImage = images.find((image) => {
+      return image.position === positionIndex.toString();
+    });
+  }
+
   return (
     <div className="content" data-testid={testid}>
       <div className={`content-${index}`}>
@@ -15,7 +23,7 @@ const ContentCard = ({ content, images, index, testid }) => {
           </div>
           {images && (
             <div className="content-image-wrapper">
-              <img src={images[index].image} />
+              <img src={findImage.image} />
             </div>
           )}
         </div>

@@ -64,6 +64,11 @@ const ContactUs = () => {
     }
   };
 
+  const returnContentForPosition = (position) => {
+    const findContent = content.find((c) => c.position === position);
+    return <ContentCard content={findContent} />;
+  };
+
   return (
     <section className="aboutus">
       <div className="aboutus__showcase relative p-2 grid">
@@ -116,7 +121,7 @@ const ContactUs = () => {
         </div>
       </div>
       {contentError && !content && <ContentError error={contentError} />}
-      {content && !contentError && <ContentCard content={content[0]} />}
+      {content && !contentError && returnContentForPosition("1")}
       <div className="contactus flex">
         {imageError && !banner && <ContentError error={imageError} />}
         {banner &&
@@ -140,7 +145,7 @@ const ContactUs = () => {
             );
           })}
       </div>
-      {content && !contentError && <ContentCard content={content[1]} />}
+      {content && !contentError && returnContentForPosition("2")}
       <div className="aboutus__popup">
         {success && (
           <div

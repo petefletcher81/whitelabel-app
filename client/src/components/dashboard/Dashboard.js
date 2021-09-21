@@ -11,7 +11,7 @@ import Row from "../../utils/Row";
 import "./Dashboard.scss";
 import DashboardImages from "./DashboardImages";
 
-const Dashboard = ({ setToggleContentModal }) => {
+const Dashboard = ({ setToggleContentModal, setSelectedImage }) => {
   const [enquiries, setEnquiries] = useState(null);
   const [content, setContent] = useState(null);
   const [footer, setFooter] = useState(null);
@@ -24,8 +24,6 @@ const Dashboard = ({ setToggleContentModal }) => {
   const [social, setSocial] = useState(null);
   const [fetchNewImages, setFetchNewImages] = useState(false);
   const mobile = window.innerWidth < 990;
-
-  console.log(mobile);
 
   useEffect(() => {
     const getAllEquiries = async () => {
@@ -88,6 +86,10 @@ const Dashboard = ({ setToggleContentModal }) => {
     };
     getFooterData();
   }, []);
+
+  const bannerImages = images?.filter((image) =>
+    image.hasOwnProperty("banner")
+  );
 
   return (
     <div
@@ -196,11 +198,12 @@ const Dashboard = ({ setToggleContentModal }) => {
             <div className="dashboard__content--heading-page text-primary">
               Page
             </div>
-            {!mobile && (
-              <div className="dashboard__content--heading text-primary">
+            {/* {!mobile && (
+              <div className="dashboard__content--heading text-primary spacer-50">
                 Created At
               </div>
-            )}
+            )} */}
+            <div className="dashboard__content--heading text-primary"></div>
             <div className="dashboard__content--heading text-primary"></div>
           </div>
 
@@ -222,18 +225,12 @@ const Dashboard = ({ setToggleContentModal }) => {
                       index={index}
                       datatestid={"home-content-dashboard"}
                       setToggleContentModal={setToggleContentModal}
+                      setSelectedImage={setSelectedImage}
+                      images={images}
                     />
                   </div>
                 );
               })}
-            {contentError && (
-              <div
-                className="dashboard__enquires-error h-full text-error 
-                flex bg-white"
-              >
-                <ContentError error={contentError} />
-              </div>
-            )}
           </div>
         </div>
       </div>

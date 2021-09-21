@@ -59,9 +59,16 @@ export const attemptSignIn = async (siginInData) => {
   return data;
 };
 
-export const updateContent = async (page, updatedContent, section) => {
+export const updateContent = async (
+  page,
+  updatedContent,
+  section,
+  position
+) => {
+  const addQuery = position ? `?position=${position}` : "";
+  console.log(page, section, updatedContent);
   const { data } = await axios.put(
-    `/content/${page}/${section}`,
+    `/content/${page}/${section}${addQuery}`,
     updatedContent
   );
   return data;
