@@ -10,9 +10,12 @@ import { contentBuilder } from "../../test-utils/test-helpers";
 import DashboardImages from "./DashboardImages";
 
 describe("Dashboard", () => {
-  // TODO - test api call
   let container = null;
   beforeEach(() => {
+    // TODO - test api call
+    // need to test these bette
+
+    window.fetch - jest.fn();
     container = document.createElement("div");
     const testid = document.createAttribute("data-testid");
     testid.value = "test-body";

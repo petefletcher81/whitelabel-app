@@ -8,6 +8,7 @@ export const contentBuilder = () => {
       createdAt: "2021-01-17T06:25:57.066Z",
       contacted: false,
       key: "test1@test.com",
+      page: "enquiries",
     },
     {
       email: "test2@test.com",
@@ -15,6 +16,7 @@ export const contentBuilder = () => {
       createdAt: "2020-01-17T06:25:57.064Z",
       contacted: true,
       key: "test2@test.com",
+      page: "enquiries",
     },
   ];
 
@@ -25,6 +27,15 @@ export const contentBuilder = () => {
       content: "Lorem ipsum dolor sit amet",
       createdAt: "2021-01-17T06:25:57.066Z",
       page: "home",
+      position: "1",
+    },
+    {
+      id: "section-2",
+      heading: "Heading 2",
+      content: "Lorem ipsum dolor sit amet",
+      createdAt: "2021-01-17T06:25:57.044Z",
+      page: "home",
+      position: "2",
     },
     {
       id: "section-2",
@@ -32,13 +43,31 @@ export const contentBuilder = () => {
       content: "Lorem ipsum dolor adipiscing elit",
       createdAt: "2021-01-17T06:25:57.066Z",
       page: "aboutus",
+      position: "1",
     },
     {
-      id: "section-1",
+      id: "section-2",
+      heading: "Heading 2",
+      content: "Lorem ipsum dolor sit amet, consectetur",
+      createdAt: "2021-01-17T06:25:57.066Z",
+      page: "contactus",
+      position: "2",
+    },
+    {
+      id: "section-3",
       heading: "New Heading",
       content: "Lorem ipsum dolor sit amet, consectetur",
       createdAt: "2021-01-17T06:25:57.066Z",
       page: "contactus",
+      position: "2",
+    },
+    {
+      id: "section-1",
+      heading: "Heading 1",
+      content: "Lorem ipsum dolor sit amet, consectetur",
+      createdAt: "2021-01-17T06:25:57.066Z",
+      page: "contactus",
+      position: "1",
     },
   ];
 
@@ -50,6 +79,7 @@ export const contentBuilder = () => {
       section: "home",
       image: "https://test-for-home",
       key: "test-filename",
+      position: "1",
     },
     {
       id: "2bed3fc0-2a17-4519-8460-0dc8ab4e32a2",
@@ -58,6 +88,7 @@ export const contentBuilder = () => {
       createdAt: "2021-01-31T06:46:28.442Z",
       banner: "https://test-for-contactus",
       key: "test-filename-2",
+      position: "2",
     },
     {
       id: "2bed3fc0-2a17-4987-8460-0dc8ab4e32a2",

@@ -231,6 +231,11 @@ const Dashboard = ({ setToggleContentModal, setSelectedImage }) => {
                   </div>
                 );
               })}
+            {contentError && (
+              <div className="dashboard__enquires-error h-full text-error flex bg-white">
+                <ContentError error={contentError} />
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { updateContent } from "../../utils/apiCalls";
 import Gallery from "../gallery/Gallery";
 import "./Modal.scss";
 

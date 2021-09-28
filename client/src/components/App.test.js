@@ -45,7 +45,9 @@ describe("App ", () => {
   it("should render content / images from redux", async () => {
     const { allContent, imageContent, footerContent } = contentBuilder();
 
-    const content = nockGetHelper("content/home", allContent);
+    const homeContent = allContent.filter((page) => page.page === "home");
+
+    const content = nockGetHelper("content/home", homeContent);
     const images = nockGetHelper("images/home/image", imageContent);
     const footer = nockGetHelper("footer", footerContent);
 
@@ -96,7 +98,9 @@ describe("App ", () => {
     const { allContent, imageContent, footerContent } = contentBuilder();
     window.innerWidth = 990;
 
-    const contentHome = nockGetHelper("content/home", allContent);
+    const homeContent = allContent.filter((page) => page.page === "home");
+
+    const contentHome = nockGetHelper("content/home", homeContent);
     const imageHome = nockGetHelper("images/home/image", imageContent);
     const contentAboutus = nockGetHelper("content/aboutus", allContent);
     const imageAboutus = nockGetHelper("images", imageContent);
@@ -132,7 +136,8 @@ describe("App ", () => {
       contentBuilder();
     window.innerWidth = 990;
 
-    const contentHome = nockGetHelper("content/home", allContent);
+    const homeContent = allContent.filter((page) => page.page === "home");
+    const contentHome = nockGetHelper("content/home", homeContent);
     const imageHome = nockGetHelper("images/home/image", imageContent);
     const enquiry = nockGetHelper("enquiries", enquiryContent);
     const content = nockGetHelper("content", allContent);
@@ -195,7 +200,9 @@ describe("App -- Nav items", () => {
   it("should render dashboard link and allow user to navigate to page, if there is an admin token within localstorage", async () => {
     const { allContent, imageContent, footerContent } = contentBuilder();
 
-    const content = nockGetHelper("content/home", allContent);
+    const homeContent = allContent.filter((page) => page.page === "home");
+    const content = nockGetHelper("content/home", homeContent);
+
     const images = nockGetHelper("images/home/image", imageContent);
     const footer = nockGetHelper("footer", footerContent);
 
@@ -213,9 +220,7 @@ describe("App -- Nav items", () => {
       </Router>
     );
 
-    await waitFor(() => {
-      screen.getByText("Heading 1");
-    });
+    await screen.findByText("Heading 1");
 
     fireEvent.click(screen.getByText("Dashboard"));
     screen.getByTestId("dashboard-screen");
@@ -229,7 +234,8 @@ describe("App -- Nav items", () => {
   it("should render not dashboard link and not allow user to navigate to page, if token out of date", async () => {
     const { allContent, imageContent, footerContent } = contentBuilder();
 
-    const content = nockGetHelper("content/home", allContent);
+    const homeContent = allContent.filter((page) => page.page === "home");
+    const content = nockGetHelper("content/home", homeContent);
     const images = nockGetHelper("images/home/image", imageContent);
     const footer = nockGetHelper("footer", footerContent);
 
@@ -261,7 +267,8 @@ describe("App -- Nav items", () => {
   it("should render not dashboard if there is admin", async () => {
     const { allContent, imageContent, footerContent } = contentBuilder();
 
-    const content = nockGetHelper("content/home", allContent);
+    const homeContent = allContent.filter((page) => page.page === "home");
+    const content = nockGetHelper("content/home", homeContent);
     const images = nockGetHelper("images/home/image", imageContent);
     const footer = nockGetHelper("footer", footerContent);
 
@@ -297,7 +304,8 @@ describe("App -- Nav items", () => {
     window.innerWidth = 414;
     const { allContent, imageContent, footerContent } = contentBuilder();
 
-    const content = nockGetHelper("content/home", allContent);
+    const homeContent = allContent.filter((page) => page.page === "home");
+    const content = nockGetHelper("content/home", homeContent);
     const images = nockGetHelper("images/home/image", imageContent);
     const footer = nockGetHelper("footer", footerContent);
 

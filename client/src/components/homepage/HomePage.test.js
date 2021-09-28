@@ -27,7 +27,8 @@ describe("<HomePage />", () => {
   it("should render component with main sections", async () => {
     const { allContent, imageContent } = contentBuilder();
 
-    const content = nockGetHelper("content/home", allContent);
+    const homeContent = allContent.filter((page) => page.page === "home");
+    const content = nockGetHelper("content/home", homeContent);
     const images = nockGetHelper("images/home/image", imageContent);
 
     render(<HomePage />);

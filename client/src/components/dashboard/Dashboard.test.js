@@ -233,4 +233,6 @@ describe("Dashboard", () => {
     enquiry.done();
     images.done();
   });
+
+  // TODO - test the image implementations for home content
 });

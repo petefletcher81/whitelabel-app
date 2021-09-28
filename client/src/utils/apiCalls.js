@@ -66,7 +66,6 @@ export const updateContent = async (
   position
 ) => {
   const addQuery = position ? `?position=${position}` : "";
-  console.log(page, section, updatedContent);
   const { data } = await axios.put(
     `/content/${page}/${section}${addQuery}`,
     updatedContent
@@ -91,8 +90,6 @@ export const deleteItem = async (page, section) => {
 
 export const postImages = (formData, page, imageType) => {
   var myHeaders = new Headers();
-
-  console.log(formData, page, imageType);
 
   var requestOptions = {
     method: "POST",
