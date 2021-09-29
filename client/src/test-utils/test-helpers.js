@@ -233,6 +233,13 @@ export const nockOptions = (endpoint) => {
 };
 
 export const nockPostMock = (postData, endpoint, content) => {
+  if (!postData) {
+    postData = { email: "test@test.com" };
+  }
+
+  // TODO - this test be breakingggggg
+  console.log(postData);
+
   return nock(
     "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",
     { encodedQueryParams: true }

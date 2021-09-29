@@ -59,6 +59,15 @@ export const attemptSignIn = async (siginInData) => {
   return data;
 };
 
+export const passwordReset = async () => {
+  // TODO - need a back off function for bots1
+  console.log("password reset");
+  const { data } = await axios.post(`/password-reset`, {
+    email: "petefletch81@gmail.com",
+  });
+  return data;
+};
+
 export const updateContent = async (
   page,
   updatedContent,

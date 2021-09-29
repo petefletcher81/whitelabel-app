@@ -1,7 +1,9 @@
 import "@testing-library/react";
 import nock from "nock";
 import React from "react";
+import { server } from "../../mocks/server.js";
 import {
+  cleanup,
   fireEvent,
   render,
   screen,
@@ -15,7 +17,7 @@ describe("<SignIn />", () => {
     screen.getByText("Sign In");
     screen.getByPlaceholderText("Email");
     screen.getByPlaceholderText("Password");
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("button", { name: "Sign In" });
     within(button).getByText("Sign In");
   });
 
@@ -62,7 +64,7 @@ describe("<SignIn />", () => {
       target: { value: inputValueEmail },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("button", { name: "Sign In" });
     fireEvent.click(button);
     await screen.findByText("Sign In Successful");
 
@@ -113,7 +115,7 @@ describe("<SignIn />", () => {
       target: { value: inputValueEmail },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("button", { name: "Sign In" });
     fireEvent.click(button);
     await screen.findByText("Invalid password, please try again");
 
@@ -164,11 +166,40 @@ describe("<SignIn />", () => {
       target: { value: inputValueEmail },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("button", { name: "Sign In" });
     fireEvent.click(button);
     await screen.findByText("User not found, please try again");
 
     enquiry.done();
     options.done();
+  });
+});
+
+describe("Password Reset", () => {
+  beforeAll(() => server.listen());
+
+  afterEach(() => {
+    server.resetHandlers();
+    cleanup();
+  });
+
+  afterAll(() => server.close());
+
+  it("should render the password reset button", () => {
+    render(<SignIn />);
+    screen.getByTestId("signin-form");
+    screen.getByRole("button", { name: "password reset" });
+  });
+
+  it("should request a new password when button is clicked", async () => {
+    render(<SignIn />);
+
+    screen.getByTestId("signin-form");
+    const passwordReset = screen.getByRole("button", {
+      name: "password reset",
+    });
+
+    fireEvent.click(passwordReset);
+    await screen.findByText("Please check your emails to reset the password");
   });
 });
