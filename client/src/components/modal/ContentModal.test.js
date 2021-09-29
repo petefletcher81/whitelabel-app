@@ -1,4 +1,3 @@
-import { within } from "@testing-library/react";
 import nock from "nock";
 import React from "react";
 import {
@@ -6,12 +5,14 @@ import {
   fireEvent,
   render,
   screen,
+  within,
 } from "../../test-utils/custom-utils";
 import {
   contentBuilder,
   nockDeleteMock,
   nockErrorDelete,
   nockErrorPut,
+  nockGetHelper,
   nockOptions,
   nockPutMock,
 } from "../../test-utils/test-helpers";
@@ -108,7 +109,7 @@ describe("<ContentModal />", () => {
 
   it("render correct class dependant on size", () => {
     const { allContent } = contentBuilder();
-    const mockClose = jest.fn();
+
     render(
       <ContentModal
         data={{
@@ -166,8 +167,10 @@ describe("Editing Content", () => {
       content: "Lorem ipsum dolor sit amet",
       createdAt: "2021-01-17T06:25:57.066Z",
       page: "home",
+      position: "1",
     };
 
+    const dashContent = nockGetHelper("content", allContent);
     const options = nockOptions("content/home/section-1");
     const content = nockPutMock(mockContent, "content/home/section-1", {
       message: "This content has been successfully updated",
@@ -184,7 +187,7 @@ describe("Editing Content", () => {
       />
     );
 
-    const heading = screen.getByDisplayValue("Heading 1");
+    const heading = await screen.findByDisplayValue("Heading 1");
     screen.getByTestId("edit-content-modal");
     fireEvent.change(heading, { target: { value: "New Heading" } });
 
@@ -265,10 +268,11 @@ describe("Editing Content", () => {
     /* need to match the body coming back or would not allow pass */
     const mockContent = {
       id: "section-1",
-      heading: "New Heading",
+      heading: "Heading 1",
       content: "Lorem ipsum dolor sit amet",
       createdAt: "2021-01-17T06:25:57.066Z",
       page: "home",
+      position: "1",
     };
 
     const options = nockOptions("content/home/section-1");
@@ -301,7 +305,7 @@ describe("Editing Content", () => {
   });
 
   it("should allow user to check the contacted box on the enquiry modal", async () => {
-    const { enquiryContent } = contentBuilder();
+    const { allContent, enquiryContent } = contentBuilder();
     /* need to match the body coming back or would not allow pass */
     const mockContent = {
       email: "test1@test.com",

@@ -59,9 +59,15 @@ export const attemptSignIn = async (siginInData) => {
   return data;
 };
 
-export const updateContent = async (page, updatedContent, section) => {
+export const updateContent = async (
+  page,
+  updatedContent,
+  section,
+  position
+) => {
+  const addQuery = position ? `?position=${position}` : "";
   const { data } = await axios.put(
-    `/content/${page}/${section}`,
+    `/content/${page}/${section}${addQuery}`,
     updatedContent
   );
   return data;
@@ -84,8 +90,6 @@ export const deleteItem = async (page, section) => {
 
 export const postImages = (formData, page, imageType) => {
   var myHeaders = new Headers();
-
-  console.log(formData, page, imageType);
 
   var requestOptions = {
     method: "POST",

@@ -5,8 +5,11 @@ const DashboardContentCard = ({
   index,
   datatestid,
   setToggleContentModal,
+  setSelectedImage,
   mobile,
+  images,
 }) => {
+  const hasChangeableImage = section.page === "home";
   return (
     <>
       <section
@@ -23,14 +26,14 @@ const DashboardContentCard = ({
         <div className="dashboard__content-page text-center">
           {section.page}
         </div>
-        {!mobile && (
+        {/* {!mobile && (
           <div className="dashboard__content-created-at text-center">
             {section.createdAt}
           </div>
-        )}
+        )} */}
         <div className="flex">
           <button
-            className="btn p-1    "
+            className="btn p-1"
             onClick={() =>
               setToggleContentModal({
                 page: section.page,
@@ -42,6 +45,24 @@ const DashboardContentCard = ({
             Edit
           </button>
         </div>
+        {hasChangeableImage ? (
+          <div className="flex">
+            <button
+              className="btn"
+              onClick={() =>
+                setSelectedImage({
+                  images,
+                  page: "dashboard",
+                  relatedContent: section,
+                })
+              }
+            >
+              Change Image
+            </button>
+          </div>
+        ) : (
+          <div className="spacer-100"></div>
+        )}
       </section>
     </>
   );

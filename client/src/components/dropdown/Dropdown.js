@@ -7,18 +7,24 @@ const Dropdown = ({ options, selected, onSelectedChange, label, mobile }) => {
   const ref = useRef();
 
   useEffect(() => {
+    let isActive = true;
+
     document.body.addEventListener(
       "click",
       (event) => {
-        if (ref?.current?.contains(event.target)) {
-          return;
+        if (isActive) {
+          if (ref?.current?.contains(event.target)) {
+            return;
+          }
+          setOpen(false);
         }
-        setOpen(false);
       },
       { capture: true }
     );
 
-    return console.log("clean up dropdown");
+    return () => {
+      isActive = false;
+    };
   }, []);
 
   const renderedOptions = options.map((option) => {

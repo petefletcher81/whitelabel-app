@@ -105,7 +105,8 @@ visible {
 .btn-tertiary:hover {
   transform: scale(0.98);
 }
-e .btn-alert:disabled {
+
+.btn-alert:disabled {
   display: inline-block;
   padding: 10px 30px;
   cursor: none;
@@ -147,6 +148,10 @@ e .btn-alert:disabled {
 
 .flex-col {
   flex-direction: column;
+}
+
+.justify-start {
+  justify-content: flex-start;
 }
 
 .grid {
@@ -194,6 +199,10 @@ e .btn-alert:disabled {
   width: 50%;
 }
 
+.w-min-100 {
+  max-width: 100%;
+}
+
 .h-0 {
   height: 0%;
 }
@@ -220,6 +229,14 @@ e .btn-alert:disabled {
 
 .h-auto {
   height: auto;
+}
+
+.h-vh75 {
+  height: 75vh;
+}
+
+.h-max-100 {
+  max-height: 100%;
 }
 
 // spacing
@@ -283,12 +300,20 @@ e .btn-alert:disabled {
   padding: 0 16px;
 }
 
+.pt-1 {
+  padding: 16px 0 0 0;
+}
+
 .pb-1 {
   padding: 0 0 16px 0;
 }
 
 .pb-2 {
   padding: 0 0 24px 0;
+}
+
+.spacer-100 {
+  width: 100px;
 }
 
 // Headings
@@ -433,4 +458,8 @@ e .btn-alert:disabled {
   .form {
     width: 80%;
   }
+}
+
+.opacity-low {
+  opacity: 0.7;
 }

@@ -1,9 +1,9 @@
-exports.contentValidation = (page, section, heading, content, req, res) => {
+exports.contentValidation = (page, section, heading, content, position) => {
   // validation section
   const pages = ["home", "aboutus", "contactus", "footer"];
   const sections = ["1", "2", "3"];
 
-  if (!page || !section) {
+  if (!page || !section || (content && !position)) {
     return false;
   } else {
     if (heading && content) {
@@ -30,4 +30,17 @@ exports.contentValidation = (page, section, heading, content, req, res) => {
     }
   }
   return true;
+};
+
+exports.imageContentValidation = (body, position, updatedPage) => {
+  if (!updatedPage) return false;
+  // TODO - could probs use array.some here
+
+  if (
+    body.hasOwnProperty("image") ||
+    body.hasOwnProperty("banner") ||
+    body.hasOwnProperty("gallery")
+  ) {
+    return true;
+  } else return false;
 };

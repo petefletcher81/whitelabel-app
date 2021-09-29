@@ -43,7 +43,6 @@ const DashboardImages = ({
       alert(response.message);
       setFetchNewImages(true);
     } catch (error) {
-      console.log(error);
       alert(error.message);
     }
   };

@@ -96,7 +96,10 @@ const ContentModal = ({ data, setToggleContentModal }) => {
   };
 
   return (
-    <div className="backdrop w-full h-full flex" data-testid="backdrop">
+    <div
+      className={`backdrop backdrop w-full h-full flex`}
+      data-testid="backdrop"
+    >
       <div className="bg-white modal p-1 rounded-1 shadow-1 text-center w-80">
         <h1 className="text-primary border-primary shadow-soft">
           Edit Content
@@ -438,7 +441,6 @@ const ContentModal = ({ data, setToggleContentModal }) => {
               </div>
             </div>
           )}
-
         <div className="modal__buttons-wrapper flex mt-1">
           {type !== "image-content" && (
             <button className="btn p-1 shadow-soft" onClick={handleSave}>
@@ -453,15 +455,18 @@ const ContentModal = ({ data, setToggleContentModal }) => {
           >
             Close
           </button>
-          <button
-            className="btn-alert p-1 shadow-soft"
-            onClick={
-              type === "site-content" ? handleDeleteContent : handleDelete
-            }
-            disabled={success}
-          >
-            Delete
-          </button>
+
+          {type !== "select-image" && (
+            <button
+              className="btn-alert p-1 shadow-soft"
+              onClick={
+                type === "site-content" ? handleDeleteContent : handleDelete
+              }
+              disabled={success}
+            >
+              Delete
+            </button>
+          )}
         </div>
         {success && <div className="py-1 text-primary">{success}</div>}
         {error && <div className="py-1 text-error">{error}</div>}

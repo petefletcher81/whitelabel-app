@@ -6,11 +6,23 @@ const Busboy = require("busboy");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
+const {
+  authErrorHandler,
+} = require("../utils/errorHandlers/auth-error-handler");
 const { dateFormatter } = require("../utils/helpers/date-formatter");
 const { firebaseConfig } = require("../config/firebase-config");
+const { imageContentBuilder } = require("../utils/helpers/content-builder");
+const {
+  imageContentValidation,
+} = require("../utils/helpers/content-validation");
+const {
+  contentErrorHandler,
+} = require("../utils/errorHandlers/content-error-handler");
+const { resourceLimits } = require("worker_threads");
 
 exports.addImage = (req, res) => {
   const { page, type } = req.params;
+  const { position } = req.query;
 
   const busboy = new Busboy({ headers: req.headers });
   const tmpdir = os.tmpdir();
@@ -77,6 +89,7 @@ exports.addImage = (req, res) => {
         createdAt: dateFormatter(),
         section: page,
         key: filename,
+        position: page === "home" ? position : null,
       };
 
       if (page === "aboutus" && imageType === "banner") {
@@ -282,7 +295,7 @@ exports.addImage = (req, res) => {
               page
             );
           } else {
-            // it gallery and can upload ans many as they want
+            // if gallery and can upload ans many as they want
             isValid = validateGallery(page, imageType);
           }
 
@@ -382,6 +395,107 @@ exports.getPageImages = async (req, res) => {
     res
       .status(400)
       .json({ message: `Something went wront cannot retrieve images` });
+  }
+};
+
+exports.updateImageContent = async (req, res) => {
+  const homepagePositions = ["1", "2", "3"];
+
+  if (!req.body.key)
+    return res.status(400).json({
+      message:
+        "Something went wrong while trying to update or the image content",
+    });
+
+  // page: what page is it on
+  /* updatedPage: wheres it going to?
+  homepage: this has 3 different sections
+  aboutus: this will always be the 'aboutus' as its in the gallery
+  contactus: will always be 'contactus' as there is only one banner
+  */
+
+  // does it have a position?
+  const { position } = req.query;
+  const { page, updatedPage } = req.params;
+
+  if (
+    updatedPage === "home" &&
+    !homepagePositions.some((p) => p === position)
+  ) {
+    return res.status(400).json({
+      message: "Sorry invalid position for this page",
+    });
+  }
+
+  if (updatedPage !== "home" && position > 1) {
+    return res.status(400).json({
+      message: "Sorry invalid position for this page",
+    });
+  }
+
+  const isValid = imageContentValidation(req.body, position, updatedPage);
+  const newContent = imageContentBuilder(req.body, position, updatedPage);
+
+  if (!isValid)
+    return res.status(400).json({
+      message:
+        "Something went wrong while trying to validate the content or the image content",
+    });
+
+  if (isValid) {
+    console.log("Content Valid");
+    try {
+      const contentRef = await db.collection(`images`).doc(`${newContent.key}`);
+      const doc = await contentRef.get();
+
+      if (!doc.exists) {
+        return res.status(400).json({ message: `The content does not exist` });
+      } else {
+        let items = [];
+
+        const updatedContent = {
+          id: Object.values(doc.data().id).join(""),
+          ...newContent,
+        };
+
+        const imageCollection = await db.collection("images");
+        const collectionQuery = await imageCollection
+          .where("section", "==", updatedPage)
+          .get();
+
+        collectionQuery.forEach((doc) => {
+          items.push({ id: doc.id, ...doc.data() });
+        });
+
+        /* check position doesnt already exist */
+        let positionExists;
+
+        if (position !== undefined) {
+          positionExists = items.find(
+            (content) => content.position === position
+          );
+        }
+
+        if (positionExists) {
+          return res.status(400).json({
+            message: `The content already exists within this position`,
+          });
+        } else {
+          await db
+            .collection(`images`)
+            .doc(updatedContent.key)
+            .set(updatedContent);
+          return res.status(201).json({
+            message: `Image has been updated with the new content`,
+          });
+        }
+      }
+    } catch (error) {
+      const errorMessage = authErrorHandler(error.code);
+      const { status, message } = errorMessage;
+
+      res.status(status).json({ error: message });
+    }
   }
 };
 
