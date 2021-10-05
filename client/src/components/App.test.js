@@ -1,9 +1,10 @@
 import "@testing-library/jest-dom/extend-expect";
 import { createMemoryHistory } from "history";
 import jwtDecode from "jwt-decode";
-import nock from "nock";
+import { rest } from "msw";
 import React from "react";
 import { Router } from "react-router-dom";
+import { server } from "../mocks/server";
 import {
   cleanup,
   fireEvent,
@@ -11,11 +12,6 @@ import {
   screen,
   waitFor,
 } from "../test-utils/custom-utils";
-import {
-  contentBuilder,
-  nockError,
-  nockGetHelper,
-} from "../test-utils/test-helpers";
 import App from "./App";
 
 let mockDate = new Date();
@@ -25,7 +21,7 @@ const mockJwt = require("jwt-decode");
 
 describe("App ", () => {
   beforeAll(() => {
-    nock.disableNetConnect();
+    server.listen();
   });
 
   beforeEach(() => {
@@ -35,22 +31,18 @@ describe("App ", () => {
   });
 
   afterEach(() => {
-    nock.cleanAll();
     console.error.mockRestore();
+    server.resetHandlers();
     cleanup();
     // the below will reset the history
     history.push("/");
   });
 
+  afterAll(() => {
+    server.close();
+  });
+
   it("should render content / images from redux", async () => {
-    const { allContent, imageContent, footerContent } = contentBuilder();
-
-    const homeContent = allContent.filter((page) => page.page === "home");
-
-    const content = nockGetHelper("content/home", homeContent);
-    const images = nockGetHelper("images/home/image", imageContent);
-    const footer = nockGetHelper("footer", footerContent);
-
     render(
       <Router history={history}>
         <App />
@@ -64,47 +56,10 @@ describe("App ", () => {
       expect(displayedImage[0].src).toContain("test-for-home");
       expect(screen.queryByTestId("homepage-section")).toBeInTheDocument();
     });
-
-    images.done();
-    content.done();
-    footer.done();
-  });
-
-  it("should render error from content reducer", async () => {
-    const { allContent, imageContent, footerContent } = contentBuilder();
-
-    const content = nockError("content/home");
-    const images = nockError("images/home/image");
-    const footer = nockError("footer");
-
-    render(
-      <Router history={history}>
-        <App />
-      </Router>
-    );
-
-    await waitFor(() => {
-      screen.getByText(
-        /Something went wrong while trying to add or get the content/i
-      );
-    });
-
-    images.done();
-    footer.done();
-    content.done();
   });
 
   it("should open the image modal when an image is clicked and close the image modal when backdrop clicked", async () => {
-    const { allContent, imageContent, footerContent } = contentBuilder();
     window.innerWidth = 990;
-
-    const homeContent = allContent.filter((page) => page.page === "home");
-
-    const contentHome = nockGetHelper("content/home", homeContent);
-    const imageHome = nockGetHelper("images/home/image", imageContent);
-    const contentAboutus = nockGetHelper("content/aboutus", allContent);
-    const imageAboutus = nockGetHelper("images", imageContent);
-    const footer = nockGetHelper("footer", footerContent);
 
     render(
       <Router history={history}>
@@ -123,26 +78,10 @@ describe("App ", () => {
     await screen.getByTestId("backdrop");
     fireEvent.click(screen.getByTestId("backdrop"));
     expect(screen.queryByTestId("backdrop")).not.toBeInTheDocument();
-
-    contentAboutus.done();
-    contentHome.done();
-    imageHome.done();
-    imageAboutus.done();
-    footer.done();
   });
 
   it("should open the content modal when an user is in dashboard and content is clicked and close the image modal when backdrop clicked", async () => {
-    const { allContent, imageContent, footerContent, enquiryContent } =
-      contentBuilder();
     window.innerWidth = 990;
-
-    const homeContent = allContent.filter((page) => page.page === "home");
-    const contentHome = nockGetHelper("content/home", homeContent);
-    const imageHome = nockGetHelper("images/home/image", imageContent);
-    const enquiry = nockGetHelper("enquiries", enquiryContent);
-    const content = nockGetHelper("content", allContent);
-    const images = nockGetHelper("images", imageContent);
-    const footer = nockGetHelper("footer", footerContent);
 
     localStorage.setItem("token", "qwerty");
 
@@ -166,46 +105,63 @@ describe("App ", () => {
     fireEvent.click(contentButton);
 
     await screen.findAllByText("Dashboard");
+  });
 
-    contentHome.done();
-    imageHome.done();
-    enquiry.done();
-    content.done();
-    images.done();
-    footer.done();
+  it("should render error from content reducer", async () => {
+    server.use(
+      rest.get(
+        "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content/home",
+        (req, res, ctx) => {
+          return res(
+            ctx.status(400),
+            ctx.json({
+              message:
+                "Something went wrong while trying to add or get the content",
+            })
+          );
+        }
+      )
+    );
+
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    await waitFor(() => {
+      screen.getByText(
+        /Something went wrong while trying to add or get the content/i
+      );
+    });
   });
 });
 
 describe("App -- Nav items", () => {
   beforeAll(() => {
-    nock.disableNetConnect();
+    server.listen();
   });
 
   beforeEach(() => {
     jest.spyOn(console, "error");
-    nock.cleanAll();
-    cleanup();
+    // @ts-ignore jest.spyOn adds this functionallity
     console.error.mockImplementation(() => null);
   });
 
   afterEach(() => {
-    localStorage.removeItem("token", "qwerty");
-    nock.cleanAll();
     console.error.mockRestore();
+    server.resetHandlers();
     cleanup();
+    // the below will reset the history
+    history.push("/");
   });
 
-  afterEach(() => {});
+  afterAll(() => {
+    server.close();
+    jest.clearAllMocks();
+  });
 
   it("should render dashboard link and allow user to navigate to page, if there is an admin token within localstorage", async () => {
-    const { allContent, imageContent, footerContent } = contentBuilder();
-
-    const homeContent = allContent.filter((page) => page.page === "home");
-    const content = nockGetHelper("content/home", homeContent);
-
-    const images = nockGetHelper("images/home/image", imageContent);
-    const footer = nockGetHelper("footer", footerContent);
-
     const history = createMemoryHistory();
     window.innerWidth = 990;
     localStorage.setItem("token", "qwerty");
@@ -224,21 +180,10 @@ describe("App -- Nav items", () => {
 
     fireEvent.click(screen.getByText("Dashboard"));
     screen.getByTestId("dashboard-screen");
-    expect(jwtDecode).toHaveBeenCalled();
-
-    content.done();
-    images.done();
-    footer.done();
+    await expect(jwtDecode).toHaveBeenCalled();
   });
 
   it("should render not dashboard link and not allow user to navigate to page, if token out of date", async () => {
-    const { allContent, imageContent, footerContent } = contentBuilder();
-
-    const homeContent = allContent.filter((page) => page.page === "home");
-    const content = nockGetHelper("content/home", homeContent);
-    const images = nockGetHelper("images/home/image", imageContent);
-    const footer = nockGetHelper("footer", footerContent);
-
     const history = createMemoryHistory();
     window.innerWidth = 990;
     localStorage.setItem("token", "qwerty");
@@ -258,20 +203,9 @@ describe("App -- Nav items", () => {
     });
 
     expect(screen.queryByText("Dashboard")).not.toBeInTheDocument();
-
-    content.done();
-    images.done();
-    footer.done();
   });
 
   it("should render not dashboard if there is admin", async () => {
-    const { allContent, imageContent, footerContent } = contentBuilder();
-
-    const homeContent = allContent.filter((page) => page.page === "home");
-    const content = nockGetHelper("content/home", homeContent);
-    const images = nockGetHelper("images/home/image", imageContent);
-    const footer = nockGetHelper("footer", footerContent);
-
     const history = createMemoryHistory();
 
     window.innerWidth = 990;
@@ -293,21 +227,11 @@ describe("App -- Nav items", () => {
     });
 
     expect(screen.queryByText("Dashboard")).not.toBeInTheDocument();
-
-    content.done();
-    images.done();
-    footer.done();
   });
 
   it("should allow user to toggle the menu button to show hide sidebar", async () => {
     const history = createMemoryHistory();
     window.innerWidth = 414;
-    const { allContent, imageContent, footerContent } = contentBuilder();
-
-    const homeContent = allContent.filter((page) => page.page === "home");
-    const content = nockGetHelper("content/home", homeContent);
-    const images = nockGetHelper("images/home/image", imageContent);
-    const footer = nockGetHelper("footer", footerContent);
 
     render(
       <Router history={history}>
@@ -335,9 +259,116 @@ describe("App -- Nav items", () => {
     expect(screen.queryByText("Home")).not.toBeInTheDocument();
     expect(screen.queryByText("About Us")).not.toBeInTheDocument();
     expect(screen.queryByText("Contact Us")).not.toBeInTheDocument();
+  });
+});
 
-    content.done();
-    images.done();
-    footer.done();
+describe("Signout", () => {
+  beforeAll(() => {
+    server.listen();
+  });
+
+  beforeEach(() => {
+    jest.spyOn(console, "error");
+    // @ts-ignore jest.spyOn adds this functionallity
+    console.error.mockImplementation(() => null);
+  });
+
+  afterEach(() => {
+    console.error.mockRestore();
+    server.resetHandlers();
+    jest.clearAllMocks();
+    cleanup();
+    // the below will reset the history
+    history.push("/");
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
+  it("should render the sign out icon when user is signed in and allow them to sign out with a click", async () => {
+    const history = createMemoryHistory();
+    window.innerWidth = 990;
+    localStorage.setItem("token", "qwerty");
+
+    mockJwt.mockImplementation(() => {
+      return { exp: mockDate.getTime(), admin: true };
+    });
+
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    await screen.findByText("Heading 1");
+
+    expect(
+      screen.queryByRole("img", { name: "sign out icon" })
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("menuitem", { name: "sign out button" }));
+    await screen.findByText("You have been succesfully signed out");
+  });
+
+  it("should NOT render the sign out icon when user NOT signed in or NOT admin", async () => {
+    const history = createMemoryHistory();
+    window.innerWidth = 990;
+    localStorage.setItem("token", "qwerty");
+
+    mockJwt.mockImplementation(() => {
+      return { exp: mockDate.getTime(), admin: false };
+    });
+
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    await screen.findByText("Heading 1");
+
+    expect(
+      screen.queryByRole("img", { name: "sign out icon" })
+    ).not.toBeInTheDocument();
+  });
+
+  it("should render error if signout fails", async () => {
+    server.use(
+      rest.post(
+        "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/signout",
+        (req, res, ctx) => {
+          return res(
+            ctx.status(404),
+            ctx.json({
+              message: "You have NOT been successfully signed out",
+            })
+          );
+        }
+      )
+    );
+
+    const history = createMemoryHistory();
+    window.innerWidth = 990;
+    localStorage.setItem("token", "qwerty");
+
+    mockJwt.mockImplementation(() => {
+      return { exp: mockDate.getTime(), admin: true };
+    });
+
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    await screen.findByText("Heading 1");
+
+    expect(
+      screen.queryByRole("img", { name: "sign out icon" })
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("menuitem", { name: "sign out button" }));
+    await screen.findByText("You have NOT been successfully signed out");
   });
 });

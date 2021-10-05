@@ -124,19 +124,18 @@ exports.getPasswordReset = async (req, res) => {
     res.send({ message: "Please check your email and reset your password" });
   } catch (error) {
     res.send({
-      message: 'Something went wrong please contact your provider'
+      message: "Something went wrong please contact your provider",
     });
   }
 };
 
 exports.signUserOut = async (req, res) => {
   try {
-    await firebase.auth().signOut().then(() => {
-      res.send({ signout: "true" });
-    }).catch((error) => {
-      res.send({
-        message: 'You could not be signed out, please contact your provider'
-      });
+    await firebase.auth().signOut();
+    res.send({ message: "You have been succesfuly signed out" });
+  } catch (error) {
+    res.send({
+      message: "You could not be signed out, please contact your provider",
     });
-    
+  }
 };

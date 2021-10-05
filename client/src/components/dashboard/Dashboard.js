@@ -26,6 +26,7 @@ const Dashboard = ({ setToggleContentModal, setSelectedImage }) => {
   const mobile = window.innerWidth < 990;
 
   useEffect(() => {
+    let componentMounted = true;
     const getAllEquiries = async () => {
       try {
         const response = await getEnquiries();
@@ -36,9 +37,13 @@ const Dashboard = ({ setToggleContentModal, setSelectedImage }) => {
       }
     };
     getAllEquiries();
+    return () => {
+      componentMounted = false;
+    };
   }, []);
 
   useEffect(() => {
+    let componentMounted = true;
     const getContent = async () => {
       try {
         const response = await getAllContent();
@@ -49,9 +54,13 @@ const Dashboard = ({ setToggleContentModal, setSelectedImage }) => {
       }
     };
     getContent();
+    return () => {
+      componentMounted = false;
+    };
   }, []);
 
   useEffect(() => {
+    let componentMounted = true;
     const getImages = async () => {
       try {
         const response = await getAllImages();
@@ -62,9 +71,13 @@ const Dashboard = ({ setToggleContentModal, setSelectedImage }) => {
       }
     };
     getImages();
-  }, [fetchNewImages]);
+    return () => {
+      componentMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
+    let componentMounted = true;
     const getFooterData = async () => {
       try {
         const response = await getFooterContent();
@@ -85,6 +98,9 @@ const Dashboard = ({ setToggleContentModal, setSelectedImage }) => {
       }
     };
     getFooterData();
+    return () => {
+      componentMounted = false;
+    };
   }, []);
 
   const bannerImages = images?.filter((image) =>
