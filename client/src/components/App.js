@@ -25,7 +25,6 @@ const App = () => {
     const decodedToken = jwtDecode(token);
     if (decodedToken.exp * 1000 < Date.now()) {
       authenticated = false;
-      //signout user
     } else {
       authenticated = true;
     }

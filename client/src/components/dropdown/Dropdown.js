@@ -63,7 +63,11 @@ const Dropdown = ({ options, selected, onSelectedChange, label, mobile }) => {
           role="combobox"
         >
           <div className="text-primary">{selected.label}</div>
-          <i className="fas fa-arrow-down text-primary mx-1"></i>
+          <i
+            role="img"
+            aria-label="down arrow icon"
+            className="fas fa-arrow-down text-primary mx-1"
+          ></i>
           {open && (
             <ul
               aria-expanded={open}

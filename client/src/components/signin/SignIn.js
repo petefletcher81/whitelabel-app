@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { attemptSignIn } from "../../utils/apiCalls";
+import { attemptSignIn, passwordReset } from "../../utils/apiCalls";
 import "./SignIn.scss";
 
 const SignIn = () => {
   const [signIn, setSignIn] = useState({ password: "", email: "" });
   const [success, setSuccess] = useState(null);
+  const [passwordSuccess, setPasswordSuccess] = useState(null);
   const [signInError, setSignInError] = useState(null);
 
   const onChangeFormDetails = (event) => {
@@ -22,6 +23,15 @@ const SignIn = () => {
     } catch (error) {
       const data = error.response?.data;
       setSignInError(data);
+    }
+  };
+
+  const handlePasswordReset = async () => {
+    try {
+      const response = await passwordReset();
+      setPasswordSuccess(response.message);
+    } catch (error) {
+      alert("Theres been an error please contact your provider");
     }
   };
 
@@ -57,14 +67,27 @@ const SignIn = () => {
                 {`${signInError.error}, please try again`}
               </div>
             )}
+            <div className="flex justify-around mt-1 w-full">
+              <label htmlFor="submit" className="visuallyhidden">
+                <input
+                  type="submit"
+                  value="Sign In"
+                  className="btn btn-primary"
+                  onClick={handleSubmit}
+                />
+              </label>
+              <button
+                aria-label="password reset"
+                className="btn btn-primary"
+                onClick={handlePasswordReset}
+              >
+                Password Reset
+              </button>
+            </div>
+            {passwordSuccess && (
+              <div className="flex mt-1 text-error">{passwordSuccess}</div>
+            )}
           </div>
-          <label htmlFor="submit" className="visuallyhidden" />
-          <input
-            type="submit"
-            value="Sign In"
-            className="btn btn-primary"
-            onClick={handleSubmit}
-          />
         </form>
       </div>
     </div>

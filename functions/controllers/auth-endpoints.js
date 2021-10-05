@@ -115,3 +115,27 @@ exports.verifyAdmin = async (req, res) => {
     res.status(status).json({ error: message });
   }
 };
+
+exports.getPasswordReset = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    await firebase.auth().sendPasswordResetEmail(email);
+    res.send({ message: "Please check your email and reset your password" });
+  } catch (error) {
+    res.send({
+      message: "Something went wrong please contact your provider",
+    });
+  }
+};
+
+exports.signUserOut = async (req, res) => {
+  try {
+    await firebase.auth().signOut();
+    res.send({ message: "You have been succesfuly signed out" });
+  } catch (error) {
+    res.send({
+      message: "You could not be signed out, please contact your provider",
+    });
+  }
+};

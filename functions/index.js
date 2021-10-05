@@ -8,6 +8,8 @@ const {
   setAdmin,
   removeAdmin,
   verifyAdmin,
+  signUserOut,
+  getPasswordReset,
 } = require("./controllers/auth-endpoints");
 const { isAdmin } = require("./middleware/check-auth-middleware");
 const {
@@ -48,6 +50,8 @@ app.post("/admin", adminLogin);
 app.post("/set-admin", isAdmin, setAdmin);
 app.post("/remove-admin", isAdmin, removeAdmin);
 app.post("/verify-admin", verifyAdmin);
+app.post("/password-reset", getPasswordReset);
+app.post("/signout", signUserOut);
 
 /** Content */
 app.get("/content", getContent);

@@ -20,6 +20,44 @@ export const contentBuilder = () => {
     },
   ];
 
+  const homeContent = [
+    {
+      id: "section-1",
+      heading: "Heading 1",
+      content: "Lorem ipsum dolor sit amet",
+      createdAt: "2021-01-17T06:25:57.066Z",
+      page: "home",
+      position: "1",
+    },
+    {
+      id: "section-2",
+      heading: "Heading 2",
+      content: "Lorem ipsum dolor sit amet",
+      createdAt: "2021-01-17T06:25:57.044Z",
+      page: "home",
+      position: "2",
+    },
+  ];
+
+  const aboutUsContent = [
+    {
+      id: "section-1",
+      heading: "Heading 1",
+      content: "Lorem ipsum dolor adipiscing elit",
+      createdAt: "2021-11-07T06:25:57.066Z",
+      page: "aboutus",
+      position: "1",
+    },
+    {
+      id: "section-2",
+      heading: "Heading 2",
+      content: "Lorem ipsum dolor adipiscing elit",
+      createdAt: "2021-01-17T06:25:57.066Z",
+      page: "aboutus",
+      position: "2",
+    },
+  ];
+
   const allContent = [
     {
       id: "section-1",
@@ -38,12 +76,20 @@ export const contentBuilder = () => {
       position: "2",
     },
     {
+      id: "section-1",
+      heading: "Heading 1",
+      content: "Lorem ipsum dolor adipiscing elit",
+      createdAt: "2021-11-07T06:25:57.066Z",
+      page: "aboutus",
+      position: "1",
+    },
+    {
       id: "section-2",
       heading: "Heading 2",
       content: "Lorem ipsum dolor adipiscing elit",
       createdAt: "2021-01-17T06:25:57.066Z",
       page: "aboutus",
-      position: "1",
+      position: "2",
     },
     {
       id: "section-2",
@@ -129,7 +175,14 @@ export const contentBuilder = () => {
       id: "social",
     },
   ];
-  return { enquiryContent, allContent, imageContent, footerContent };
+  return {
+    enquiryContent,
+    allContent,
+    homeContent,
+    imageContent,
+    aboutUsContent,
+    footerContent,
+  };
 };
 
 // nock get request helper
@@ -233,6 +286,13 @@ export const nockOptions = (endpoint) => {
 };
 
 export const nockPostMock = (postData, endpoint, content) => {
+  if (!postData) {
+    postData = { email: "test@test.com" };
+  }
+
+  // TODO - this test be breakingggggg
+  console.log(postData);
+
   return nock(
     "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app",
     { encodedQueryParams: true }

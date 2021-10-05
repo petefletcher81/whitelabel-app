@@ -18,6 +18,7 @@ const HomePage = () => {
   const contentError = useSelector((state) => state.homepageContent.error);
 
   useEffect(() => {
+    let componentMounted = true;
     const getAllContent = async () => {
       try {
         const response = await getContent("home");
@@ -28,9 +29,13 @@ const HomePage = () => {
       }
     };
     getAllContent();
+    return () => {
+      componentMounted = false;
+    };
   }, []);
 
   useEffect(() => {
+    let componentMounted = true;
     const getImageContent = async () => {
       try {
         const response = await getImages("home");
@@ -41,6 +46,9 @@ const HomePage = () => {
       }
     };
     getImageContent();
+    return () => {
+      componentMounted = false;
+    };
   }, []);
 
   return (
