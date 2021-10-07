@@ -11,8 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - working-directory: ./client
-      - run: npm run ci && npm run build
+      - name: Install node modules
+        working-directory: ./client
+        run: npm ci && npm run build
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           # githubalready sets a secrets token when we enable actions

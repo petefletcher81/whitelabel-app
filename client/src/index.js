@@ -1,11 +1,9 @@
-import App from "./components/App";
-import "../dist/index.html";
-
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
-import { store } from "./redux/store";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import App from "./components/App";
+import { store } from "./redux/store";
 
 const rootElement = document.getElementById("root");
 const app = (

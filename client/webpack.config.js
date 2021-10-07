@@ -4,8 +4,9 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 module.exports = {
   entry: "./src/index.js",
   output: {
-    filename: "main.js",
-    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "build"),
+    publicPath: "/", // this is to enable relative paths when deployed
   },
   // this is needed for dev server routing
   devServer: {
