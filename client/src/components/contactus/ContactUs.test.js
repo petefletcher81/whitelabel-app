@@ -160,24 +160,25 @@ describe("<ContactUs /> Mobile", () => {
     banner.done();
   });
 
-  it("should display banner image for page", async () => {
-    const { allContent, imageContent } = contentBuilder();
+  // TODO - add banners back to codebase
+  // it("should display banner image for page", async () => {
+  //   const { allContent, imageContent } = contentBuilder();
 
-    const content = nockGetHelper("content/contactus", allContent);
-    const banner = nockGetHelper("images/contactus/banner", imageContent);
+  //   const content = nockGetHelper("content/contactus", allContent);
+  //   const banner = nockGetHelper("images/contactus/banner", imageContent);
 
-    render(<ContactUs />);
+  //   render(<ContactUs />);
 
-    await screen.findByText("Heading 1");
-    screen.getByText("Heading 2");
+  //   await screen.findByText("Heading 1");
+  //   screen.getByText("Heading 2");
 
-    await screen.getByTestId("contactus-banner");
-    const displayedImage = document.querySelectorAll("img");
-    expect(displayedImage[0].src).toContain("test-for-contactus");
+  //   await screen.getByTestId("contactus-banner");
+  //   const displayedImage = document.querySelectorAll("img");
+  //   expect(displayedImage[0].src).toContain("test-for-contactus");
 
-    content.done();
-    banner.done();
-  });
+  //   content.done();
+  //   banner.done();
+  // });
 
   it("should display banner image error content if bad response from api", async () => {
     const { allContent } = contentBuilder();

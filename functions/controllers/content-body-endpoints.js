@@ -86,7 +86,7 @@ exports.getPageContent = async (req, res) => {
   getAll(req, res);
 };
 
-exports.updateContent = async (req, res) => {
+exports.updatePageContent = async (req, res) => {
   const { heading, content } = req.body;
   const { page, section } = req.params;
   const { position } = req.query;

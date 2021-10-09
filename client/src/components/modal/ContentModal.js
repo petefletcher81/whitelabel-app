@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import {
   deleteContent,
   deleteItem,
-  updateContent,
   updateData,
+  updatePageContent,
 } from "../../utils/apiCalls";
 import Row from "../../utils/Row";
 import "./Modal.scss";
@@ -43,7 +43,13 @@ const ContentModal = ({ data, setToggleContentModal }) => {
 
     try {
       if (type === "site-content") {
-        const response = await updateContent(page, newContent, newContent.id);
+        //TODO - this needs looking at
+        const response = await updatePageContent(
+          page,
+          newContent,
+          newContent.id,
+          item.position
+        );
         setSuccess(response.message);
       }
       if (type !== "site-content") {

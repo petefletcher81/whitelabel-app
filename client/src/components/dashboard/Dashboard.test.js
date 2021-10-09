@@ -64,7 +64,7 @@ describe("Dashboard", () => {
     render(<Dashboard />, { container });
 
     await screen.findByText("test");
-    screen.getAllByText("Heading 1");
+    await screen.findAllByText("Heading 1");
 
     enquiry.done();
     footer.done();
@@ -83,7 +83,7 @@ describe("Dashboard", () => {
     render(<Dashboard />, { container });
 
     await screen.findByText("test");
-    screen.getAllByText("Heading 1");
+    await screen.findAllByText("Heading 1");
     screen.getByText("2021-01-31T06:46:28.342Z");
 
     const contentWindow = screen.getByTestId("manage-enquiries");

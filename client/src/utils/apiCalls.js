@@ -5,11 +5,6 @@ axios.defaults.baseURL =
 
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
-// const BASE_URL_FIREBASE =
-//   process.env.NODE_ENV === "development"
-//     ? "http://localhost:5000/whitelabel-website-7d72b/europe-west2/app"
-//     : "/v1";
-
 export const getContent = async (page) => {
   const { data } = await axios.get(`/content/${page}`);
   return data;
@@ -73,7 +68,26 @@ export const userSignout = async () => {
   return data;
 };
 
-export const updateContent = async (
+export const updateImageContent = async (
+  page,
+  updatedContent,
+  section,
+  position
+) => {
+  const addQuery = position ? `?position=${position}` : "";
+  const { data } = await axios.put(
+    `/images/${page}/${section}${addQuery}`,
+    updatedContent
+  );
+  return data;
+};
+
+export const updateData = async (page, updatedContent, section) => {
+  const { data } = await axios.put(`/${page}/${section}`, updatedContent);
+  return data;
+};
+
+export const updatePageContent = async (
   page,
   updatedContent,
   section,
@@ -84,11 +98,6 @@ export const updateContent = async (
     `/content/${page}/${section}${addQuery}`,
     updatedContent
   );
-  return data;
-};
-
-export const updateData = async (page, updatedContent, section) => {
-  const { data } = await axios.put(`/${page}/${section}`, updatedContent);
   return data;
 };
 

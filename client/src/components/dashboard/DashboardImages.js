@@ -77,7 +77,11 @@ const DashboardImages = ({
                 onChange={handleImageOnChange}
                 hidden
               />
-              <div className="dashboard__form-button-wrapper my-1 flex justify-around">
+              <div
+                className={`dashboard__form-button-wrapper my-1 flex justify-around ${
+                  mobile && "flex-col"
+                }`}
+              >
                 <button
                   className="btn btn-primary m-2"
                   onClick={handleImageUpload}
