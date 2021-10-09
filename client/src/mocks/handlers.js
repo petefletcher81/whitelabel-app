@@ -54,7 +54,6 @@ export const handlers = [
     "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content/aboutus",
     (req, res, ctx) => {
       const { aboutUsContent } = contentBuilder();
-      console.log(homeContent);
       return res(ctx.status(200), ctx.json([...aboutUsContent]));
     }
   ),

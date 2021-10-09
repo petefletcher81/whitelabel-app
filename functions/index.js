@@ -17,7 +17,7 @@ const {
   getPageContent,
   deleteContent,
   addContent,
-  updateContent,
+  updatePageContent,
 } = require("./controllers/content-body-endpoints");
 const {
   addImage,
@@ -57,13 +57,14 @@ app.post("/signout", signUserOut);
 app.get("/content", getContent);
 app.get("/content/:page", getPageContent);
 app.post("/content/:page/:section", addContent);
-app.put("/content/:page/:updatedPage", updateImageContent);
+app.put("/content/:page/:section", updatePageContent);
 app.delete("/content/:page/:section", deleteContent);
 
 /** Images */
 app.post("/images/:page/:type", addImage);
 app.get("/images", getAllImages);
 app.get("/images/:page/:type", getPageImages);
+app.put("/images/:page/:updatedPage", updateImageContent);
 app.delete("/images/:name", deleteImage);
 
 /** footer */

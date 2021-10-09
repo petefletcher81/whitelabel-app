@@ -26,6 +26,6 @@ exports.imageContentBuilder = (body, position, updatedPage) => {
     key,
   };
 
-  console.log("content built");
+  console.log("content built", contentObj);
   return contentObj;
 };

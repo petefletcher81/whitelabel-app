@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { updateContent } from "../../utils/apiCalls";
+import { updateImageContent } from "../../utils/apiCalls";
 import Gallery from "../gallery/Gallery";
 import "./Modal.scss";
 
@@ -41,12 +41,12 @@ const ImageModal = ({ data, setSelectedImage }) => {
     // section - what page the image is going to
     // position - what position if any
     try {
-      const galleryImage = await updateContent(
+      const galleryImage = await updateImageContent(
         imageToGoToGallery.section,
         imageToGoToGallery,
         "aboutus"
       );
-      const newlyPositionedImage = await updateContent(
+      const newlyPositionedImage = await updateImageContent(
         selectedGridImage.image.section,
         selectedGridImage.image,
         imageToGoToGallery.section,

@@ -12,6 +12,17 @@ import {
 import SignIn from "./SignIn";
 
 describe("<SignIn />", () => {
+  beforeEach(() => {
+    jest.spyOn(console, "error");
+    // @ts-ignore jest.spyOn adds this functionallity
+    console.error.mockImplementation(() => null);
+  });
+
+  afterEach(() => {
+    console.error.mockRestore();
+    cleanup();
+  });
+
   it("should render the signin form", async () => {
     render(<SignIn />);
     screen.getByText("Sign In");
@@ -178,7 +189,15 @@ describe("<SignIn />", () => {
 describe("Password Reset", () => {
   beforeAll(() => server.listen());
 
+  beforeEach(() => {
+    jest.spyOn(console, "error");
+    // @ts-ignore jest.spyOn adds this functionallity
+    console.error.mockImplementation(() => null);
+  });
+
   afterEach(() => {
+    console.error.mockRestore();
+    cleanup();
     server.resetHandlers();
     cleanup();
   });

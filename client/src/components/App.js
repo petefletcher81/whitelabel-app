@@ -52,18 +52,18 @@ const App = () => {
               component={() => <AboutUs setSelectedImage={setSelectedImage} />}
             />
             <Route exact path="/contactus" component={ContactUs} />
-            {/* {authenticated && admin && ( */}
-            <Route
-              exact
-              path="/dashboard"
-              component={() => (
-                <Dashboard
-                  setToggleContentModal={setToggleContentModal}
-                  setSelectedImage={setSelectedImage}
-                />
-              )}
-            />
-            {/* )} */}
+            {authenticated && admin && (
+              <Route
+                exact
+                path="/dashboard"
+                component={() => (
+                  <Dashboard
+                    setToggleContentModal={setToggleContentModal}
+                    setSelectedImage={setSelectedImage}
+                  />
+                )}
+              />
+            )}
           </Switch>
           {selectedImage && (
             <ImageModal

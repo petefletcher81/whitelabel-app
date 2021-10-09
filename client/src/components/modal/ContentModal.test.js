@@ -171,10 +171,14 @@ describe("Editing Content", () => {
     };
 
     const dashContent = nockGetHelper("content", allContent);
-    const options = nockOptions("content/home/section-1");
-    const content = nockPutMock(mockContent, "content/home/section-1", {
-      message: "This content has been successfully updated",
-    });
+    const options = nockOptions("content/home/section-1?position=1");
+    const content = nockPutMock(
+      mockContent,
+      "content/home/section-1?position=1",
+      {
+        message: "This content has been successfully updated",
+      }
+    );
 
     render(
       <ContentModal
@@ -275,8 +279,8 @@ describe("Editing Content", () => {
       position: "1",
     };
 
-    const options = nockOptions("content/home/section-1");
-    const content = nockErrorPut("content/home/section-1");
+    const options = nockOptions("content/home/section-1?position=1");
+    const content = nockErrorPut("content/home/section-1?position=1");
 
     render(
       <ContentModal

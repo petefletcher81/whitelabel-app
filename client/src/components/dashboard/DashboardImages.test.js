@@ -13,7 +13,7 @@ describe("Dashboard", () => {
   let container = null;
   beforeEach(() => {
     // TODO - test api call
-    // need to test these bette
+    // need to test these better
 
     window.fetch - jest.fn();
     container = document.createElement("div");
@@ -51,7 +51,7 @@ describe("Dashboard", () => {
 
   it("should allow user to upload images from the dashboard", () => {
     const mockAlert = jest.fn();
-    let originalGlobalAlert = global.aler;
+    let originalGlobalAlert = global.alert;
     global.alert = mockAlert;
 
     let file;
