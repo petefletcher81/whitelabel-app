@@ -56,28 +56,28 @@ app.post("/signout", signUserOut);
 /** Content */
 app.get("/content", getContent);
 app.get("/content/:page", getPageContent);
-app.post("/content/:page/:section", addContent);
-app.put("/content/:page/:section", updatePageContent);
-app.delete("/content/:page/:section", deleteContent);
+app.post("/content/:page/:section", isAdmin, addContent);
+app.put("/content/:page/:section", isAdmin, updatePageContent);
+app.delete("/content/:page/:section", isAdmin, deleteContent);
 
 /** Images */
 app.post("/images/:page/:type", addImage);
 app.get("/images", getAllImages);
 app.get("/images/:page/:type", getPageImages);
-app.put("/images/:page/:updatedPage", updateImageContent);
-app.delete("/images/:name", deleteImage);
+app.put("/images/:page/:updatedPage", isAdmin, updateImageContent);
+app.delete("/images/:name", isAdmin, deleteImage);
 
 /** footer */
 app.get("/footer", getFooterContent);
-app.post("/footer/:area", addFooterContent);
-app.put("/footer/:area", updateFooterContent);
-app.delete("/footer/:area", deleteFooterContent);
+app.post("/footer/:area", isAdmin, addFooterContent);
+app.put("/footer/:area", isAdmin, updateFooterContent);
+app.delete("/footer/:area", isAdmin, deleteFooterContent);
 
 /** enquires */
 app.post("/enquiries", addEnquiry);
 app.get("/enquiries", getEnquiries);
-app.put("/enquiries/:email", updateEnquiry);
-app.delete("/enquiries/:name", deleteEnquiry);
+app.put("/enquiries/:email", isAdmin, updateEnquiry);
+app.delete("/enquiries/:name", isAdmin, deleteEnquiry);
 
 app.use((req, res) => {
   res.send({ message: "Path does not exist" });
