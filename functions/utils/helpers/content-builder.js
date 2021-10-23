@@ -1,6 +1,6 @@
 const { dateFormatter } = require("./date-formatter");
 
-exports.contentBuilder = (heading, content, page, position) => {
+exports.contentBuilder = (heading, content, section, page, position) => {
   const contentObj = {
     heading,
     content,

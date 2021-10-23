@@ -69,7 +69,7 @@ const firebaseScript = async () => {
 
   console.log("Install firebase Tools");
   const firebaseTools = await commandToRun(
-    `cd ${PROJECT_NAME} && npm install -g firebase-tools`
+    `cd ${PROJECT_NAME} && npm install -g firebase-tools axios -D`
   );
   helperReturnValue(firebaseTools);
   console.log("");
