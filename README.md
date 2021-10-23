@@ -15,6 +15,8 @@ in order to run this you will need a copy of the config folder as seen in the vi
 
 `auth-config.js`
 
+Before you run the script - be sure to update the project name within the whitelabel-script
+
 Now run
 
 ```
@@ -63,7 +65,7 @@ File functions/.gitignore all dependencies with npm now? (Y/n) Yes
 
 Go to the firebase console and select ${PROJECT_NAME}random number`
 
-select STORAGE and create - choose correct region EU2
+select STORAGE and create - choose correct region `europe-west2`
 
 ## Firebase Firestore setup
 
@@ -88,7 +90,7 @@ cloud.firestore {
 
 ## Firebase auth setup
 
-Select AUTHENTICATION and choose Email / password THEN selct ENABLE
+Select `get started` then `AUTHENTICATION` and choose `Email / password` THEN selct `ENABLE`
 
 ---
 
@@ -104,6 +106,7 @@ firebase apps:create
 ```
 Choose 'Web'
 
+**Firebase requires you to give the app a name - just call the same as the project**
 What would you like to call your app? ${PROJECT_NAME}
 ```
 
@@ -196,6 +199,18 @@ Starting with the top request `Homepage image 1`
 In the body section - `replace the image` with one on your local machine
 
 Rinse and repeat for each request - the gallery (last) request can add 3 images at a time.
+
+---
+
+### Firebase deploy
+
+Once all the content is added from this script run
+
+```
+firebase deploy
+```
+
+This will deploy your functions and app
 
 ---
 

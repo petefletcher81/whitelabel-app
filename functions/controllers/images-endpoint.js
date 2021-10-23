@@ -283,7 +283,6 @@ exports.addImage = (req, res) => {
               contactUsImageLimit,
               aboutUsImageLimit,
               homeImageLimit,
-              imageType,
               page
             );
           } else if (imageType === "banner") {

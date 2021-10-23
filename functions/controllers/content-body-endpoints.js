@@ -18,7 +18,7 @@ exports.addContent = async (req, res) => {
   const newContent = contentBuilder(heading, content, section, page, position);
 
   // validation
-  const isValid = contentValidation(page, section, heading, content, position);
+  const isValid = contentValidation(heading, content, section, page, position);
 
   if (isValid) {
     try {

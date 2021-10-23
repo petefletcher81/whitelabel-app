@@ -1,4 +1,4 @@
-exports.contentValidation = (page, section, heading, content, position) => {
+exports.contentValidation = (heading, content, section, page, position) => {
   // validation section
   const pages = ["home", "aboutus", "contactus", "footer"];
   const sections = ["1", "2", "3"];
