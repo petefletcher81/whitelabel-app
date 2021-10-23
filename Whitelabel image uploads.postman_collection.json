@@ -1,0 +1,199 @@
+{
+	"info": {
+		"_postman_id": "7a4fbab8-c6d3-4675-9d85-d08bb1f6afdb",
+		"name": "Whitelabel image uploads",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Homepage image 1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/Pete/Documents/test-script/w-app-images/brook-anderson-1M5W_Gni_N4-unsplash.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/{{your-project-name}}/europe-west2/app/images/home/image?position=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"{{your-project-name}}",
+						"europe-west2",
+						"app",
+						"images",
+						"home",
+						"image"
+					],
+					"query": [
+						{
+							"key": "position",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Homepage image 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/Pete/Documents/test-script/w-app-images/brook-anderson-gTQbZXL417Q-unsplash.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/{{your-project-name}}/europe-west2/app/images/home/image?position=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"{{your-project-name}}",
+						"europe-west2",
+						"app",
+						"images",
+						"home",
+						"image"
+					],
+					"query": [
+						{
+							"key": "position",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Homepage image 3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/Pete/Documents/test-script/w-app-images/cindy-chen--7nnXc4jBWU-unsplash.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/{{your-project-name}}/europe-west2/app/images/home/image?position=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"{{your-project-name}}",
+						"europe-west2",
+						"app",
+						"images",
+						"home",
+						"image"
+					],
+					"query": [
+						{
+							"key": "position",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Gallery images add",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/Pete/Documents/test-script/w-app-images/cindy-chen-gpq41VQHxqg-unsplash.jpg"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/Pete/Documents/test-script/w-app-images/farhan-khan-TEWmCKjBHMM-unsplash.jpg"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/Pete/Documents/test-script/w-app-images/hu-chen-FZ0qzjVF_-c-unsplash.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/{{your-project-name}}/europe-west2/app/images/aboutus/gallery",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"{{your-project-name}}",
+						"europe-west2",
+						"app",
+						"images",
+						"aboutus",
+						"gallery"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "your-project-name",
+			"value": "test-project1981"
+		}
+	]
+}
