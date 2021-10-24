@@ -67,6 +67,20 @@ Go to the firebase console and select ${PROJECT_NAME}random number`
 
 select STORAGE and create - choose correct region `europe-west2`
 
+Add the following to security rules
+
+```
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read;
+      allow write: if request.auth != null;
+    }
+  }
+}
+```
+
 ## Firebase Firestore setup
 
 select FIRESTORE DATABASE and create database
@@ -202,11 +216,54 @@ Rinse and repeat for each request - the gallery (last) request can add 3 images 
 
 ---
 
+### Find and replace whitelabel-website
+
+In the folder / file search in vscode - search for `whitelabel-website-7d72b` and replace
+al occurences with your project name
+
+---
+
+### Set new origin for git hub
+
+```
+git remote rm origin
+git remote add origin git@github.com:<yourusername>/<projectname>.git
+
+```
+
+### Set up actions to pair with new repo and firebase project
+
+```
+firebase init
+choose `Hosting: Set up Github Action Deploys`
+
+entry chosen repo `<username>/<repo-name>`
+// this will now add secrets and ask a couple of questions
+
+Set up the workflow to run a build script before every deploy? Y
+
+What script should be ran? npm ci and npm run build
+
+Set up auto deployments when pr is merged? Y
+
+What is the name of the github live channel? main
+
+This will replace a couple of the actions set up witin .github/workflows
+```
+
+---
+
 ### Firebase deploy
 
 Once all the content is added from this script run
 
 ```
+// navigate to the functions folder
+cd functions
+firebase deploy
+
+// navigate to the client folder to deploy app
+cd client
 firebase deploy
 ```
 
