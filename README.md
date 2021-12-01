@@ -184,6 +184,19 @@ firebase serve
 Now we are running on port 5000, we can run
 
 ```
+cd ../client -D
+```
+
+open the `populate-firebase-project`
+replace the url project name on line 125 from
+
+http://localhost:5000/`test-project1981`/europe-west2/app/${url}
+
+to
+
+http://localhost:5000/`yourprojectname`/europe-west2/app/${url}
+
+```
 node populate firebase project
 ```
 
@@ -231,11 +244,45 @@ git remote add origin git@github.com:<yourusername>/<projectname>.git
 
 ```
 
+Navigate to Github
+Create a new repo on git hub with that given name
+
+Then copy and paste these in the command line
+
+```
+git branch -M main
+git push -u origin main
+
+```
+
+---
+
+### Firebase deploy
+
+Just before we deploy you will need to go to the firebase console and upgrade
+the package from `free tier` to `blaze` which is a pay as you go package. This
+can be done in from the bottom left corner of the console menu.
+
+```
+// navigate to the functions folder
+cd functions
+firebase deploy
+
+// navigate to the client folder to deploy app
+cd client
+firebase deploy
+```
+
+This will deploy your functions and app
+
+---
+
 ### Set up actions to pair with new repo and firebase project
 
 ```
+cd into /client
 firebase init
-choose `Hosting: Set up Github Action Deploys`
+choose `Configure files for Firebase Hosting and (optionally) set up GitHub Action deploys`
 
 entry chosen repo `<username>/<repo-name>`
 // this will now add secrets and ask a couple of questions
@@ -250,24 +297,6 @@ What is the name of the github live channel? main
 
 This will replace a couple of the actions set up witin .github/workflows
 ```
-
----
-
-### Firebase deploy
-
-Once all the content is added from this script run
-
-```
-// navigate to the functions folder
-cd functions
-firebase deploy
-
-// navigate to the client folder to deploy app
-cd client
-firebase deploy
-```
-
-This will deploy your functions and app
 
 ---
 
