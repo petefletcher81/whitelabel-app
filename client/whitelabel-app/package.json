@@ -1,0 +1,32 @@
+{
+  "name": "whitelabel-app",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "classnames": "^2.2.6",
+    "identity-obj-proxy": "^3.0.0",
+    "jwt-decode": "^3.1.2",
+    "next": "12.0.7",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "redux": "^4.1.2",
+    "redux-logger": "^3.0.6",
+    "sass": "^1.44.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "babel-jest": "^27.0.6",
+    "eslint": "8.4.0",
+    "eslint-config-next": "12.0.7",
+    "jest": "^26.6.3",
+    "msw": "^0.35.0",
+    "nock": "^13.0.7"
+  }
+}

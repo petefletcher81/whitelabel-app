@@ -1,0 +1,465 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+
+// css properties
+:root {
+  --primary-color: #565b87;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Robobo", sans-serif;
+  color: #0e0e0e;
+  line-height: 1.6;
+  background-color: #e6e6e6;
+}
+
+ul {
+  // no bullets for uls
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+h1,
+h2 {
+  font-weight: 300;
+  line-height: 1.2;
+  // margin top and bottom
+  margin: 10px 0;
+}
+
+p {
+  margin: 10px 0;
+}
+
+img {
+  // ensures img doesnt break out of div
+  max-width: 100%;
+  // max-height: 100%;
+  display: block;
+}
+
+.hidden {
+  overflow: hidden;
+}
+
+visible {
+  overflow: visible;
+}
+
+.scroll-x {
+  overflow-x: scroll;
+}
+
+.scroll-y {
+  overflow-y: scroll;
+}
+
+.container {
+  max-width: 80%;
+  // keep it in the middle
+  margin: 0 auto;
+}
+
+// Utility
+.btn {
+  display: inline-block;
+  padding: 10px 30px;
+  cursor: pointer;
+  color: white;
+  border-radius: 0.25rem;
+  background-color: var(--primary-color);
+  border: none;
+}
+
+.btn-tertiary {
+  display: inline-block;
+  padding: 10px 30px;
+  cursor: pointer;
+  color: var(--primary-color);
+  border-radius: 0.25rem;
+  background-color: white;
+  border: 1px solid var(--primary-color);
+}
+
+.btn-alert {
+  display: inline-block;
+  padding: 10px 30px;
+  cursor: pointer;
+  color: white;
+  border-radius: 0.25rem;
+  background-color: red;
+  border: none;
+}
+
+.btn:hover,
+.btn-alert:hover,
+.btn-tertiary:hover {
+  transform: scale(0.98);
+}
+
+.btn-alert:disabled {
+  display: inline-block;
+  padding: 10px 30px;
+  cursor: none;
+  color: white;
+  border-radius: 0.25rem;
+  background-color: #ccc;
+  border: none;
+}
+
+// colours
+.text-white {
+  color: white;
+}
+
+.text-error {
+  color: red;
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.shaded {
+  background-color: #d6d6d6;
+}
+
+// display
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // height whatever the container is
+  height: 100%;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+// size
+.w-500 {
+  width: 500px;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-min {
+  min-width: 0;
+}
+
+.w-80 {
+  width: 80%;
+}
+.w-50 {
+  width: 50%;
+}
+
+.w-min-100 {
+  max-width: 100%;
+}
+
+.h-0 {
+  height: 0%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.h-half {
+  height: 50%;
+}
+
+.h-75 {
+  height: 75%;
+}
+
+.h-1 {
+  height: 1rem;
+}
+
+.h-4 {
+  height: 4rem;
+}
+
+.h-auto {
+  height: auto;
+}
+
+.h-vh75 {
+  height: 75vh;
+}
+
+.h-max-100 {
+  max-height: 100%;
+}
+
+// spacing
+.m-1 {
+  margin: 16px;
+}
+
+.my-1 {
+  margin: 16px 0;
+}
+
+.my-2 {
+  margin: 24px 0;
+}
+
+.mx-1 {
+  margin: 0 16px;
+}
+
+.mx-2 {
+  margin: 0 24px;
+}
+
+.mx-4 {
+  margin: 0 64px;
+}
+
+.mb-1 {
+  margin: 0 0 16px 0;
+}
+
+.mb-2 {
+  margin: 0 0 24px 0;
+}
+
+.mb-3 {
+  margin: 0 0 32px 0;
+}
+
+.mt-1 {
+  margin: 16px 0 0 0;
+}
+
+.mt-4 {
+  margin: 64px 0 0 0;
+}
+
+.p-1 {
+  padding: 16px;
+}
+
+.p-2 {
+  padding: 32px;
+}
+
+.py-1 {
+  padding: 16px 0;
+}
+
+.px-1 {
+  padding: 0 16px;
+}
+
+.pt-1 {
+  padding: 16px 0 0 0;
+}
+
+.pb-1 {
+  padding: 0 0 16px 0;
+}
+
+.pb-2 {
+  padding: 0 0 24px 0;
+}
+
+.spacer-100 {
+  width: 100px;
+}
+
+// Headings
+.heading {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.heading-sm {
+  font-size: 1rem;
+}
+
+// aligning
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+// text
+.text-center {
+  text-align: center;
+}
+
+.text-title-m {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-bold {
+  font-weight: 700;
+}
+
+// borders
+.border-white {
+  border: 1px solid #fff;
+}
+
+.border-primary {
+  border: 1px solid var(--primary-color);
+}
+
+.border-tb-2 {
+  border-top: 2px solid var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.border-bottom {
+  padding-bottom: 12px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+}
+
+.border-bottom-primary {
+  border-color: var(--primary-color);
+  padding-bottom: 12px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+}
+
+.border-bottom-sm {
+  border-color: var(--primary-color);
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+}
+
+.border-right-sm {
+  border-color: var(--primary-color);
+  border-right-style: solid;
+  border-right-width: 2px;
+}
+
+.border-rounded {
+  border-color: var(--primary-color);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 0.25rem;
+}
+
+.border-wrapper {
+  border-top: 2px solid var(--primary-color);
+  border-left: 2px solid var(--primary-color);
+  border-right: 2px solid var(--primary-color);
+}
+
+.shadow-1 {
+  box-shadow: 3px 5px 7px rgba(0, 0, 0, 0.5);
+}
+
+.shadow-soft {
+  box-shadow: 3px 5px 7px rgba(0, 0, 0, 0.12);
+}
+
+.rounded-1 {
+  border-radius: 0.25rem;
+}
+
+// Forms
+.form {
+  display: flex;
+  background-color: #fff;
+  border-radius: 0.25rem;
+  box-shadow: 3px 5px 7px rgba(0, 0, 0, 0.5);
+  color: var(--primary-color);
+  flex-direction: column;
+  height: 250px;
+  width: 100%;
+  justify-content: center;
+  padding: 1rem;
+  margin: 0.5rem;
+  z-index: 1;
+}
+
+.form-control {
+  margin: 30px 0;
+}
+
+.form-control input[type="text"],
+.form-control input[type="email"],
+.form-control input[type="password"] {
+  border: 0;
+  border-bottom: 1px solid var(--primary-color);
+  width: 100%;
+  padding: 3px;
+}
+
+.form-control input:focus {
+  outline: none;
+}
+
+.form h2 {
+  margin-bottom: 0 !important;
+}
+
+@media (min-width: 990px) {
+  .form {
+    width: 80%;
+  }
+}
+
+.opacity-low {
+  opacity: 0.7;
+}

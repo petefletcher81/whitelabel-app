@@ -1,9 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import NavItems from "../navitems/NavItems";
-import "./Navbar.scss";
 
 const Navbar = ({ toggle, handleToggle }) => {
-  const mobile = window.innerWidth < 990;
+  let mobile;
+
+  if (typeof window !== "undefined") {
+    mobile = window.innerWidth < 990;
+  }
+
   const ref = useRef();
 
   if (mobile) {

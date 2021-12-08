@@ -2,7 +2,7 @@
   flex-direction: column;
   & li {
     display: flex;
-    color: white;
+    color: var(--primary-color);
     height: 4rem;
     align-items: center;
     text-align: center;

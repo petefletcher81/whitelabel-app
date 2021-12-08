@@ -1,9 +1,12 @@
-import React from "react";
-import { fireEvent, render, screen } from "../../test-utils/custom-utils";
-import { Router } from "react-router-dom";
-import { createMemoryHistory } from "history";
 import "@testing-library/jest-dom/extend-expect";
-
+import { createMemoryHistory } from "history";
+import React from "react";
+import { Router } from "react-router-dom";
+import {
+  fireEvent,
+  render,
+  screen,
+} from "../../../src/test-utils/custom-utils";
 import Navbar from "./Navbar";
 
 const history = createMemoryHistory();

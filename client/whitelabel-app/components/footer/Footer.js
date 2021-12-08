@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { getFooterContent } from "../../utils/apiCalls";
-import ContentError from "../../utils/contentError";
 import classnames from "classnames";
-import "./Footer.scss";
-import { waitForElementToBeRemoved } from "@testing-library/dom";
+import React, { useEffect, useState } from "react";
+import { getFooterContent } from "../../pages/api/apiCalls";
+import ContentError from "../../utils/contentError";
 
 const Footer = () => {
   const [footerContent, setFooterContent] = useState(null);
   const [error, setError] = useState(null);
-  const mobile = window.innerWidth < 990;
+
+  let mobile;
+
+  if (typeof window !== "undefined") {
+    mobile = window.innerWidth < 990;
+  }
 
   useEffect(() => {
     const getAllFooterContent = async () => {

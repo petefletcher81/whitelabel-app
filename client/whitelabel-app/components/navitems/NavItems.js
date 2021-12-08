@@ -1,11 +1,10 @@
-import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
-import { userSignout } from "../../utils/apiCalls";
-import { UserContext } from "../App";
-import "./NavItems.scss";
+import Link from "next/link";
+import React, { useState } from "react";
+// import { userSignout } from "../../utils/apiCalls";
+// import { UserContext } from "../App";
 
 const NavItems = () => {
-  const { admin } = useContext(UserContext);
+  // const { admin } = useContext(UserContext);
   const [signoutError, setSignoutError] = useState(null);
   const [signoutSuccess, setSignoutSuccess] = useState(null);
 
@@ -26,18 +25,18 @@ const NavItems = () => {
     <>
       <div className="navitem flex">
         <li role="menuitem" aria-label="home navigation">
-          <Link to="/">Home</Link>
+          <Link href="/">Home</Link>
         </li>
         <li role="menuitem" aria-label="about us navigation">
-          <Link to="aboutus">About Us</Link>
+          <Link href="aboutus">About Us</Link>
         </li>
         <li role="menuitem" aria-label="contact us navigation">
-          <Link to="/contactus">Contact Us</Link>
+          <Link href="/contactus">Contact Us</Link>
         </li>
-        {admin && !signoutSuccess && (
+        {/* {admin && !signoutSuccess && (
           <>
             <li role="menuitem" aria-label="dashboard navigation">
-              <Link to="/dashboard">Dashboard</Link>
+              <Link href="/dashboard">Dashboard</Link>
             </li>
             <li
               role="menuitem"
@@ -53,7 +52,7 @@ const NavItems = () => {
               </button>
             </li>
           </>
-        )}
+        )} */}
       </div>
       {signoutError && <div className="w-full">{signoutError}</div>}
       {signoutSuccess && <div className="w-full">{signoutSuccess}</div>}
