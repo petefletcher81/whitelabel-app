@@ -9,6 +9,13 @@ const HomePage = ({ content, images }) => {
       ? { message: "Missing content / Failed to load" }
       : null;
 
+  let isMobile;
+  if (typeof window !== "undefined") {
+    isMobile = window.innerWidth < 990;
+  }
+
+  const mobileStyles = isMobile && "px-1";
+
   return (
     <section className="homepage relative" data-testid="homepage-section ">
       {contentError && !content && <ContentError error={contentError} />}
@@ -28,6 +35,12 @@ const HomePage = ({ content, images }) => {
               index={index}
               key={`${section.id}-${index}`}
               testid={"home-content"}
+              isMobile
+              customStyles={{
+                image: "object-cover h-500",
+                container: isMobile ? "pb-4" : "my-3",
+                content: mobileStyles ? mobileStyles : "pl-1",
+              }}
             />
           );
         })}
