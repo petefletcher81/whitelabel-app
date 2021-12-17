@@ -25,34 +25,17 @@ const ContentCard = ({
     });
   }
 
-  const mobileStyles = "pb-1 px-2 w-full";
-
   return (
-    <div
-      className={`flex bg-white my-2 ${isMobile ? "flex-col" : "h-500"} ${
-        customStyles.container
-      }`}
-      data-testid={testid}
-    >
+    <div className={`content-card bg-white my-2`} data-testid={testid}>
       {images && findImage && isBefore && (
-        <div
-          className={`content-image-wrapper-${index}  ${
-            isMobile && mobileStyles
-          } ${isMobile ? customStyles.wrapper : ""} flex w-500`}
-        >
+        <div className={`content-image-wrapper-${index} flex `}>
           <img className={`${customStyles.image}`} src={findImage.image} />
         </div>
       )}
-      <div className={`content-${index} ${isMobile ? "w-full flex" : ""}`}>
-        <div className={`flex w-500`}>
-          <div
-            className={`content-text-wrapper-${index} ${customStyles.content}`}
-          >
-            <div
-              className={`content__section-heading my-1 heading  ${
-                isMobile ? "text-center" : ""
-              }`}
-            >
+      <div className={`content-card__content`}>
+        <div className={`flex`}>
+          <div className={`content-text-wrapper-${index}`}>
+            <div className={`content__section-heading my-1 heading`}>
               {content["heading"]}
             </div>
             <div className="content__section-content mx-1 mb-2">
@@ -63,9 +46,8 @@ const ContentCard = ({
       </div>
       {images && findImage && isAfter && !isBefore && (
         <div
-          className={`content-image-wrapper-${index} w-500 ${
-            isMobile && mobileStyles
-          }  flex`}
+          className={`content-image-wrapper-${index}  
+            flex`}
         >
           <img className={`${customStyles.image}`} src={findImage.image} />
         </div>

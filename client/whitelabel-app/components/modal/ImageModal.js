@@ -87,7 +87,7 @@ const ImageModal = ({ data, setSelectedImage, showModal }) => {
     if (!images || !banner) {
       return (
         <div
-          className={`backdrop  w-full h-full flex`}
+          className={`backdrop backdrop__${page} w-full h-full flex`}
           data-testid="backdrop"
           onClick={(e) => {
             !images ? setSelectedImage(null) : null;

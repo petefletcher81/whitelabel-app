@@ -1,0 +1,29 @@
+.content-card {
+  padding-bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 100%;
+  }
+
+  @media (min-width: 990px) {
+    display: flex;
+    flex-direction: row;
+    margin: 16px 16px;
+
+    img {
+      width: 500px;
+    }
+  }
+
+  &__content {
+    padding: 0 16px 0 16px;
+
+    @media (min-width: 990px) {
+      width: 500px;
+    }
+  }
+}

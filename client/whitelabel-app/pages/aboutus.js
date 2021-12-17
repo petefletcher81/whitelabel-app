@@ -1,8 +1,8 @@
 import React from "react";
+import ContentCard from "../components/contentCard/ContentCard";
 import Gallery from "../components/gallery/Gallery";
-import useSetSelected from "../contexts/useSetSelectedImage";
+import useSetSelected from "../customHooks/useSetSelectedImage";
 import { getAllImages, getContent } from "../pages/api/apiCalls";
-import ContentCard from "../utils/ContentCard";
 import ContentError from "../utils/contentError";
 
 // how do we pass set~Selected
@@ -20,7 +20,9 @@ const AboutUs = ({ content, images }) => {
     >
       <div className="bg-white w-full">
         {contentError && !content && <ContentError error={contentError} />}
-        {content && !contentError && <ContentCard content={content[0]} />}
+        {content && !contentError && (
+          <ContentCard content={content[0]} customStyles={{ content: "" }} />
+        )}
       </div>
       <Gallery
         images={images}
@@ -28,7 +30,9 @@ const AboutUs = ({ content, images }) => {
         page="aboutus"
       />
       <div className="bg-white w-full">
-        {content && !contentError && <ContentCard content={content[1]} />}
+        {content && !contentError && (
+          <ContentCard customStyles={{ content: "" }} content={content[1]} />
+        )}
       </div>
     </section>
   );

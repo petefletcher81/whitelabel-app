@@ -4,8 +4,36 @@
   color: #fff;
 }
 
+.company-details {
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 990px) {
+    flex-direction: row;
+  }
+}
+
+.fas {
+  padding-bottom: 16px;
+
+  @media (min-width: 990px) {
+    padding-bottom: 0px;
+  }
+}
+
 .social-icons {
   color: #fff;
+}
+
+.footer-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  @media (min-width: 990px) {
+    flex-direction: row;
+  }
 }
 
 @media (min-width: 990px) {

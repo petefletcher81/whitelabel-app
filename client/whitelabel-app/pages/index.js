@@ -1,5 +1,5 @@
 import React from "react";
-import ContentCard from "../utils/ContentCard";
+import ContentCard from "../components/contentCard/ContentCard";
 import ContentError from "../utils/contentError";
 import { getContent, getImages } from "./api/apiCalls";
 
@@ -8,13 +8,6 @@ const HomePage = ({ content, images }) => {
     !content || !images
       ? { message: "Missing content / Failed to load" }
       : null;
-
-  let isMobile;
-  if (typeof window !== "undefined") {
-    isMobile = window.innerWidth < 990;
-  }
-
-  const mobileStyles = isMobile && "px-1";
 
   return (
     <section className="homepage relative" data-testid="homepage-section ">
@@ -35,11 +28,10 @@ const HomePage = ({ content, images }) => {
               index={index}
               key={`${section.id}-${index}`}
               testid={"home-content"}
-              isMobile
+              isMobile={isMobile}
               customStyles={{
                 image: "object-cover h-500",
-                container: isMobile ? "pb-4" : "my-3",
-                content: mobileStyles ? mobileStyles : "pl-1",
+                container: "whitelabel",
               }}
             />
           );
@@ -48,7 +40,7 @@ const HomePage = ({ content, images }) => {
   );
 };
 
-export async function getStaticProps() {
+export async function getStaticProps(context) {
   const [content, images] = await Promise.all([
     getContent("home"),
     getImages("home"),

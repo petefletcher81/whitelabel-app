@@ -8,7 +8,6 @@ const Footer = () => {
   const [error, setError] = useState(null);
 
   let mobile;
-
   if (typeof window !== "undefined") {
     mobile = window.innerWidth < 990;
   }
@@ -28,7 +27,6 @@ const Footer = () => {
     // need to clean up so no memory leak in tests
     return () => {};
   }, []);
-
   const generateFooterCompany = ({
     companyName,
     companyAddress,
@@ -45,48 +43,29 @@ const Footer = () => {
         {companyAddress && (
           <div
             className={classnames(
-              "company-details border-bottom m-1 flex text-center",
-              {
-                "flex-col ": mobile,
-              }
+              "company-details border-bottom m-1 flex text-center"
             )}
           >
-            <i
-              className={classnames("fas fa-2x fa-home ", {
-                "pb-1": mobile,
-              })}
-            ></i>
+            <i className={classnames("fas fa-2x fa-home ", {})}></i>
             <div className="px-1">{companyAddress}</div>
           </div>
         )}
         {contactNumber && (
           <div
-            className={classnames("company-details border-bottom m-1 flex", {
-              "flex-col": mobile,
-            })}
+            className={classnames("company-details border-bottom m-1 flex", {})}
           >
             <div>
-              <i
-                className={classnames("fas fa-2x fa-phone ", {
-                  "pb-1": mobile,
-                })}
-              ></i>
+              <i className={classnames("fas fa-2x fa-phone ", {})}></i>
             </div>
             <div className="px-1">{contactNumber}</div>
           </div>
         )}
         {mobileNumber && (
           <div
-            className={classnames("company-details border-bottom m-1 flex", {
-              "flex-col": mobile,
-            })}
+            className={classnames("company-details border-bottom m-1 flex", {})}
           >
             <div>
-              <i
-                className={classnames("fas fa-2x fa-mobile ", {
-                  "pb-1": mobile,
-                })}
-              ></i>
+              <i className={classnames("fas fa-2x fa-mobile ", {})}></i>
             </div>
             <div className="px-1">{mobileNumber}</div>
           </div>
@@ -107,7 +86,7 @@ const Footer = () => {
         {socialFacebook && (
           <div>
             <a href={socialFacebook}>
-              <i className=" social-icons fab fa-2x fa-facebook px-1"></i>
+              <i className="social-icons fab fa-2x fa-facebook px-1"></i>
             </a>
           </div>
         )}
@@ -145,12 +124,7 @@ const Footer = () => {
 
   return (
     <div className="footer" data-testid="footer-section">
-      <div
-        className={classnames("justify-between", {
-          "flex flex-col": mobile,
-          flex: !mobile,
-        })}
-      >
+      <div className={"footer-wrapper"}>
         {!footerContent && !error && <div className="loading">Loading ...</div>}
         {error && !footerContent && <ContentError error={error} />}
         {footerContent &&
