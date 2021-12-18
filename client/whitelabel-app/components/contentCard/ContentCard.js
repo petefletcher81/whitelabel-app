@@ -13,7 +13,6 @@ const ContentCard = ({
   },
   isBefore = false,
   isAfter = true,
-  isMobile,
 }) => {
   const positionIndex = index + 1;
 

@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "../components/layout/Layout";
 import "../styles/AboutUs.scss";
 import "../styles/App.scss";
+import "../styles/ContactUs.scss";
 import "../styles/ContentCard.scss";
 import "../styles/Footer.scss";
 import "../styles/Gallery.scss";

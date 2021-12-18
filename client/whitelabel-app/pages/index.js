@@ -28,7 +28,6 @@ const HomePage = ({ content, images }) => {
               index={index}
               key={`${section.id}-${index}`}
               testid={"home-content"}
-              isMobile={isMobile}
               customStyles={{
                 image: "object-cover h-500",
                 container: "whitelabel",
