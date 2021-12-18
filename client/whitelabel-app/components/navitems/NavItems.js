@@ -1,12 +1,14 @@
 import Link from "next/link";
-import React, { useState } from "react";
-// import { userSignout } from "../../utils/apiCalls";
-// import { UserContext } from "../App";
+import React, { useContext, useState } from "react";
+import { userSignout } from "../../pages/api/apiCalls";
+import { UserContext } from "../../pages/_app";
 
 const NavItems = () => {
-  // const { admin } = useContext(UserContext);
+  const { admin } = useContext(UserContext);
   const [signoutError, setSignoutError] = useState(null);
   const [signoutSuccess, setSignoutSuccess] = useState(null);
+
+  console.log("this is admin", admin);
 
   const handleSignout = async () => {
     try {
@@ -33,7 +35,7 @@ const NavItems = () => {
         <li role="menuitem" aria-label="contact us navigation">
           <Link href="/contactus">Contact Us</Link>
         </li>
-        {/* {admin && !signoutSuccess && (
+        {admin && !signoutSuccess && (
           <>
             <li role="menuitem" aria-label="dashboard navigation">
               <Link href="/dashboard">Dashboard</Link>
@@ -52,7 +54,7 @@ const NavItems = () => {
               </button>
             </li>
           </>
-        )} */}
+        )}
       </div>
       {signoutError && <div className="w-full">{signoutError}</div>}
       {signoutSuccess && <div className="w-full">{signoutSuccess}</div>}

@@ -1,0 +1,146 @@
+.dashboard {
+  font-size: 0.85rem;
+  &__footer-company-details.flex {
+    align-items: baseline;
+  }
+
+  &__footer-headings.grid {
+    grid-template-columns: repeat(6, minmax(100px, 300px));
+    text-align: center;
+  }
+
+  &__images-content-wrapper {
+    height: 40vh;
+    box-shadow: 3px 5px 7px rgba(0, 0, 0, 0.5);
+  }
+
+  &__footer-content.grid {
+    grid-template-columns: repeat(6, minmax(100px, 300px));
+    text-align: center;
+  }
+
+  &__footer-content-social.grid {
+    grid-template-columns: repeat(7, minmax(100px, 250px));
+    text-align: center;
+  }
+
+  &__footer-headings-social.grid {
+    grid-template-columns: repeat(7, minmax(100px, 250px));
+    text-align: center;
+  }
+
+  &__heading {
+    font-size: 1rem;
+    border-bottom: 2px solid var(--primary-color);
+  }
+
+  &__enquiry-content-wrapper {
+    grid-template-columns: repeat(1, 1fr);
+    align-items: flex-start;
+  }
+
+  &__enquiries {
+    &--headings.grid {
+      grid-template-columns: repeat(4, 1fr);
+      font-size: 0.85rem;
+    }
+
+    &--contents.grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    &--is-mobile {
+      display: none;
+      @media (min-width: 990px) {
+        display: block;
+      }
+    }
+  }
+
+  &__content {
+    &--headings.grid {
+      grid-template-columns: 1fr 2fr 1fr 1fr;
+      font-size: 0.85rem;
+    }
+
+    &--contents.grid {
+      grid-template-columns: 1fr 2fr 1fr 1fr;
+    }
+  }
+
+  &__images {
+    &--headings.grid {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+
+    &--contents.grid {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+
+    &--is-mobile {
+      display: none;
+      @media (min-width: 990px) {
+        display: block;
+      }
+    }
+  }
+
+  &__form-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: auto;
+    flex-wrap: wrap;
+    overflow-x: scroll;
+    padding-left: 16px;
+  }
+
+  &__form-button-wrapper {
+    justify-items: flex-start;
+  }
+
+  @media (min-width: 990px) {
+    &__enquiry-content-wrapper {
+      grid-template-columns: repeat(2, 1fr);
+      justify-content: flex-start;
+    }
+
+    &__content-wrapper {
+      height: 40vh;
+    }
+
+    &__enquiry-wrapper {
+      height: 40vh;
+    }
+
+    &__content {
+      &--headings.grid {
+        grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+      }
+
+      &--contents.grid {
+        grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+      }
+    }
+
+    &__enquiries {
+      &--headings.grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      &--contents.grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    &__images {
+      &--headings.grid {
+        grid-template-columns: repeat(2, 1fr) 2fr repeat(2, 1fr);
+      }
+
+      &--contents.grid {
+        grid-template-columns: repeat(2, 1fr) 2fr repeat(2, 1fr);
+      }
+    }
+  }
+}
