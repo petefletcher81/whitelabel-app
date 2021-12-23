@@ -53,6 +53,7 @@
       display: none;
       @media (min-width: 990px) {
         display: block;
+        line-break: anywhere;
       }
     }
   }
@@ -93,6 +94,10 @@
     flex-wrap: wrap;
     overflow-x: scroll;
     padding-left: 16px;
+
+    @media (min-width: 990px) {
+      justify-content: center;
+    }
   }
 
   &__form-button-wrapper {
@@ -115,11 +120,15 @@
 
     &__content {
       &--headings.grid {
-        grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 2fr 1fr 1fr 2fr;
       }
 
       &--contents.grid {
-        grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 2fr 1fr 1fr 2fr;
+      }
+
+      .btn {
+        min-height: 48px;
       }
     }
 

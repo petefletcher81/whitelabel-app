@@ -7,7 +7,7 @@
     "test": "concurrently \"firebase serve\" \"jest --watch\""
   },
   "engines": {
-    "node": "12"
+    "node": "16"
   },
   "main": "index.js",
   "dependencies": {

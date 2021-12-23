@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import ImageModal from "../modal/ImageModal";
 
 const Gallery = ({ images, onClickEvent, page, isSelected }) => {
   const gridStyles = page && `grid${page}`;
-  const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const modalRef = React.useRef();
 
   return (
@@ -22,7 +21,7 @@ const Gallery = ({ images, onClickEvent, page, isSelected }) => {
                 data-testid={`gallery-image-${index}`}
                 key={`${image.id}-${index}`}
                 onClick={() => {
-                  setShowModal(true);
+                  isSelected && setShowModal(true);
                   onClickEvent({ imageUrl, referrerPage, image, page });
                   setSelectedImage({ page, ...image });
                 }}
@@ -37,7 +36,7 @@ const Gallery = ({ images, onClickEvent, page, isSelected }) => {
             );
           })}
       </div>
-      {showModal && (
+      {showModal && isSelected !== null && (
         <div className="" ref={modalRef}>
           <ImageModal
             data={selectedImage}

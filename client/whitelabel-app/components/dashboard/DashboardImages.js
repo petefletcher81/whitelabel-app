@@ -8,6 +8,8 @@ const DashboardImages = ({
   images,
   imageError,
   setToggleContentModal,
+  setModalInformation,
+  showContentModal,
   setFetchNewImages,
 }) => {
   const [imagesUpload, setImagesUpload] = useState(null);
@@ -180,13 +182,19 @@ const DashboardImages = ({
                     </div>
                     <button
                       className="btn p-1"
-                      onClick={() =>
+                      onClick={() => {
+                        setModalInformation({
+                          item: image,
+                          page: "images",
+                          type: "image-content",
+                        });
+                        showContentModal(true);
                         setToggleContentModal({
                           item: image,
                           page: "images",
                           type: "image-content",
-                        })
-                      }
+                        });
+                      }}
                     >
                       Edit
                     </button>

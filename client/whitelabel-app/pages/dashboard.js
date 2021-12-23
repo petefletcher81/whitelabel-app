@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import DashboardContentCard from "../components/dashboard/DashboardContentCard";
 import DashboardImages from "../components/dashboard/DashboardImages";
+import ContentModal from "../components/modal/ContentModal";
+import ImageModal from "../components/modal/ImageModal";
 import useSetSelected from "../customHooks/useSetSelectedImage";
 import {
   getAllContent,
@@ -21,6 +23,7 @@ const Dashboard = ({
   const [content, setContent] = useState(initContent);
   const [footer, setFooter] = useState(footerContent);
   const [images, setImages] = useState(initImages);
+  const modalRef = React.useRef();
 
   const [contentError, setContentError] = useState(null);
   const [enquiriesError, setEnquiriesError] = useState(null);
@@ -29,6 +32,11 @@ const Dashboard = ({
   const [company, setCompany] = useState(null);
   const [social, setSocial] = useState(null);
   const [fetchNewImages, setFetchNewImages] = useState(false);
+
+  // modal functionality
+  const [showContentModal, setShowContentModal] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [modalInformation, setModalInformation] = useState(null);
   const setImageModal = useSetSelected("Image");
   const setContentModal = useSetSelected("Content");
 
@@ -114,7 +122,13 @@ const Dashboard = ({
                         <button
                           className="btn p-1"
                           onClick={() => {
-                            setToggleContentModal({
+                            setContentModal.setSelectedContent({
+                              item: enquiry,
+                              page: "enquiries",
+                              type: "enquiries-content",
+                            });
+                            setShowContentModal(true);
+                            setModalInformation({
                               item: enquiry,
                               page: "enquiries",
                               type: "enquiries-content",
@@ -154,11 +168,6 @@ const Dashboard = ({
             <div className="dashboard__content--heading-page text-primary">
               Page
             </div>
-            {/* {!mobile && (
-              <div className="dashboard__content--heading text-primary spacer-50">
-                Created At
-              </div>
-            )} */}
             <div className="dashboard__content--heading text-primary"></div>
             <div className="dashboard__content--heading text-primary"></div>
           </div>
@@ -175,13 +184,16 @@ const Dashboard = ({
                     key={`${section.createdAt}-${index}-dashboard`}
                   >
                     <DashboardContentCard
-                      // mobile={mobile}
                       page={section.page}
                       section={section}
                       index={index}
                       datatestid={"home-content-dashboard"}
                       setToggleContentModal={setContentModal.setSelectedContent}
+                      setToggleImageModal={setImageModal.setSelectedImage}
                       setSelectedImage={setImageModal.setSelectedImage}
+                      setModalInformation={setModalInformation}
+                      showContentModal={setShowContentModal}
+                      showImageModal={setShowImageModal}
                       images={images}
                     />
                   </div>
@@ -202,6 +214,8 @@ const Dashboard = ({
           images={images}
           imageError={imageError}
           setFetchNewImages={setFetchNewImages}
+          setModalInformation={setModalInformation}
+          showContentModal={setShowContentModal}
         />
         <div
           className="dashboard__footer-company-wrapper border-wrapper 
@@ -265,13 +279,18 @@ const Dashboard = ({
                   </Row>
                   <button
                     className="btn p-1"
-                    onClick={() =>
-                      setToggleContentModal({
+                    onClick={() => {
+                      setModalInformation({
                         item: company,
                         page: "footer",
                         type: "footer-content",
-                      })
-                    }
+                      });
+                      setShowContentModal({
+                        item: company,
+                        page: "footer",
+                        type: "footer-content",
+                      });
+                    }}
                   >
                     Edit
                   </button>
@@ -340,13 +359,18 @@ const Dashboard = ({
                   <Row className="dashboard__footer--content">{social?.id}</Row>
                   <button
                     className="btn p-1"
-                    onClick={() =>
-                      setToggleContentModal({
+                    onClick={() => {
+                      setModalInformation({
                         item: social,
                         page: "footer",
                         type: "footer-content",
-                      })
-                    }
+                      });
+                      setShowContentModal({
+                        item: social,
+                        page: "footer",
+                        type: "footer-content",
+                      });
+                    }}
                   >
                     Edit
                   </button>
@@ -361,12 +385,28 @@ const Dashboard = ({
           )}
         </div>
       </div>
+      {showContentModal && (
+        <div className="" ref={modalRef}>
+          <ContentModal
+            data={modalInformation}
+            setToggleContentModal={setShowContentModal}
+          />
+        </div>
+      )}
+      {showImageModal && (
+        <div className="" ref={modalRef}>
+          <ImageModal
+            data={modalInformation}
+            showModal={setShowImageModal}
+            setSelectedImage={setImageModal.setSelectedImage}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
-export async function getServerSideProps(req) {
-  console.log(req);
+export async function getServerSideProps(req, res) {
   const [initContent, initImages, initEnquiries, footerContent] =
     await Promise.all([
       getAllContent(),

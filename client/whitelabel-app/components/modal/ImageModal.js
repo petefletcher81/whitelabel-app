@@ -84,7 +84,7 @@ const ImageModal = ({ data, setSelectedImage, showModal }) => {
   };
 
   const modalContent = () => {
-    if (!images || !banner) {
+    if (!images) {
       return (
         <div
           className={`backdrop backdrop__${page} w-full h-full flex`}
