@@ -1,3 +1,4 @@
+import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import DashboardContentCard from "../components/dashboard/DashboardContentCard";
 import DashboardImages from "../components/dashboard/DashboardImages";
@@ -406,7 +407,27 @@ const Dashboard = ({
   );
 };
 
-export async function getServerSideProps(req, res) {
+export async function getServerSideProps(context) {
+  const { req, res } = context;
+  const { cookies } = req;
+  let isAdmin;
+  console.log("request", typeof req);
+  console.log("request", cookies);
+
+  if (cookies.token) {
+    const decodedToken = jwtDecode(cookies.token);
+    isAdmin = decodedToken?.admin;
+    console.log(isAdmin);
+  }
+
+  if (!isAdmin)
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+
   const [initContent, initImages, initEnquiries, footerContent] =
     await Promise.all([
       getAllContent(),

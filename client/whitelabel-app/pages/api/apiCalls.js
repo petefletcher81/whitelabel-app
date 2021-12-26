@@ -64,6 +64,7 @@ export const passwordReset = async () => {
 
 export const userSignout = async () => {
   // TODO - need a back off function for bots1
+  document.cookie = "token=";
   const { data } = await axios.post(`/signout`, {});
   return data;
 };

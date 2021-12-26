@@ -41,6 +41,8 @@ function MyApp({ Component, pageProps }) {
     const decodedToken = jwtDecode(token);
     if (decodedToken.admin === true) {
       admin = true;
+      const expires = new Date(Date.now() + 86400 * 1000).toUTCString();
+      document.cookie = `token=${token}; expires=" ${expires + 86400})";`;
     } else {
       admin = false;
     }

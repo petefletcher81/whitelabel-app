@@ -12,6 +12,10 @@ const SignIn = () => {
     setSignIn({ ...signIn, [name]: value });
   };
 
+  if (typeof window !== "undefined") {
+    document.cookie = "username=John Doe";
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
