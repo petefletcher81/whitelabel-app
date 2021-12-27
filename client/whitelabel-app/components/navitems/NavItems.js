@@ -8,8 +8,6 @@ const NavItems = () => {
   const [signoutError, setSignoutError] = useState(null);
   const [signoutSuccess, setSignoutSuccess] = useState(null);
 
-  console.log("this is admin", admin);
-
   const handleSignout = async () => {
     try {
       const response = await userSignout();
