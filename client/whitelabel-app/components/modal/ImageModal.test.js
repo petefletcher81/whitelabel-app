@@ -1,5 +1,5 @@
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
-import { fireEvent, render, screen } from "../../test-utils/custom-utils";
 import { contentBuilder } from "../../test-utils/test-helpers";
 import ImageModal from "./ImageModal";
 
@@ -14,6 +14,7 @@ describe("<ImageModal />", () => {
           relatedContent: allContent[0],
         }}
         setSelectedImage={jest.fn()}
+        showModal={jest.fn()}
       />
     );
 
@@ -24,6 +25,7 @@ describe("<ImageModal />", () => {
   it("should allow user to close the image modal", () => {
     const { allContent, imageContent } = contentBuilder();
     const mockClose = jest.fn();
+
     render(
       <ImageModal
         data={{
@@ -31,12 +33,15 @@ describe("<ImageModal />", () => {
           page: "dashboard",
           relatedContent: allContent[0],
         }}
+        showModal={jest.fn()}
         setSelectedImage={mockClose}
       />
     );
 
     const closeButton = screen.getByRole("button", { name: "Close" });
+
     fireEvent.click(closeButton);
+
     expect(mockClose).toHaveBeenCalled();
   });
 });

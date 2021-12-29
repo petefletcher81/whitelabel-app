@@ -11,7 +11,6 @@ const Layout = ({ children }) => {
     setToggle(newValue);
   };
 
-  console.log("YOOOOOO");
   return (
     <>
       <Navbar toggle={toggle} handleToggle={handleToggle} />

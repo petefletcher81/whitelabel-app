@@ -5,6 +5,14 @@ axios.defaults.baseURL =
 
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
+let token = "";
+if (typeof window !== "undefined" && document?.cookie) {
+  token = document.cookie
+    .split(";")
+    .find((cookie) => cookie.includes("token"))
+    .split("=")[1];
+}
+
 export const getContent = async (page) => {
   const { data } = await axios.get(`/content/${page}`);
   return data;
@@ -78,13 +86,22 @@ export const updateImageContent = async (
   const addQuery = position ? `?position=${position}` : "";
   const { data } = await axios.put(
     `/images/${page}/${section}${addQuery}`,
-    updatedContent
+    updatedContent,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   );
   return data;
 };
 
 export const updateData = async (page, updatedContent, section) => {
-  const { data } = await axios.put(`/${page}/${section}`, updatedContent);
+  const { data } = await axios.put(`/${page}/${section}`, updatedContent, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return data;
 };
 
@@ -97,25 +114,39 @@ export const updatePageContent = async (
   const addQuery = position ? `?position=${position}` : "";
   const { data } = await axios.put(
     `/content/${page}/${section}${addQuery}`,
-    updatedContent
+    updatedContent,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   );
   return data;
 };
 
 export const deleteContent = async (page, section) => {
-  const { data } = await axios.delete(`/content/${page}/${section}`);
+  const { data } = await axios.delete(`/content/${page}/${section}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return data;
 };
 
 export const deleteItem = async (page, section) => {
-  const { data } = await axios.delete(`/${page}/${section}`);
+  const { data } = await axios.delete(`/${page}/${section}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return data;
 };
 
 export const postImages = (formData, page, imageType) => {
-  var myHeaders = new Headers();
+  let myHeaders = new Headers();
+  Headers.append("Authorization", `Bearer ${token}`);
 
-  var requestOptions = {
+  let requestOptions = {
     method: "POST",
     headers: myHeaders,
     body: formData,

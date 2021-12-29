@@ -22,7 +22,7 @@ const customJestConfig = {
   // A list of reporter names that Jest uses when writing coverage reports
   coverageReporters: ["json", "text", "html"],
 
-  moduleDirectories: ["node_modules", "src"],
+  moduleDirectories: ["node_modules", "whitelabel-app"],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   // ADD This --- https://jestjs.io/docs/en/webpack

@@ -73,7 +73,6 @@ exports.updateFooterContent = async (req, res) => {
   const { content } = req.body;
   const collection = req.url.split("/")[1];
   const areas = ["company", "social"];
-  console.log("11111111111111", content);
 
   if (!content || !areas) {
     return res.status(400).json({ message: "There is no content to be added" });

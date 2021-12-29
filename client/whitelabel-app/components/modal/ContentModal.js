@@ -52,7 +52,6 @@ const ContentModal = ({ data, setToggleContentModal }) => {
       }
 
       if (type === "footer-content") {
-        console.log("in here");
         const response = await updateData(
           newContent.page,
           { content: { ...newContent } },
@@ -64,7 +63,7 @@ const ContentModal = ({ data, setToggleContentModal }) => {
       if (type !== "site-content") {
         const response = await updateData(
           newContent.page,
-          newContent,
+          { content: { ...newContent } },
           newContent.key
         );
         setSuccess(response.message);

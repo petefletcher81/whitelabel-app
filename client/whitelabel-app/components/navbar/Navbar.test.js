@@ -33,12 +33,12 @@ describe("<Navbar /> mobile", () => {
     expect(mockToggle).toHaveBeenCalledTimes(2);
   });
 
-  xit("should route user to about us when link clicked", () => {
-    window.innerWidth = 990;
-    const mockToggle = jest.fn();
-    render(<Navbar handleToggle={mockToggle} />);
+  // xit("should route user to about us when link clicked", () => {
+  //   window.innerWidth = 990;
+  //   const mockToggle = jest.fn();
+  //   render(<Navbar handleToggle={mockToggle} />);
 
-    fireEvent.click(screen.getByText("About Us"));
-    expect(mockToggle).toHaveBeenCalled();
-  });
+  //   fireEvent.click(screen.getByText("About Us"));
+  //   expect(mockToggle).toHaveBeenCalled();
+  // });
 });

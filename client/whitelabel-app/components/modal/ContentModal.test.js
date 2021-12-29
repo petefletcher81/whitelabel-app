@@ -1,22 +1,14 @@
-import nock from "nock";
+import { fireEvent, render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { rest } from "msw";
 import React from "react";
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  within,
-} from "../../test-utils/custom-utils";
-import {
-  contentBuilder,
-  nockDeleteMock,
-  nockErrorDelete,
-  nockErrorPut,
-  nockGetHelper,
-  nockOptions,
-  nockPutMock,
-} from "../../test-utils/test-helpers";
+import { server } from "../../mocks/server";
+import { contentBuilder } from "../../test-utils/test-helpers";
 import ContentModal from "./ContentModal";
+
+// const host = "http://localhost";
+// axios.defaults.host = host;
+// axios.defaults.adapter = httpAdapter;
 
 describe("<ContentModal />", () => {
   it("should open the content modal with the correct content with type of site", () => {
@@ -48,8 +40,8 @@ describe("<ContentModal />", () => {
     screen.getByText(
       "Are you sure you want to delete this image from the home page"
     );
-    const displayedImage = document.querySelectorAll("img");
-    expect(displayedImage[0].src).toContain("test-for-home");
+
+    expect(screen.getByRole("img", { name: "chosen image" }));
   });
 
   it("should open the modal with the correct content with type image", () => {
@@ -149,36 +141,9 @@ describe("<ContentModal />", () => {
 });
 
 describe("Editing Content", () => {
-  beforeAll(() => {
-    nock.disableNetConnect();
-  });
-
-  afterEach(() => {
-    nock.cleanAll();
-    cleanup();
-  });
-
   it("should allow user to edit content data and post data", async () => {
     const { allContent } = contentBuilder();
     /* need to match the body coming back or would not allow pass */
-    const mockContent = {
-      id: "section-1",
-      heading: "New Heading",
-      content: "Lorem ipsum dolor sit amet",
-      createdAt: "2021-01-17T06:25:57.066Z",
-      page: "home",
-      position: "1",
-    };
-
-    const dashContent = nockGetHelper("content", allContent);
-    const options = nockOptions("content/home/section-1?position=1");
-    const content = nockPutMock(
-      mockContent,
-      "content/home/section-1?position=1",
-      {
-        message: "This content has been successfully updated",
-      }
-    );
 
     render(
       <ContentModal
@@ -201,19 +166,10 @@ describe("Editing Content", () => {
     await screen.findByText("This content has been successfully updated");
 
     expect(screen.getByDisplayValue("New Heading")).toBeInTheDocument();
-
-    content.done();
-    options.done();
   });
 
   it("should allow user to delete content", async () => {
     const { allContent } = contentBuilder();
-
-    const options = nockOptions("content/home/section-1");
-    const content = nockDeleteMock("content/home/section-1", {
-      message: "This content has now been deleted",
-      item: "section-1",
-    });
 
     render(
       <ContentModal
@@ -226,22 +182,30 @@ describe("Editing Content", () => {
       />
     );
 
-    const heading = screen.getByDisplayValue("Heading 1");
+    screen.getByDisplayValue("Heading 1");
     screen.getByTestId("edit-content-modal");
 
-    fireEvent.click(screen.getByText("Delete"));
+    userEvent.click(screen.getByText("Delete"));
 
     await screen.findByText("This content has now been deleted");
-
-    content.done();
-    options.done();
   });
 
   it("should surface an error if there is a problem response with content on delete", async () => {
-    const { allContent } = contentBuilder();
+    server.use(
+      rest.delete(
+        "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content/home/section-1",
+        (req, res, ctx) => {
+          return res(
+            ctx.status(400),
+            ctx.json({
+              message: "Something went wrong when trying to remove content",
+            })
+          );
+        }
+      )
+    );
 
-    const options = nockOptions("content/home/section-1");
-    const content = nockErrorDelete("content/home/section-1");
+    const { allContent } = contentBuilder();
 
     render(
       <ContentModal
@@ -260,27 +224,26 @@ describe("Editing Content", () => {
     fireEvent.click(screen.getByText("Delete"));
 
     await screen.findByText(
-      "Something went wrong while trying to add or get the content"
+      "Something went wrong when trying to remove content"
     );
-
-    content.done();
-    options.done();
   });
 
   it("should surface an error if there is a problem rsponse with contetn on post", async () => {
-    const { allContent } = contentBuilder();
-    /* need to match the body coming back or would not allow pass */
-    const mockContent = {
-      id: "section-1",
-      heading: "Heading 1",
-      content: "Lorem ipsum dolor sit amet",
-      createdAt: "2021-01-17T06:25:57.066Z",
-      page: "home",
-      position: "1",
-    };
+    server.use(
+      rest.put(
+        "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content/home/section-1",
+        (req, res, ctx) => {
+          return res(
+            ctx.status(400),
+            ctx.json({
+              message: "Something went wrong when trying to remove content",
+            })
+          );
+        }
+      )
+    );
 
-    const options = nockOptions("content/home/section-1?position=1");
-    const content = nockErrorPut("content/home/section-1?position=1");
+    const { allContent } = contentBuilder();
 
     render(
       <ContentModal
@@ -301,29 +264,13 @@ describe("Editing Content", () => {
     fireEvent.click(screen.getByText("Save"));
 
     await screen.findByText(
-      "Something went wrong while trying to add or get the content"
+      "Something went wrong when trying to remove content"
     );
-
-    content.done();
-    options.done();
   });
 
   it("should allow user to check the contacted box on the enquiry modal", async () => {
-    const { allContent, enquiryContent } = contentBuilder();
+    const { enquiryContent } = contentBuilder();
     /* need to match the body coming back or would not allow pass */
-    const mockContent = {
-      email: "test1@test.com",
-      name: "test",
-      createdAt: "2021-01-17T06:25:57.066Z",
-      contacted: true,
-      key: "test1@test.com",
-      page: "enquiries",
-    };
-
-    const options = nockOptions("enquiries/test1@test.com");
-    const content = nockPutMock(mockContent, "enquiries/test1@test.com", {
-      message: "This content has been successfully updated",
-    });
 
     render(
       <ContentModal
@@ -346,18 +293,10 @@ describe("Editing Content", () => {
     fireEvent.click(screen.getByText("Save"));
 
     await screen.findByText("This content has been successfully updated");
-
-    content.done();
-    options.done();
   });
 
   it("should allow user to delete content that is not of type site-content", async () => {
     const { enquiryContent } = contentBuilder();
-
-    const options = nockOptions("enquiries/test1@test.com");
-    const content = nockDeleteMock("enquiries/test1@test.com", {
-      message: "This content has now been deleted",
-    });
 
     render(
       <ContentModal
@@ -376,28 +315,10 @@ describe("Editing Content", () => {
     fireEvent.click(screen.getByText("Delete"));
 
     await screen.findByText("This content has now been deleted");
-
-    content.done();
-    options.done();
   });
 
   it("should allow user to edit the footer company content and update the new data", async () => {
     const { footerContent } = contentBuilder();
-    /* need to match the body coming back or would not allow pass */
-    const mockContent = {
-      id: "company",
-      companyName: "New Heading",
-      key: "company",
-      page: "footer",
-      companyAddress: "23 Made Up Street, Somewhere Nice, Awesome Town",
-      companyNumber: "12345 678909",
-      mobileNumber: "09872234837",
-    };
-
-    const options = nockOptions("footer/company");
-    const content = nockPutMock(mockContent, "footer/company", {
-      message: "This content has been successfully updated",
-    });
 
     render(
       <ContentModal
@@ -423,29 +344,11 @@ describe("Editing Content", () => {
     expect(screen.getByDisplayValue("New Heading")).toBeInTheDocument();
 
     await screen.findByText("This content has been successfully updated");
-
-    content.done();
-    options.done();
   });
 
   it("should allow user to edit the footer social content and update the new data", async () => {
     const { footerContent } = contentBuilder();
     /* need to match the body coming back or would not allow pass */
-    const mockContent = {
-      socialLinkedin: "New Heading",
-      socialFacebook: "fburl",
-      socialInstagram: "instaurl",
-      socialPinterest: "pinurl",
-      socialTwitter: "twiturl",
-      key: "social",
-      page: "footer",
-      id: "social",
-    };
-
-    const options = nockOptions("footer/social");
-    const content = nockPutMock(mockContent, "footer/social", {
-      message: "This content has been successfully updated",
-    });
 
     render(
       <ContentModal
@@ -471,18 +374,10 @@ describe("Editing Content", () => {
     expect(screen.getByDisplayValue("New Heading")).toBeInTheDocument();
 
     await screen.findByText("This content has been successfully updated");
-
-    content.done();
-    options.done();
   });
 
   it("should allow user to delete footer company content", async () => {
     const { footerContent } = contentBuilder();
-
-    const options = nockOptions("footer/company");
-    const content = nockDeleteMock("footer/company", {
-      message: "This content has now been deleted",
-    });
 
     render(
       <ContentModal
@@ -501,18 +396,10 @@ describe("Editing Content", () => {
     fireEvent.click(screen.getByText("Delete"));
 
     await screen.findByText("This content has now been deleted");
-
-    content.done();
-    options.done();
   });
 
   it("should allow user to delete footer social content", async () => {
     const { footerContent } = contentBuilder();
-
-    const options = nockOptions("footer/social");
-    const content = nockDeleteMock("footer/social", {
-      message: "This content has now been deleted",
-    });
 
     render(
       <ContentModal
@@ -531,18 +418,10 @@ describe("Editing Content", () => {
     fireEvent.click(screen.getByText("Delete"));
 
     await screen.findByText("This content has now been deleted");
-
-    content.done();
-    options.done();
   });
 
   it("should allow usr to delete image content", async () => {
     const { imageContent } = contentBuilder();
-
-    const options = nockOptions("images/test-filename");
-    const content = nockDeleteMock("images/test-filename", {
-      message: "This content has now been deleted",
-    });
 
     render(
       <ContentModal
@@ -560,16 +439,23 @@ describe("Editing Content", () => {
     fireEvent.click(screen.getByText("Delete"));
 
     await screen.findByText("This content has now been deleted");
-
-    content.done();
-    options.done();
   });
 
   it("should surface an error if there is a problem response with !content on deleteItem", async () => {
+    server.use(
+      rest.delete(
+        "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/footer/social",
+        (req, res, ctx) => {
+          return res(
+            ctx.status(400),
+            ctx.json({
+              message: "Something went wrong when trying to remove content",
+            })
+          );
+        }
+      )
+    );
     const { footerContent } = contentBuilder();
-
-    const options = nockOptions("footer/social");
-    const content = nockErrorDelete("footer/social");
 
     render(
       <ContentModal
@@ -588,10 +474,7 @@ describe("Editing Content", () => {
     fireEvent.click(screen.getByText("Delete"));
 
     await screen.findByText(
-      "Something went wrong while trying to add or get the content"
+      "Something went wrong when trying to remove content"
     );
-
-    content.done();
-    options.done();
   });
 });

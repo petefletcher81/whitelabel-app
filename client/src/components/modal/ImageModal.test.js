@@ -1,5 +1,5 @@
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
-import { fireEvent, render, screen } from "../../test-utils/custom-utils";
 import { contentBuilder } from "../../test-utils/test-helpers";
 import ImageModal from "./ImageModal";
 

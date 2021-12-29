@@ -417,7 +417,6 @@ export async function getServerSideProps(context) {
   if (cookies.token) {
     const decodedToken = jwtDecode(cookies.token);
     isAdmin = decodedToken?.admin;
-    console.log(isAdmin);
   }
 
   if (!isAdmin)

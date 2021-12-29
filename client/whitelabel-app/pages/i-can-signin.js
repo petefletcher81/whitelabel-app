@@ -12,16 +12,16 @@ const SignIn = () => {
     setSignIn({ ...signIn, [name]: value });
   };
 
-  if (typeof window !== "undefined") {
-    document.cookie = "username=John Doe";
-  }
-
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const expires = new Date(Date.now() + 86400 * 1000).toUTCString();
     try {
       const signInRes = await attemptSignIn(signIn);
       setSuccess(true);
       localStorage.setItem("token", signInRes.token);
+      document.cookie = `token=${signInRes.token}; expires=" ${
+        expires + 86400
+      })";`;
       window.location.href = "/";
     } catch (error) {
       const data = error.response?.data;

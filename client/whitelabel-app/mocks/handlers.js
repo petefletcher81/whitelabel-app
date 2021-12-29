@@ -26,11 +26,63 @@ export const handlers = [
     }
   ),
 
-  rest.get(
-    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content/home",
+  rest.put(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content/home/section-1",
     (req, res, ctx) => {
-      const { homeContent } = contentBuilder();
-      return res(ctx.status(200), ctx.json([...homeContent]));
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "This content has been successfully updated",
+        })
+      );
+    }
+  ),
+
+  rest.put(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/enquiries/test1@test.com",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "This content has been successfully updated",
+        })
+      );
+    }
+  ),
+
+  rest.put(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/footer/company",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "This content has been successfully updated",
+        })
+      );
+    }
+  ),
+
+  rest.put(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/footer/social",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "This content has been successfully updated",
+        })
+      );
+    }
+  ),
+
+  rest.put(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content/home/section-1",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "This content has been successfully updated",
+        })
+      );
     }
   ),
 
@@ -79,6 +131,99 @@ export const handlers = [
     (req, res, ctx) => {
       const { footerContent } = contentBuilder();
       return res(ctx.status(200), ctx.json([...footerContent]));
+    }
+  ),
+
+  rest.put(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/footer/social",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "This content has been successfully updated",
+        })
+      );
+    }
+  ),
+
+  rest.options(
+    "http://localhost:5000/whitelabel-website-7d72b/europe-west2/app/footer/social",
+    (req, res, ctx) => {
+      return res(ctx.status(200));
+    }
+  ),
+
+  rest.options(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/footer",
+    (req, res, ctx) => {
+      return res(ctx.status(200));
+    }
+  ),
+
+  rest.options(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content/home/section-1",
+    (req, res, ctx) => {
+      return res(ctx.status(200));
+    }
+  ),
+
+  rest.delete(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/images/test-filename",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "This content has now been deleted",
+        })
+      );
+    }
+  ),
+
+  rest.delete(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content/home/section-1",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "This content has now been deleted",
+        })
+      );
+    }
+  ),
+
+  rest.delete(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/enquiries/test1@test.com",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "This content has now been deleted",
+        })
+      );
+    }
+  ),
+
+  rest.delete(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/footer/company",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "This content has now been deleted",
+        })
+      );
+    }
+  ),
+
+  rest.delete(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/footer/social",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "This content has now been deleted",
+        })
+      );
     }
   ),
 ];

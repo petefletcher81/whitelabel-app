@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ReactDom from "react-dom";
 import { updateImageContent } from "../../pages/api/apiCalls";
 import Gallery from "../gallery/Gallery";
 
@@ -127,7 +126,13 @@ const ImageModal = ({ data, setSelectedImage, showModal }) => {
               className="modal__buttons-wrapper-dashboard bg-white 
           flex mt-1 w-full p-1 shadow-1 justify-around"
             >
-              <button className="btn p-1 shadow-soft" onClick={handleSave}>
+              <button
+                className="btn p-1 shadow-soft"
+                onClick={() => {
+                  handleSave();
+                  showModal(false);
+                }}
+              >
                 Save
               </button>
               <button
@@ -135,6 +140,7 @@ const ImageModal = ({ data, setSelectedImage, showModal }) => {
                 onClick={(e) => {
                   setSelectedGridImage(null);
                   setSelectedImage(null);
+                  showModal(false);
                 }}
               >
                 Close
@@ -146,10 +152,7 @@ const ImageModal = ({ data, setSelectedImage, showModal }) => {
     }
   };
 
-  return ReactDom.createPortal(
-    modalContent(),
-    document.getElementById("modal-root")
-  );
+  return <div className="">{modalContent()}</div>;
 };
 
 export default ImageModal;
