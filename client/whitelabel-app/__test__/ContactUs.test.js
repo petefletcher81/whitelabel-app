@@ -3,6 +3,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import React from "react";
 import { server } from "../mocks/server";
+import { getContent, getImages } from "../pages/api/apiCalls";
 import ContactUs from "../pages/contactus";
 import { contentBuilder } from "../test-utils/test-helpers";
 
@@ -118,4 +119,20 @@ describe("<ContactUs /> Mobile", () => {
   //   content.done();
   //   banner.done();
   // });
+});
+
+describe("API calls for the page", () => {
+  it("should make a call serverside for content", async () => {
+    const { contactUsContent } = contentBuilder();
+
+    const result = await getContent("contactus");
+    expect(result).toEqual(contactUsContent);
+  });
+
+  it("should make a call serverside for images", async () => {
+    const { imageContent } = contentBuilder();
+
+    const result = await getImages("contactus");
+    expect(result).toEqual(imageContent);
+  });
 });

@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import AboutUs from "../pages/aboutus";
+import { getAllImages, getContent } from "../pages/api/apiCalls";
 import { contentBuilder } from "../test-utils/test-helpers";
 
 describe("<AboutUs />", () => {
@@ -42,5 +43,21 @@ describe("<AboutUs />", () => {
     await screen.getByTestId("backdrop");
     fireEvent.click(screen.getByTestId("backdrop"));
     expect(screen.queryByTestId("backdrop")).not.toBeInTheDocument();
+  });
+});
+
+describe("API calls for the page", () => {
+  it("should make a call serverside for content", async () => {
+    const { aboutUsContent } = contentBuilder();
+
+    const result = await getContent("aboutus");
+    expect(result).toEqual(aboutUsContent);
+  });
+
+  it("should make a call serverside for images", async () => {
+    const { imageContent } = contentBuilder();
+
+    const result = await getAllImages();
+    expect(result).toEqual(imageContent);
   });
 });

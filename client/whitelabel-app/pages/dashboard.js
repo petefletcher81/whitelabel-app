@@ -25,11 +25,23 @@ const Dashboard = ({
   const [footer, setFooter] = useState(footerContent);
   const [images, setImages] = useState(initImages);
   const modalRef = React.useRef();
+  const errorMessage = {
+    message: "Something went wrong when trying to display content",
+  };
 
-  const [contentError, setContentError] = useState(null);
-  const [enquiriesError, setEnquiriesError] = useState(null);
-  const [imageError, setImageError] = useState(null);
-  const [footerError, setFooterError] = useState(null);
+  const [contentError, setContentError] = useState(
+    !!initContent ? null : errorMessage
+  );
+  const [enquiriesError, setEnquiriesError] = useState(
+    !!initEnquiries ? null : errorMessage
+  );
+  const [imageError, setImageError] = useState(
+    !!initImages ? null : errorMessage
+  );
+  const [footerError, setFooterError] = useState(
+    !!footerContent ? null : errorMessage
+  );
+
   const [company, setCompany] = useState(null);
   const [social, setSocial] = useState(null);
   const [fetchNewImages, setFetchNewImages] = useState(false);
@@ -55,6 +67,8 @@ const Dashboard = ({
   const bannerImages = images?.filter((image) =>
     image.hasOwnProperty("banner")
   );
+
+  console.log();
 
   return (
     <div
@@ -387,7 +401,7 @@ const Dashboard = ({
         </div>
       </div>
       {showContentModal && (
-        <div className="" ref={modalRef}>
+        <div className="" ref={modalRef} data-testid={"content-modal"}>
           <ContentModal
             data={modalInformation}
             setToggleContentModal={setShowContentModal}
@@ -395,7 +409,7 @@ const Dashboard = ({
         </div>
       )}
       {showImageModal && (
-        <div className="" ref={modalRef}>
+        <div className="" ref={modalRef} data-testid={"image-modal"}>
           <ImageModal
             data={modalInformation}
             showModal={setShowImageModal}
@@ -411,8 +425,6 @@ export async function getServerSideProps(context) {
   const { req, res } = context;
   const { cookies } = req;
   let isAdmin;
-  console.log("request", typeof req);
-  console.log("request", cookies);
 
   if (cookies.token) {
     const decodedToken = jwtDecode(cookies.token);

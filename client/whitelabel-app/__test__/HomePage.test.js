@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { default as React } from "react";
+import { React } from "react";
+import { getContent, getImages } from "../pages/api/apiCalls";
 import HomePage from "../pages/index";
 import { contentBuilder } from "../test-utils/test-helpers";
 
@@ -64,5 +65,21 @@ describe("App ", () => {
     await waitFor(() => {
       screen.getAllByText("Missing content / Failed to load");
     });
+  });
+});
+
+describe("API calls for the page", () => {
+  it("should make a call serverside for content", async () => {
+    const { homeContent } = contentBuilder();
+
+    const result = await getContent("home");
+    expect(result).toEqual(homeContent);
+  });
+
+  it("should make a call serverside for images", async () => {
+    const { imageContent } = contentBuilder();
+
+    const result = await getImages("home");
+    expect(result).toEqual(imageContent);
   });
 });

@@ -41,13 +41,11 @@ const HomePage = ({ content, images }) => {
   );
 };
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
   const [content, images] = await Promise.all([
     getContent("home"),
     getImages("home"),
   ]);
-
-  console.log(images);
 
   return {
     props: { content, images }, // will be passed to the page component as props
