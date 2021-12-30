@@ -26,6 +26,18 @@ export const handlers = [
     }
   ),
 
+  rest.post(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/enquiries",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "Thank you Fred, someone will contact you soon",
+        })
+      );
+    }
+  ),
+
   rest.put(
     "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content/home/section-1",
     (req, res, ctx) => {
@@ -148,6 +160,13 @@ export const handlers = [
 
   rest.options(
     "http://localhost:5000/whitelabel-website-7d72b/europe-west2/app/footer/social",
+    (req, res, ctx) => {
+      return res(ctx.status(200));
+    }
+  ),
+
+  rest.options(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/enquiries",
     (req, res, ctx) => {
       return res(ctx.status(200));
     }

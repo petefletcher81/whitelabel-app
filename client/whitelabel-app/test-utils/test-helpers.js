@@ -58,6 +58,25 @@ export const contentBuilder = () => {
     },
   ];
 
+  const contactUsContent = [
+    {
+      id: "section-1",
+      heading: "Heading 1",
+      content: "Lorem ipsumsof dolor adipiscing elit",
+      createdAt: "2021-11-07T05:25:57.066Z",
+      page: "contactus",
+      position: "1",
+    },
+    {
+      id: "section-2",
+      heading: "Heading 2",
+      content: "Lorem ipsum aordolor adipiscing elit",
+      createdAt: "2021-01-18T06:25:57.066Z",
+      page: "contactus",
+      position: "2",
+    },
+  ];
+
   const allContent = [
     {
       id: "section-1",
@@ -182,6 +201,7 @@ export const contentBuilder = () => {
     imageContent,
     aboutUsContent,
     footerContent,
+    contactUsContent,
   };
 };
 

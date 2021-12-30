@@ -19,7 +19,9 @@ const AboutUs = ({ content, images }) => {
       data-testid="aboutus-section "
     >
       <div className="bg-white w-full">
-        {contentError && !content && <ContentError error={contentError} />}
+        {contentError && (!content || !images) && (
+          <ContentError error={contentError} />
+        )}
         {content && !contentError && (
           <ContentCard content={content[0]} customStyles={{ content: "" }} />
         )}

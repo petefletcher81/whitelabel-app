@@ -39,12 +39,12 @@ const ContactUs = ({ content, images }) => {
 
   return (
     <section className="aboutus">
-      <div className="relative p-2 grid">
+      <div className="relative p-2 grid bg-primary">
         <div className="">
-          <div className="">
+          <div className="text-white">
             <h1>vestibulum morbi blandit cursus</h1>
           </div>
-          <p className="py-1">
+          <p className="py-1 text-white">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
@@ -54,9 +54,10 @@ const ContactUs = ({ content, images }) => {
           <div className=" form relative" data-testid="contact-form">
             <h2>Contact Us</h2>
             <form>
-              <div className=" form-control">
+              <div className="form-control">
                 <label htmlFor="name" className="visuallyhidden" />
                 <input
+                  aria-label="enquirers name"
                   type="text"
                   name="name"
                   placeholder="Name"
@@ -68,6 +69,7 @@ const ContactUs = ({ content, images }) => {
                 <label htmlFor="email" className="visuallyhidden" />
                 <input
                   type="text"
+                  aria-label="enquirers email"
                   name="email"
                   placeholder="Email"
                   onChange={onChangeFormDetails}
@@ -129,24 +131,6 @@ const ContactUs = ({ content, images }) => {
           })}
       </div>
       {content && !contentError && returnContentForPosition("2")}
-      <div className="aboutus__popup">
-        {success && (
-          <div
-            className="aboutus__popup-success"
-            data-testid="confirmation-modal"
-          >
-            {success.message}
-          </div>
-        )}
-        {enquiryError && (
-          <div
-            className="aboutus__popup-enquiryError"
-            data-testid="error-modal"
-          >
-            {enquiryError.message}
-          </div>
-        )}
-      </div>
     </section>
   );
 };

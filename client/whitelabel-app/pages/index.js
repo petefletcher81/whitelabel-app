@@ -10,8 +10,10 @@ const HomePage = ({ content, images }) => {
       : null;
 
   return (
-    <section className="homepage relative" data-testid="homepage-section ">
-      {contentError && !content && <ContentError error={contentError} />}
+    <section className="homepage relative" data-testid="homepage-section">
+      {contentError && (!content || !images) && (
+        <ContentError error={contentError} />
+      )}
       {content &&
         images &&
         !contentError &&
@@ -44,6 +46,8 @@ export async function getStaticProps(context) {
     getContent("home"),
     getImages("home"),
   ]);
+
+  console.log(images);
 
   return {
     props: { content, images }, // will be passed to the page component as props
