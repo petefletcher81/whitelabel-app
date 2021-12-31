@@ -68,8 +68,6 @@ const Dashboard = ({
     image.hasOwnProperty("banner")
   );
 
-  console.log();
-
   return (
     <div
       className="dashboard border-primary flex flex-col grid p-2"

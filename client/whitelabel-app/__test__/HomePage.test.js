@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/extend-expect";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { React } from "react";
 import { getContent, getImages } from "../pages/api/apiCalls";
 import HomePage from "../pages/index";
@@ -23,31 +23,31 @@ describe("App ", () => {
     });
   });
 
-  // about us test
+  // // about us test
 
-  // Dashboard test
-  xit("should open the content modal when an user is in dashboard and content is clicked and close the image modal when backdrop clicked", async () => {
-    window.innerWidth = 990;
+  // // Dashboard test
+  // xit("should open the content modal when an user is in dashboard and content is clicked and close the image modal when backdrop clicked", async () => {
+  //   window.innerWidth = 990;
 
-    localStorage.setItem("token", "qwerty");
+  //   localStorage.setItem("token", "qwerty");
 
-    mockJwt.mockImplementation(() => {
-      return { exp: mockDate.getTime(), admin: true };
-    });
+  //   mockJwt.mockImplementation(() => {
+  //     return { exp: mockDate.getTime(), admin: true };
+  //   });
 
-    render(<App />);
+  //   render(<App />);
 
-    await screen.findByText("Heading 1");
-    fireEvent.click(screen.getAllByText("Dashboard")[0]);
+  //   await screen.findByText("Heading 1");
+  //   fireEvent.click(screen.getAllByText("Dashboard")[0]);
 
-    await screen.findByText("test1@test.com");
+  //   await screen.findByText("test1@test.com");
 
-    screen.getByText("Manage Content");
-    const [contentButton] = screen.getAllByText("Edit");
-    fireEvent.click(contentButton);
+  //   screen.getByText("Manage Content");
+  //   const [contentButton] = screen.getAllByText("Edit");
+  //   fireEvent.click(contentButton);
 
-    await screen.findAllByText("Dashboard");
-  });
+  //   await screen.findAllByText("Dashboard");
+  // });
 
   it("should render error if content fails", async () => {
     const { imageContent, homeContent } = contentBuilder();
