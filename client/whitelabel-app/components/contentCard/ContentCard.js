@@ -27,7 +27,10 @@ const ContentCard = ({
   return (
     <div className={`content-card bg-white my-2`} data-testid={testid}>
       {images && findImage && isBefore && (
-        <div className={`content-image-wrapper-${index} flex `}>
+        <div
+          className={`content-image-wrapper-${index} flex `}
+          data-testid={"image-is-before"}
+        >
           <img className={`${customStyles.image}`} src={findImage.image} />
         </div>
       )}
@@ -47,6 +50,7 @@ const ContentCard = ({
         <div
           className={`content-image-wrapper-${index}  
             flex`}
+          data-testid={"image-is-after"}
         >
           <img className={`${customStyles.image}`} src={findImage.image} />
         </div>

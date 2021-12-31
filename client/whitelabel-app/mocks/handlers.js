@@ -15,6 +15,18 @@ export const handlers = [
   ),
 
   rest.post(
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/admin",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          message: "Sign In Successful",
+        })
+      );
+    }
+  ),
+
+  rest.post(
     "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/signout",
     (req, res, ctx) => {
       return res(

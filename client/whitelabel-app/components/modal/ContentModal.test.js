@@ -6,10 +6,6 @@ import { server } from "../../mocks/server";
 import { contentBuilder } from "../../test-utils/test-helpers";
 import ContentModal from "./ContentModal";
 
-// const host = "http://localhost";
-// axios.defaults.host = host;
-// axios.defaults.adapter = httpAdapter;
-
 describe("<ContentModal />", () => {
   it("should open the content modal with the correct content with type of site", () => {
     const { allContent } = contentBuilder();

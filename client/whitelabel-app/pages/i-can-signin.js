@@ -18,6 +18,7 @@ const SignIn = () => {
     try {
       const signInRes = await attemptSignIn(signIn);
       setSuccess(true);
+
       localStorage.setItem("token", signInRes.token);
       document.cookie = `token=${signInRes.token}; expires=" ${
         expires + 86400
