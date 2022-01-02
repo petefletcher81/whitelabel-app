@@ -164,17 +164,29 @@ const DashboardImages = ({
                     </>
                     {image.image && (
                       <div className="dashboard__image-image">
-                        <img src={image.image} className="w-full h-full" />
+                        <img
+                          src={image.image}
+                          className="w-full h-full"
+                          alt={`image collection number ${index}`}
+                        />
                       </div>
                     )}
                     {image.banner && (
                       <div className="dashboard__image-banner">
-                        <img src={image.banner} className="w-full h-full" />
+                        <img
+                          src={image.banner}
+                          className="w-full h-full"
+                          alt={`banner collection number ${index}`}
+                        />
                       </div>
                     )}
                     {image.gallery && (
                       <div className="dashboard__image-gallery">
-                        <img src={image.gallery} className="w-full h-full" />
+                        <img
+                          src={image.gallery}
+                          className="w-full h-full"
+                          alt={`banner collection number ${index}`}
+                        />
                       </div>
                     )}
                     <div className="dashboard__image-section text-center">

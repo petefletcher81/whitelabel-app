@@ -40,6 +40,8 @@ const {
   updateFooterContent,
 } = require("./controllers/footer-endpoint");
 
+const { default: next } = require("next");
+
 const app = express(); // creates express app
 
 app.use(cors({ origin: true }));
@@ -83,6 +85,4 @@ app.use((req, res) => {
   res.send({ message: "Path does not exist" });
 });
 
-// onRequest takes a https function
-// app will turn into multiple different routes
 exports.app = functions.region("europe-west2").https.onRequest(app);

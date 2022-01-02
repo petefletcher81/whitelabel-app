@@ -21,7 +21,7 @@ const Navbar = ({ toggle, handleToggle }) => {
   return (
     <section className="navbar" role="menu">
       <div className="flex mx-1 justify-between w-full">
-        <div className="logo heading-sm font-bold">Whitelabel Website</div>
+        <div className="logo heading-sm font-bold">Whitelabel Website Next</div>
         <nav
           aria-labelledby="page-navigation"
           role="navigation"

@@ -1,3 +1,4 @@
+import Script from "next/script";
 import React, { useState } from "react";
 import Footer from "../footer/Footer";
 import Navbar from "../navbar/Navbar";
@@ -13,6 +14,10 @@ const Layout = ({ children }) => {
 
   return (
     <>
+      <Script
+        src="https://kit.fontawesome.com/1b5d21fe5d.js"
+        crossOrigin="anonymous"
+      ></Script>
       <Navbar toggle={toggle} handleToggle={handleToggle} />
       {toggle && <SideBar />}
       <main className="main">{children}</main>

@@ -30,6 +30,7 @@ const Gallery = ({ images, onClickEvent, page, isSelected }) => {
               >
                 <img
                   src={imageUrl}
+                  alt={`gallery image collection number ${index}`}
                   className={`w-full h-full ${
                     isSelected?.imageUrl === imageUrl && "opacity-low"
                   } `}
