@@ -10,7 +10,6 @@ import "../styles/Dropdown.scss";
 import "../styles/Footer.scss";
 import "../styles/Gallery.scss";
 import "../styles/globals.css";
-import "../styles/Homepage.scss";
 import "../styles/Modal.scss";
 import "../styles/Navbar.scss";
 import "../styles/NavItems.scss";
