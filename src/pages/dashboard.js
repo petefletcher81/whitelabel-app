@@ -64,10 +64,6 @@ const Dashboard = ({
     setSocial(findSocial);
   }, []);
 
-  const bannerImages = images?.filter((image) =>
-    image.hasOwnProperty("banner")
-  );
-
   return (
     <div
       className="dashboard border-primary flex flex-col grid p-2"

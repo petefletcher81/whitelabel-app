@@ -4,7 +4,8 @@
   "scripts": {
     "serve": "firebase emulators:start --only functions",
     "deploy": "firebase deploy --only functions",
-    "test": "concurrently \"firebase serve\" \"jest --watch\""
+    "test": "concurrently \"firebase serve\" \"jest --watch\"",
+    "log": "firebase functions:log"
   },
   "engines": {
     "node": "16"

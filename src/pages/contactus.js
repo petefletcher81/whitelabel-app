@@ -135,7 +135,7 @@ const ContactUs = ({ content, images }) => {
   );
 };
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
   const [content, images] = await Promise.all([
     getContent("contactus"),
     getImages("contactus"),

@@ -40,7 +40,7 @@ const AboutUs = ({ content, images }) => {
   );
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const [content, images] = await Promise.all([
     getContent("aboutus"),
     getAllImages(),

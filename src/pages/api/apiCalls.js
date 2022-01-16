@@ -1,16 +1,16 @@
 import axios from "axios";
 axios.defaults.baseURL =
-  // "http://localhost:5000/whitelabel-website-7d72b/europe-west2/app";
+  // "http://localhost:5001/whitelabel-website-7d72b/europe-west2/app";
   "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app";
 
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
 let token = "";
 if (typeof window !== "undefined" && document?.cookie) {
-  token = document.cookie
-    .split(";")
-    .find((cookie) => cookie.includes("token"))
-    .split("=")[1];
+  if (document.cookie.includes(";")) {
+    token = document.cookie.split(";").split("=")[1];
+  }
+  token = document.cookie.split("=");
 }
 
 export const getContent = async (page) => {
@@ -73,6 +73,7 @@ export const passwordReset = async () => {
 export const userSignout = async () => {
   // TODO - need a back off function for bots1
   document.cookie = "token=";
+  window.location.href = "/";
   const { data } = await axios.post(`/signout`, {});
   return data;
 };
@@ -97,7 +98,13 @@ export const updateImageContent = async (
 };
 
 export const updateData = async (page, updatedContent, section) => {
-  const { data } = await axios.put(`/${page}/${section}`, updatedContent, {
+  let url = `/${page}/${section}`;
+
+  if (page === "enquiries") {
+    url = `/${page}`;
+  }
+
+  const { data } = await axios.put(url, updatedContent, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -134,7 +141,13 @@ export const deleteContent = async (page, section) => {
 };
 
 export const deleteItem = async (page, section) => {
-  const { data } = await axios.delete(`/${page}/${section}`, {
+  let url = `/${page}/${section}`;
+
+  if (page === "enquiries") {
+    url = `/${page}`;
+  }
+
+  const { data } = await axios.delete(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -142,32 +155,12 @@ export const deleteItem = async (page, section) => {
   return data;
 };
 
-export const postImages = (formData, page, imageType) => {
-  let myHeaders = new Headers();
-  Headers.append("Authorization", `Bearer ${token}`);
-
-  let requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: formData,
-    redirect: "follow",
-    mode: "cors",
-  };
-
-  const response = fetch(
-    `https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/images/${page}/${imageType}`,
-    requestOptions
-  )
-    .then(async (res) => {
-      const data = await res.json();
-      if (res.ok) {
-        return data;
-      } else {
-        throw new Error(data.message);
-      }
-    })
-    .catch((error) => {
-      return Promise.reject(error);
-    });
-  return response;
+export const postImages = async (formData, page, imageType) => {
+  const { data } = await axios.post(`/images/${page}/${imageType}`, formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
+  return data;
 };

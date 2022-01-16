@@ -40,8 +40,6 @@ const {
   updateFooterContent,
 } = require("./controllers/footer-endpoint");
 
-const { default: next } = require("next");
-
 const app = express(); // creates express app
 
 app.use(cors({ origin: true }));
@@ -63,7 +61,7 @@ app.put("/content/:page/:section", isAdmin, updatePageContent);
 app.delete("/content/:page/:section", isAdmin, deleteContent);
 
 /** Images */
-app.post("/images/:page/:type", addImage);
+app.post("/images/:page/:type", isAdmin, addImage);
 app.get("/images", getAllImages);
 app.get("/images/:page/:type", getPageImages);
 app.put("/images/:page/:updatedPage", isAdmin, updateImageContent);
@@ -78,8 +76,8 @@ app.delete("/footer/:area", isAdmin, deleteFooterContent);
 /** enquires */
 app.post("/enquiries", addEnquiry);
 app.get("/enquiries", getEnquiries);
-app.put("/enquiries/:email", isAdmin, updateEnquiry);
-app.delete("/enquiries/:name", isAdmin, deleteEnquiry);
+app.put("/enquiries", isAdmin, updateEnquiry);
+app.delete("/enquiries", isAdmin, deleteEnquiry);
 
 app.use((req, res) => {
   res.send({ message: "Path does not exist" });

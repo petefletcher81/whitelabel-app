@@ -470,17 +470,19 @@ const ContentModal = ({ data, setToggleContentModal }) => {
             Close
           </button>
 
-          {type !== "select-image" && (
-            <button
-              className="btn-alert p-1 shadow-soft"
-              onClick={
-                type === "site-content" ? handleDeleteContent : handleDelete
-              }
-              disabled={success}
-            >
-              Delete
-            </button>
-          )}
+          {type !== "select-image" &&
+            type !== "site-content" &&
+            type !== "footer-content" && (
+              <button
+                className="btn-alert p-1 shadow-soft"
+                onClick={
+                  type === "site-content" ? handleDeleteContent : handleDelete
+                }
+                disabled={success}
+              >
+                Delete
+              </button>
+            )}
         </div>
         {success && <div className="py-1 text-primary">{success}</div>}
         {error && <div className="py-1 text-error">{error}</div>}

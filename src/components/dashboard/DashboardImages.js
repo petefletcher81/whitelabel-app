@@ -26,6 +26,7 @@ const DashboardImages = ({
     const fileInput = document.getElementById("image-input");
     fileInput.click();
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
@@ -33,6 +34,7 @@ const DashboardImages = ({
     if (!imagesUpload) {
       return alert("Please upload an image");
     }
+
     formData.append("image", imagesUpload, imagesUpload.name);
 
     try {
