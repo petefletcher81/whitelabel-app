@@ -8,6 +8,10 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
+    permissions:
+      contents: "read"
+      id-token: "write"
+
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -17,13 +21,31 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Install node modules
-        working-directory: ./client
+        working-directory: ./src
         run: npm ci
 
       - name: Run tests
-        working-directory: ./client
+        working-directory: ./src
         run: npm run test:ci --verbose --maxWorkers=2
 
-      - name: Run build
-        working-directory: ./client
-        run: npm run build
+      # Add "id-token" with the intended permissions.
+      - id: "auth"
+        uses: "google-github-actions/auth@v0"
+        with:
+          credentials: "${{ secrets.GCP_SA_KEY }}"
+
+      - name: "Set up Cloud SDK"
+        uses: "google-github-actions/setup-gcloud@v0"
+
+      - name: "Use gcloud CLI"
+        run: "gcloud info"
+
+      - id: "deploy"
+        uses: "google-github-actions/deploy-cloudrun@v0"
+        with:
+          service: "whitelabel-website"
+          image: "gcr.io/whitelabel-website-7d72b/whitelabel-website"
+          region: europe-west2
+
+      - name: "Use output"
+        run: 'curl "${{ steps.deploy.outputs.url }}"'

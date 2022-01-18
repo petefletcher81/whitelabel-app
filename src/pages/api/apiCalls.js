@@ -141,10 +141,7 @@ export const deleteContent = async (page, section) => {
 };
 
 export const deleteItem = async (page, section) => {
-  console.log("111111111111111111");
   let url = `/${page}/${section}`;
-
-  console.log("SECTION", section);
 
   if (page === "enquiries") {
     url = `/${page}`;

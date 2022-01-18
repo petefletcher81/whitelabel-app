@@ -82,8 +82,8 @@ describe("_app Navbar -- Nav items", () => {
   //   });
   // });
 
-  describe("Nav Items", () => {
-    it("should allow user to toggle the menu button to show hide sidebar", async () => {
+  xdescribe("Nav Items", () => {
+    it("should allow user to toggle the menu button to show hide sidebar", () => {
       render(
         <Layout>
           <TestComponent {...pageProps} />

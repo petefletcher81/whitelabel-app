@@ -62,6 +62,8 @@
 - user clicks `edit` modal opens with correct details
 - user can check / uncheck box and `save`
 - user can `delete` content
+- [bug] user can still click save after delete
+- [actions] - disable button or close modal after delete
 
 #### Manage Content
 
