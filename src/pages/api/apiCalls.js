@@ -1,6 +1,6 @@
 import axios from "axios";
 axios.defaults.baseURL =
-  // "http://localhost:5001/whitelabel-website-7d72b/europe-west2/app";
+  // "http://localhost:5000/whitelabel-website-7d72b/europe-west2/app";
   "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app";
 
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
@@ -141,7 +141,10 @@ export const deleteContent = async (page, section) => {
 };
 
 export const deleteItem = async (page, section) => {
+  console.log("111111111111111111");
   let url = `/${page}/${section}`;
+
+  console.log("SECTION", section);
 
   if (page === "enquiries") {
     url = `/${page}`;
@@ -151,6 +154,7 @@ export const deleteItem = async (page, section) => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    data: page === "enquiries" && { id: section },
   });
   return data;
 };

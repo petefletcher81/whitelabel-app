@@ -1,5 +1,4 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 import React from "react";
 import { server } from "../../mocks/server";
@@ -164,65 +163,67 @@ describe("Editing Content", () => {
     expect(screen.getByDisplayValue("New Heading")).toBeInTheDocument();
   });
 
-  it("should allow user to delete content", async () => {
-    const { allContent } = contentBuilder();
+  /** NOTE: Taken this out as easy to manage in beginning stages - may need a ticket */
+  // it("should allow user to delete content", async () => {
+  //   const { allContent } = contentBuilder();
 
-    render(
-      <ContentModal
-        data={{
-          item: allContent[0],
-          type: "site-content",
-          page: "home",
-        }}
-        setToggleContentModal={jest.fn()}
-      />
-    );
+  //   render(
+  //     <ContentModal
+  //       data={{
+  //         item: allContent[0],
+  //         type: "site-content",
+  //         page: "home",
+  //       }}
+  //       setToggleContentModal={jest.fn()}
+  //     />
+  //   );
 
-    screen.getByDisplayValue("Heading 1");
-    screen.getByTestId("edit-content-modal");
+  //   screen.getByDisplayValue("Heading 1");
+  //   screen.getByTestId("edit-content-modal");
 
-    userEvent.click(screen.getByText("Delete"));
+  //   userEvent.click(screen.getByText("Delete"));
 
-    await screen.findByText("This content has now been deleted");
-  });
+  //   await screen.findByText("This content has now been deleted");
+  // });
 
-  it("should surface an error if there is a problem response with content on delete", async () => {
-    server.use(
-      rest.delete(
-        "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content/home/section-1",
-        (req, res, ctx) => {
-          return res(
-            ctx.status(400),
-            ctx.json({
-              message: "Something went wrong when trying to remove content",
-            })
-          );
-        }
-      )
-    );
+  /** NOTE: Taken this out as easy to manage in beginning stages - may need a ticket */
+  // it("should surface an error if there is a problem response with content on delete", async () => {
+  //   server.use(
+  //     rest.delete(
+  //       "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/content/home/section-1",
+  //       (req, res, ctx) => {
+  //         return res(
+  //           ctx.status(400),
+  //           ctx.json({
+  //             message: "Something went wrong when trying to remove content",
+  //           })
+  //         );
+  //       }
+  //     )
+  //   );
 
-    const { allContent } = contentBuilder();
+  //   const { allContent } = contentBuilder();
 
-    render(
-      <ContentModal
-        data={{
-          item: allContent[0],
-          type: "site-content",
-          page: "home",
-        }}
-        setToggleContentModal={jest.fn()}
-      />
-    );
+  //   render(
+  //     <ContentModal
+  //       data={{
+  //         item: allContent[0],
+  //         type: "site-content",
+  //         page: "home",
+  //       }}
+  //       setToggleContentModal={jest.fn()}
+  //     />
+  //   );
 
-    const heading = screen.getByDisplayValue("Heading 1");
-    screen.getByTestId("edit-content-modal");
+  //   const heading = screen.getByDisplayValue("Heading 1");
+  //   screen.getByTestId("edit-content-modal");
 
-    fireEvent.click(screen.getByText("Delete"));
+  //   fireEvent.click(screen.getByText("Delete"));
 
-    await screen.findByText(
-      "Something went wrong when trying to remove content"
-    );
-  });
+  //   await screen.findByText(
+  //     "Something went wrong when trying to remove content"
+  //   );
+  // });
 
   it("should surface an error if there is a problem rsponse with contetn on post", async () => {
     server.use(
@@ -372,49 +373,51 @@ describe("Editing Content", () => {
     await screen.findByText("This content has been successfully updated");
   });
 
-  it("should allow user to delete footer company content", async () => {
-    const { footerContent } = contentBuilder();
+  /** NOTE: Taken this out as easy to manage in beginning stages - may need a ticket */
+  // it("should allow user to delete footer company content", async () => {
+  //   const { footerContent } = contentBuilder();
 
-    render(
-      <ContentModal
-        data={{
-          item: footerContent[0],
-          type: "footer-content",
-          page: "footer",
-        }}
-        setToggleContentModal={jest.fn()}
-      />
-    );
+  //   render(
+  //     <ContentModal
+  //       data={{
+  //         item: footerContent[0],
+  //         type: "footer-content",
+  //         page: "footer",
+  //       }}
+  //       setToggleContentModal={jest.fn()}
+  //     />
+  //   );
 
-    screen.getByDisplayValue("Big Trees");
-    screen.getByTestId("footer-content-company");
+  //   screen.getByDisplayValue("Big Trees");
+  //   screen.getByTestId("footer-content-company");
 
-    fireEvent.click(screen.getByText("Delete"));
+  //   fireEvent.click(screen.getByText("Delete"));
 
-    await screen.findByText("This content has now been deleted");
-  });
+  //   await screen.findByText("This content has now been deleted");
+  // });
 
-  it("should allow user to delete footer social content", async () => {
-    const { footerContent } = contentBuilder();
+  /** NOTE: Taken this out as easy to manage in beginning stages - may need a ticket */
+  // it("should allow user to delete footer social content", async () => {
+  //   const { footerContent } = contentBuilder();
 
-    render(
-      <ContentModal
-        data={{
-          item: footerContent[1],
-          type: "footer-content",
-          page: "footer",
-        }}
-        setToggleContentModal={jest.fn()}
-      />
-    );
+  //   render(
+  //     <ContentModal
+  //       data={{
+  //         item: footerContent[1],
+  //         type: "footer-content",
+  //         page: "footer",
+  //       }}
+  //       setToggleContentModal={jest.fn()}
+  //     />
+  //   );
 
-    screen.getByDisplayValue("linkedinurl");
-    screen.getByTestId("footer-content-social");
+  //   screen.getByDisplayValue("linkedinurl");
+  //   screen.getByTestId("footer-content-social");
 
-    fireEvent.click(screen.getByText("Delete"));
+  //   fireEvent.click(screen.getByText("Delete"));
 
-    await screen.findByText("This content has now been deleted");
-  });
+  //   await screen.findByText("This content has now been deleted");
+  // });
 
   it("should allow usr to delete image content", async () => {
     const { imageContent } = contentBuilder();
@@ -437,40 +440,41 @@ describe("Editing Content", () => {
     await screen.findByText("This content has now been deleted");
   });
 
-  it("should surface an error if there is a problem response with !content on deleteItem", async () => {
-    server.use(
-      rest.delete(
-        "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/footer/social",
-        (req, res, ctx) => {
-          return res(
-            ctx.status(400),
-            ctx.json({
-              message: "Something went wrong when trying to remove content",
-            })
-          );
-        }
-      )
-    );
-    const { footerContent } = contentBuilder();
+  /** NOTE: Taken this out as easy to manage in beginning stages - may need a ticket */
+  // it("should surface an error if there is a problem response with !content on deleteItem", async () => {
+  //   server.use(
+  //     rest.delete(
+  //       "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/footer/social",
+  //       (req, res, ctx) => {
+  //         return res(
+  //           ctx.status(400),
+  //           ctx.json({
+  //             message: "Something went wrong when trying to remove content",
+  //           })
+  //         );
+  //       }
+  //     )
+  //   );
+  //   const { footerContent } = contentBuilder();
 
-    render(
-      <ContentModal
-        data={{
-          item: footerContent[1],
-          type: "footer-content",
-          page: "footer",
-        }}
-        setToggleContentModal={jest.fn()}
-      />
-    );
+  //   render(
+  //     <ContentModal
+  //       data={{
+  //         item: footerContent[1],
+  //         type: "footer-content",
+  //         page: "footer",
+  //       }}
+  //       setToggleContentModal={jest.fn()}
+  //     />
+  //   );
 
-    screen.getByDisplayValue("linkedinurl");
-    screen.getByTestId("footer-content-social");
+  //   screen.getByDisplayValue("linkedinurl");
+  //   screen.getByTestId("footer-content-social");
 
-    fireEvent.click(screen.getByText("Delete"));
+  //   fireEvent.click(screen.getByText("Delete"));
 
-    await screen.findByText(
-      "Something went wrong when trying to remove content"
-    );
-  });
+  //   await screen.findByText(
+  //     "Something went wrong when trying to remove content"
+  //   );
+  // });
 });

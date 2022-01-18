@@ -32,8 +32,8 @@
 #### Contact form
 
 - user can send request and recieve message for success / error
-  - bug - need only to see the appropriate message never both
-  - bug - size needs adjusting for when the message is showing
+  - [bug] need only to see the appropriate message never both
+  - [bug] size needs adjusting for when the message is showing
 
 ## FOOTER
 
@@ -54,7 +54,7 @@
 
 ## DASHBOARD
 
-- bug - user only sees update when refreshes
+- [bug] user only sees update when refreshes
 - user needs to be signed in and admin to implement any of the following:-
 
 #### Manage Enquiries
@@ -80,9 +80,10 @@
 
 - user can upload images to gallery
   - need to lock this down / make process easier
+  - [bug] when image exists the wrong error is being surfaced
 - user can click `edit` modal appears and then `delete` or `close` modal
   - if deleted then the user will see an alert with the `success` message
-  - after refesh content will be updated
+  - after refresh content will be updated
 
 #### Manage Footer
 

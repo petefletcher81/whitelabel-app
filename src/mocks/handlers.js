@@ -63,7 +63,7 @@ export const handlers = [
   ),
 
   rest.put(
-    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/enquiries/test1@test.com",
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/enquiries",
     (req, res, ctx) => {
       return res(
         ctx.status(200),
@@ -255,7 +255,7 @@ export const handlers = [
   ),
 
   rest.delete(
-    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/enquiries/test1@test.com",
+    "https://europe-west2-whitelabel-website-7d72b.cloudfunctions.net/app/enquiries",
     (req, res, ctx) => {
       return res(
         ctx.status(200),
