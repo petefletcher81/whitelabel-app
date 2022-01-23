@@ -231,44 +231,29 @@ git remote add origin git@github.com:<yourusername>/<projectname>.git
 
 ```
 
-### Set up actions to pair with new repo and firebase project
+### Create docker image via cloud build and deploy with cloud run
+
+First we need the gcloud SDK
 
 ```
-firebase init
-choose `Hosting: Set up Github Action Deploys`
-
-entry chosen repo `<username>/<repo-name>`
-// this will now add secrets and ask a couple of questions
-
-Set up the workflow to run a build script before every deploy? Y
-
-What script should be ran? npm ci and npm run build
-
-Set up auto deployments when pr is merged? Y
-
-What is the name of the github live channel? main
-
-This will replace a couple of the actions set up witin .github/workflows
-```
-
----
-
-### Firebase deploy
-
-Once all the content is added from this script run
+https://cloud.google.com/sdk/docs/install
 
 ```
-// navigate to the functions folder
-cd functions
-firebase deploy
 
-// navigate to the client folder to deploy app
-cd client
-firebase deploy
+next we want to initializes gcloud and login
+
+```
+gcloud init
+gcloud auth login
 ```
 
+gcloud builds submit --tag gcr.io/whitelabel-website-7d72b/whitelabel-website --region=europe-west2
+
+gcloud run deploy whitelabel-website --image=gcr.io/whitelabel-website-7d72b/whitelabel-website --region=europe-west2
+
+```
 This will deploy your functions and app
-
 ---
 
 You should now have a fully populated backend and ready to style frontend template :)
+```
