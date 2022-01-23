@@ -1,0 +1,39 @@
+{
+  "name": "whitelabel-app",
+  "private": true,
+  "engines": {
+    "node": "16"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "node_modules/.bin/next start",
+    "lint": "next lint",
+    "test": "jest --watch --coverage",
+    "test:ci": "jest --ci"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "classnames": "^2.2.6",
+    "identity-obj-proxy": "^3.0.0",
+    "jwt-decode": "^3.1.2",
+    "next": "12.0.7",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "redux": "^4.1.2",
+    "redux-logger": "^3.0.6",
+    "sass": "^1.44.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "13.5.0",
+    "babel-jest": "27.4.5",
+    "eslint": "8.4.0",
+    "eslint-config-next": "latest",
+    "eslint-plugin-testing-library": "5.0.1",
+    "jest": "27.4.5",
+    "msw": "^0.35.0",
+    "nock": "^13.0.7"
+  }
+}

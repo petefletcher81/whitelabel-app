@@ -45,6 +45,7 @@ exports.setAdmin = async (req, res) => {
     ) {
       // once we set the custom claims on a user they will stay there
       // we can only then set them
+
       return res.json({ message: `${userRef.email} is already an admin` });
     } else {
       try {

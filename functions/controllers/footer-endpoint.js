@@ -106,7 +106,6 @@ exports.updateFooterContent = async (req, res) => {
 
           res.status(201).json({ message: `New content added to ${area}` });
         }
-        get;
       } catch (error) {
         // add middleware and get the same auth errors
         const errorMessage = authErrorHandler(error.code);

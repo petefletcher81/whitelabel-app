@@ -31,8 +31,13 @@ exports.getAll = async (req, res) => {
 
 exports.deleteItem = async (req, res) => {
   const { section, name, page, area } = req.params;
+  const { id } = req.body;
   let content = !page ? req.url.split("/")[1] : page;
   let item = section ? section : name ? name : area;
+
+  if (id) {
+    item = id;
+  }
 
   try {
     const contentRef = await db.collection(`${content}`).doc(`${item}`);

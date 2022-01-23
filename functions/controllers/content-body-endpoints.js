@@ -1,4 +1,5 @@
 const { db, admin } = require("../config/admin-config");
+const functions = require("firebase-functions");
 // initializes the admin sdk in the app
 const {
   authErrorHandler,
@@ -20,6 +21,8 @@ exports.addContent = async (req, res) => {
   // validation
   const isValid = contentValidation(heading, content, section, page, position);
 
+  functions.logger.log("Data Validation ADDCONTENT", isValid);
+
   if (isValid) {
     try {
       const contentRef = await db.collection(`${page}`).doc(`${section}`);
@@ -36,6 +39,7 @@ exports.addContent = async (req, res) => {
       }
     } catch (error) {
       // add middleware and get the same auth errors
+      functions.logger.log("Content call failed", error);
       const errorMessage = authErrorHandler(error.code);
       const { status, message } = errorMessage;
 

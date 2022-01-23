@@ -1,0 +1,25 @@
+// Navbar
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  background-color: var(--primary-color);
+  color: #fff;
+  width: 100%;
+  height: 70px;
+
+  &__menu-icon {
+    &:hover {
+      cursor: pointer;
+    }
+
+    @media (min-width: 990px) {
+      display: none;
+    }
+  }
+  &__navitems {
+    display: none;
+    @media (min-width: 990px) {
+      display: block;
+    }
+  }
+}

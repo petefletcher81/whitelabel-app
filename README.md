@@ -255,27 +255,29 @@ git push -u origin main
 
 ```
 
----
+### Create docker image via cloud build and deploy with cloud run
 
-### Firebase deploy
-
-Just before we deploy you will need to go to the firebase console and upgrade
-the package from `free tier` to `blaze` which is a pay as you go package. This
-can be done in from the bottom left corner of the console menu.
+First we need the gcloud SDK
 
 ```
-// navigate to the functions folder
-cd functions
-firebase deploy
+https://cloud.google.com/sdk/docs/install
 
-// navigate to the client folder to deploy app
-cd client
-firebase deploy
+next we want to initializes gcloud and login
+
 ```
 
-This will deploy your functions and app
+gcloud init
+gcloud auth login
 
----
+```
+
+gcloud builds submit --tag gcr.io/whitelabel-website-7d72b/whitelabel-website --region=europe-west2
+
+gcloud run deploy whitelabel-website --image=gcr.io/whitelabel-website-7d72b/whitelabel-website --region=europe-west2
+
+```
+
+## This will deploy your functions and app
 
 ### Set up actions to pair with new repo and firebase project
 
@@ -301,3 +303,7 @@ This will replace a couple of the actions set up witin .github/workflows
 ---
 
 You should now have a fully populated backend and ready to style frontend template :)
+
+```
+
+```

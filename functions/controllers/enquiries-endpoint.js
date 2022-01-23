@@ -44,7 +44,9 @@ exports.addEnquiry = async (req, res) => {
 };
 
 exports.updateEnquiry = async (req, res) => {
-  const { name, email, contacted } = req.body;
+  const {
+    content: { name, email, contacted },
+  } = req.body;
 
   const enquiry = {
     name,

@@ -1,0 +1,41 @@
+.navitem {
+  flex-direction: column;
+  & li {
+    display: flex;
+    color: var(--primary-color);
+    height: 4rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  & a {
+    color: var(--primary-color);
+  }
+
+  & a:hover {
+    border-bottom: 2px #fff solid;
+  }
+}
+
+.navitem .flex {
+  height: 70px;
+}
+
+@media (min-width: 990px) {
+  .navitem {
+    flex-direction: row;
+    & li {
+      display: flex;
+      color: white;
+      height: 4rem;
+      align-items: center;
+      text-align: center;
+    }
+
+    & a {
+      width: 100px;
+      color: white;
+      padding: 10px;
+    }
+  }
+}

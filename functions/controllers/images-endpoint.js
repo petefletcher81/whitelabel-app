@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
+const functions = require("firebase-functions");
 const { getAll, deleteItem } = require("./shared-crud-calls");
 const { db, admin } = require("../config/admin-config");
 const fbConfig = require("../config/firebase-config");
@@ -35,7 +36,7 @@ exports.addImage = (req, res) => {
 
   // This code will process each non-file field in the form.
   busboy.on("field", (fieldname, val) => {
-    console.log(`Processed field ${fieldname}: ${val}.`);
+    functions.logger.log(`Processed field ${fieldname}: ${val}.`);
     fields[fieldname] = val;
   });
 
@@ -47,7 +48,7 @@ exports.addImage = (req, res) => {
     // Note: os.tmpdir() points to an in-memory file system on GCF
     // Thus, any files in it must fit in the instance's memory.
 
-    console.log(`Processed file ${filename}`);
+    functions.logger.log(`Processed file ${filename}`);
     // randomnumber.png
     const filepath = path.join(tmpdir, filename);
     uploads[filename] = filepath;
@@ -71,7 +72,7 @@ exports.addImage = (req, res) => {
 
     fileWrites.forEach(async ([file], index) => {
       let filename = file.split("\\").pop();
-      console.log("======", filename);
+      functions.logger.log("======", filename);
       if (filename.includes("tmp")) {
         trimmedFilename = filename.split("/")[2];
         filename = trimmedFilename;

@@ -1,15 +1,14 @@
+const functions = require("firebase-functions");
 const { dateFormatter } = require("./date-formatter");
 
-exports.contentBuilder = (heading, content, section, page, position) => {
-  const contentObj = {
+exports.contentBuilder = (heading, content, page, position) => {
+  return {
     heading,
     content,
     createdAt: dateFormatter(),
     page,
     position,
   };
-
-  return contentObj;
 };
 
 exports.imageContentBuilder = (body, position, updatedPage) => {
@@ -26,6 +25,6 @@ exports.imageContentBuilder = (body, position, updatedPage) => {
     key,
   };
 
-  console.log("content built", contentObj);
+  functions.logger.log("CONTENT BUILT", contentObj);
   return contentObj;
 };
