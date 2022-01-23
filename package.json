@@ -18,5 +18,8 @@
     "url": "https://github.com/petefletcher81/whitelabel-app/issues"
   },
   "homepage": "https://github.com/petefletcher81/whitelabel-app#readme",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "axios": "^0.23.0"
+  }
 }

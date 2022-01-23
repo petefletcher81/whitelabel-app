@@ -184,6 +184,19 @@ firebase serve
 Now we are running on port 5000, we can run
 
 ```
+cd ../client -D
+```
+
+open the `populate-firebase-project`
+replace the url project name on line 125 from
+
+http://localhost:5000/`test-project1981`/europe-west2/app/${url}
+
+to
+
+http://localhost:5000/`yourprojectname`/europe-west2/app/${url}
+
+```
 node populate firebase project
 ```
 
@@ -231,6 +244,17 @@ git remote add origin git@github.com:<yourusername>/<projectname>.git
 
 ```
 
+Navigate to Github
+Create a new repo on git hub with that given name
+
+Then copy and paste these in the command line
+
+```
+git branch -M main
+git push -u origin main
+
+```
+
 ### Create docker image via cloud build and deploy with cloud run
 
 First we need the gcloud SDK
@@ -238,13 +262,13 @@ First we need the gcloud SDK
 ```
 https://cloud.google.com/sdk/docs/install
 
-```
-
 next we want to initializes gcloud and login
 
 ```
+
 gcloud init
 gcloud auth login
+
 ```
 
 gcloud builds submit --tag gcr.io/whitelabel-website-7d72b/whitelabel-website --region=europe-west2
@@ -252,8 +276,34 @@ gcloud builds submit --tag gcr.io/whitelabel-website-7d72b/whitelabel-website --
 gcloud run deploy whitelabel-website --image=gcr.io/whitelabel-website-7d72b/whitelabel-website --region=europe-west2
 
 ```
-This will deploy your functions and app
+
+## This will deploy your functions and app
+
+### Set up actions to pair with new repo and firebase project
+
+```
+cd into /client
+firebase init
+choose `Configure files for Firebase Hosting and (optionally) set up GitHub Action deploys`
+
+entry chosen repo `<username>/<repo-name>`
+// this will now add secrets and ask a couple of questions
+
+Set up the workflow to run a build script before every deploy? Y
+
+What script should be ran? npm ci and npm run build
+
+Set up auto deployments when pr is merged? Y
+
+What is the name of the github live channel? main
+
+This will replace a couple of the actions set up witin .github/workflows
+```
+
 ---
 
 You should now have a fully populated backend and ready to style frontend template :)
+
+```
+
 ```

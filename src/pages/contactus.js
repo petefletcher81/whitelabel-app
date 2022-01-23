@@ -105,8 +105,10 @@ const ContactUs = ({ content, images }) => {
           </div>
         </div>
       </div>
+
       {contentError && !content && <ContentError error={contentError} />}
       {content && !contentError && returnContentForPosition("1")}
+
       <div className="contactus flex">
         {contentError && !banner && <ContentError error={contentError} />}
         {banner &&
